@@ -1,0 +1,84 @@
+/* General styles */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #000; /* Black background */
+  color: #fff; /* White text for contrast */
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Container for forms */
+form {
+  background-color: #008000; /* Green background */
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  width: 300px;
+  max-width: 90%; /* Responsive */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Form heading */
+h2 {
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  color: #fff;
+  text-align: center;
+}
+
+/* Input fields */
+input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+  font-size: 1rem;
+}
+
+/* Buttons */
+button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #fff;
+  background-color: #005f00; /* Dark green */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #007f00; /* Brighter green */
+}
+
+/* Links */
+a {
+  color: #ffb600; /* Gold for links */
+  text-decoration: none;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Error message */
+div[style*="color: red"] {
+  background-color: #ffe6e6; /* Light pink for better contrast */
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+  color: #cc0000; /* Dark red for text */
+  text-align: center;
+  font-weight: bold;
+}
