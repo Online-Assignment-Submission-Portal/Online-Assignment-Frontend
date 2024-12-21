@@ -9,6 +9,7 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [role, setRole] = useState("student");
   const navigate = useNavigate();
 
   const handleSignup = async (e) => {
@@ -19,7 +20,7 @@ const Signup = () => {
       return;
     }
 
-    const user = { firstName, lastName, email, password };
+    const user = { firstName, lastName, email, password, confirmPassword, role};
 
     try {
       const response = await axios.post("http://localhost:3000/user/signup", user);
