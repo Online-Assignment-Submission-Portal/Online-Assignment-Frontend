@@ -12,7 +12,7 @@ const AdminSignin = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:8000/admin/login", { email, password });
+      const response = await axios.post("http://localhost:8000/admin/signin", { email, password });
       if (response.status === 200) {
         console.log("Admin Signin successful:", response.data);
         navigate("/admin-dashboard");
