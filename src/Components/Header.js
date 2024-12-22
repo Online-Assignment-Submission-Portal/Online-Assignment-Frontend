@@ -6,7 +6,7 @@ const Header = () => {
     <header>
       <h2>File Submission Portal</h2>
       <nav>
-        <Link to="/signup">Signup</Link> | <Link to="/signin">Signin</Link>
+        <Link to="/signup">Signup</Link> | <Link to="/signin">Signin</Link> | <Link to="/admin-signin">Are You an Admin?</Link>
       </nav>
     </header>
   );
