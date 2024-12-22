@@ -12,7 +12,7 @@ const Signin = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:3000/user/login", { email, password });
+      const response = await axios.post("http://localhost:8000/user/signin", { email, password });
       if (response.status === 200) {
         console.log("Signin successful:", response.data);
         navigate("/"); // Redirect to the homepage or desired page

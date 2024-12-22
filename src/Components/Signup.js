@@ -14,19 +14,25 @@ const Signup = () => {
 
   const handleSignup = async (e) => {
     e.preventDefault();
-
+    
     if (password !== confirmPassword) {
       setError("Passwords do not match");
       return;
     }
-
-    const user = { firstName, lastName, email, password, confirmPassword, role};
-
+    
+    const userDetails = { firstName, lastName, email, password, confirmPassword, role};
+    const userEmail = { email };
     try {
-      const response = await axios.post("http://localhost:3000/user/signup", user);
+      console.log(userDetails);
+      const response = await axios.post("http://localhost:8000/user/signup", userDetails);
       if (response.status === 201) {
         console.log("User created successfully:", response.data);
-        navigate("/otp-verification"); // Redirect to OTP page after successful signup
+        const result = await axios.post("http://localhost:8000/user/sendotp", userEmail);
+        console.log(result);
+        if(result.status === 200) {
+          console.log("OTP sent successfully:", result.data);
+          navigate("/otp-verification", {state:{ email }}); // Redirect to OTP page after successful signup
+        }
       }
     } catch (err) {
       setError("Signup failed. Please try again.");
