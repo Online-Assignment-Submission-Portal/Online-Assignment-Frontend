@@ -1,18 +1,20 @@
 // OTPVerification.js
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const OTPVerification = () => {
   const [otp, setOtp] = useState("");
   const [error, setError] = useState("");
+  const { state } = useLocation();
   const navigate = useNavigate();
 
   const handleOTPSubmit = async (e) => {
     e.preventDefault();
-
+   
+    // const UserEmail = { email };
     try {
-      const response = await axios.post("http://localhost:3000/user/verify-otp", { otp });
+      const response = await axios.post("http://localhost:8000/user/verifyotp", { email: state.email, otp });
       if (response.status === 200) {
         console.log("OTP Verified!");
         navigate("/blank"); // Redirect to a blank page after successful OTP verification
