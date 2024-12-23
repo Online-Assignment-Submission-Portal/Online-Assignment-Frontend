@@ -1,45 +1,70 @@
 // BlankPage.js
 import React from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+
 const BlankPage = () => {
   const navigate = useNavigate();
-
-  const handleLogout = async (e) => {
-    e.preventDefault();
-    try{
-      const token = localStorage.getItem("token");
-      console.log(token);
-      if(!token){
-        console.error("No Token provided");
+  const handleLogout = async () => {
+    try {
+      const token = localStorage.getItem("token"); // Retrieve token from storage
+      if (!token) {
+        console.error("No token available for logout.");
+        navigate("/signin");
         return;
       }
-      const response = await axios.post("http://localhost:8000/user/logout", {token},
-                                      {
-                                       headers: {
-                                        Authorization: `Bearer ${token}`,
-                                       },
-                                    });
-      console.log(response);
-      if(response.status === 200){
-        localStorage.removeItem("token");
-        navigate("/");
-      }
-    } catch(err){
-      if (err.response && err.response.status === 401) {
-        console.log("Token has expired");
-        localStorage.removeItem('token'); // Clear expired token
-        navigate('/'); // Redirect to login page
+
+      const response = await fetch("http://localhost:8000/user/logout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Send token in Authorization header
+        },
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log(data.message);
+        localStorage.clear(); // Clear local storage
+        navigate("/signin"); // Redirect to sign-in page
       } else {
-        alert('An error occurred during logout.');
+        console.error(data.message || "Failed to log out.");
       }
-      console.log(err);
+    } catch (error) {
+      console.error("Error during logout:", error);
     }
-  }
+  };
+
   return (
-    <div className="blank-page">
-      <h2>Welcome to the Dashboard</h2>
-      <button onClick={handleLogout}>Logout</button>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+      <h1 className="text-3xl font-bold text-gray-800 mb-6">
+        Welcome to Your Dashboard
+      </h1>
+      <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-md">
+        <h2 className="text-2xl font-semibold text-gray-700 mb-4">
+          Profile Details
+        </h2>
+        <p className="text-gray-600 mb-2">
+          <span className="font-medium">First Name:</span>{" "}
+          {"Not available"}
+        </p>
+        <p className="text-gray-600 mb-2">
+          <span className="font-medium">Last Name:</span>{" "}
+          {"Not available"}
+        </p>
+        <p className="text-gray-600">
+          <span className="font-medium">Email:</span>{" "}
+          {"Not available"}
+        </p>
+        <button
+          className="mt-6 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition duration-200"
+          onClick={handleLogout}
+        >
+          Logout
+        </button>
+      </div>
     </div>
   );
 };

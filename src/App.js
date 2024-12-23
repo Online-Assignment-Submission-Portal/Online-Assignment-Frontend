@@ -10,8 +10,8 @@ import AdminDashboard from "./Components/AdminDashboard"; // Import AdminDashboa
 const App = () => {
   return (
     <Router>
-    <Header />
       <Routes>
+        <Route path="/" element={<Header />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/signin" element={<Signin />} />
         <Route path="/otp-verification" element={<OTPVerification />} />

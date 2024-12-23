@@ -16,11 +16,9 @@ const OTPVerification = () => {
     try {
       const response = await axios.post("http://localhost:8000/user/verifyotp", { email: state.email, otp });
       if (response.status === 200) {
-        const {token} = response.data;
-        console.log(token);
-        localStorage.setItem("token", token);
         console.log("OTP Verified!");
-        navigate("/blank"); // Redirect to a blank page after successful OTP verification
+        alert("OTP verified. Pending admin approval");
+        navigate("/"); // Redirect to a home page after successful OTP verification
       }
     } catch (err) {
       setError("Invalid OTP. Please try again.");
