@@ -14,6 +14,9 @@ const AdminSignin = () => {
     try {
       const response = await axios.post("http://localhost:8000/admin/signin", { email, password });
       if (response.status === 200) {
+        const {token} = response.data;
+        console.log(token);
+        localStorage.setItem("token", token);
         console.log("Admin Signin successful:", response.data);
         navigate("/admin-dashboard");
       }
