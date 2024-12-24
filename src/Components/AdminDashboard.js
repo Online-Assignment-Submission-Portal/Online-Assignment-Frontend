@@ -7,7 +7,6 @@ const AdminDashboard = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  // Fetch pending users when component mounts
   useEffect(() => {
     const fetchPendingUsers = async () => {
       try {
@@ -20,7 +19,6 @@ const AdminDashboard = () => {
           navigate("/admin-signin");
           return;
         }
-
         const response = await axios.get("http://localhost:8000/admin/check", {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -34,15 +32,40 @@ const AdminDashboard = () => {
     };
 
     fetchPendingUsers();
-  }, [navigate, ]);
+  }, [navigate]);
 
-  // Handle logout
-  const handleLogout = () => {
-    document.cookie = "adminToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-    navigate("/admin-signin");
+  const handleLogout = async () => {
+    try {
+      const token = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("adminToken="))
+        ?.split("=")[1];
+
+      if (!token) {
+        navigate("/admin-signin");
+        return;
+      }
+
+      const response = await axios.post(
+        "http://localhost:8000/admin/logout",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data.success) {
+        document.cookie = "adminToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+        navigate("/admin-signin");
+      }
+    } catch (err) {
+      setError("Unauthorized or session expired.");
+      navigate("/admin-signin");
+    }
   };
 
-  // Handle role confirmation (student/teacher)
   const handleConfirmRole = async (userId, role) => {
     const token = document.cookie
       .split("; ")
@@ -65,14 +88,13 @@ const AdminDashboard = () => {
         }
       );
       if (response.data.success) {
-        setPendingUsers(pendingUsers.filter(user => user._id !== userId)); // Remove the user from pending list
+        setPendingUsers(pendingUsers.filter((user) => user._id !== userId));
       }
     } catch (err) {
       setError(err.response?.data?.message || "Failed to confirm role.");
     }
   };
 
-  // Handle user deletion
   const handleDeleteUser = async (userId) => {
     const token = document.cookie
       .split("; ")
@@ -86,7 +108,7 @@ const AdminDashboard = () => {
 
     try {
       const response = await axios.delete(
-        `http://localhost:4000/admin/delete-user/${userId}`,
+        `http://localhost:8000/admin/deletependinguser/${userId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -94,7 +116,7 @@ const AdminDashboard = () => {
         }
       );
       if (response.data.success) {
-        setPendingUsers(pendingUsers.filter(user => user._id !== userId)); // Remove the deleted user from the list
+        setPendingUsers(pendingUsers.filter((user) => user._id !== userId));
       }
     } catch (err) {
       setError(err.response?.data?.message || "Failed to delete user.");
@@ -102,61 +124,100 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <div className="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md">
-        <h1 className="text-3xl font-bold text-center mb-6">Admin Dashboard</h1>
+    <div style={{ textAlign: "center", backgroundColor: "#000", height: "100vh", width:"100vh", marginTop : "7rem", padding: "2rem" }}>
+      <div style={{
+        backgroundColor: "#008000",
+        padding: "2rem",
+        borderRadius: "10px",
+        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.5)",
+        maxWidth: "800px",
+        margin: "auto",
+        color: "#fff"
+      }}>
+        <h2>Admin Dashboard</h2>
 
-        {/* Error Message */}
-        {error && <p className="text-red-600 text-center mb-4">{error}</p>}
+        {error && (
+          <div style={{
+            color: "#cc0000",
+            backgroundColor: "#ffe6e6",
+            padding: "10px",
+            borderRadius: "5px",
+            marginBottom: "10px",
+          }}>
+            {error}
+          </div>
+        )}
 
-        {/* Logout Button */}
-        <div className="text-right mb-6">
-          <button
-            onClick={handleLogout}
-            className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-400"
-          >
-            Logout
-          </button>
-        </div>
 
-        {/* Pending Users List */}
-        <h2 className="text-2xl font-semibold mb-4">Pending Users</h2>
-        <div className="space-y-4">
-          {pendingUsers.length === 0 ? (
-            <p className="text-center text-gray-500">No pending users.</p>
-          ) : (
-            pendingUsers.map((user) => (
-              <div key={user._id} className="bg-gray-50 p-4 rounded-lg shadow-sm flex justify-between items-center">
-                <div>
-                  <p className="font-semibold">{user.firstName} {user.lastName}</p>
-                  <p className="text-gray-600">{user.email}</p>
-                </div>
-
-                {/* Action Buttons */}
-                <div className="space-x-2">
-                  <button
-                    onClick={() => handleConfirmRole(user._id, "student")}
-                    className="bg-green-500 text-white py-1 px-3 rounded-md hover:bg-green-400"
-                  >
-                    Confirm as Student
-                  </button>
-                  <button
-                    onClick={() => handleConfirmRole(user._id, "teacher")}
-                    className="bg-blue-500 text-white py-1 px-3 rounded-md hover:bg-blue-400"
-                  >
-                    Confirm as Teacher
-                  </button>
-                  <button
-                    onClick={() => handleDeleteUser(user._id)}
-                    className="bg-red-500 text-white py-1 px-3 rounded-md hover:bg-red-400"
-                  >
-                    Delete User
-                  </button>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
+        <h2>Pending Users</h2>
+        {pendingUsers.length === 0 ? (
+          <p>No pending users.</p>
+        ) : (
+          <table style={{ width: "100%", color: "#fff", marginTop: "20px", borderCollapse: "collapse" }}>
+            <thead>
+              <tr style={{ backgroundColor: "#006400", textAlign: "left" }}>
+                <th style={{ padding: "10px", border: "1px solid #fff" }}>Name</th>
+                <th style={{ padding: "10px", border: "1px solid #fff" }}>Email</th>
+                <th style={{ padding: "10px", border: "1px solid #fff" }}>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {pendingUsers.map((user) => (
+                <tr key={user._id} style={{ textAlign: "left", backgroundColor: "#004d00" }}>
+                  <td style={{ padding: "10px", border: "1px solid #fff" }}>{user.firstName} {user.lastName}</td>
+                  <td style={{ padding: "10px", border: "1px solid #fff" }}>{user.email}</td>
+                  <td style={{ padding: "10px", border: "1px solid #fff" }}>
+                    <div style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
+                      <label>
+                        <input
+                          type="radio"
+                          name={`role-${user._id}`}
+                          onClick={() => handleConfirmRole(user._id, "student")}
+                        />
+                        Student
+                      </label>
+                      <label>
+                        <input
+                          type="radio"
+                          name={`role-${user._id}`}
+                          onClick={() => handleConfirmRole(user._id, "teacher")}
+                        />
+                        Teacher
+                      </label>
+                      <button
+                        onClick={() => handleDeleteUser(user._id)}
+                        style={{
+                          backgroundColor: "#cc0000",
+                          color: "#fff",
+                          padding: "5px 10px",
+                          borderRadius: "5px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+        
+        <button
+          onClick={handleLogout}
+          style={{
+            backgroundColor: "#005f00",
+            padding: "10px 20px",
+            fontWeight: "bold",
+            borderRadius: "5px",
+            color: "#fff",
+            cursor: "pointer",
+            marginBottom: "20px",
+          }}
+        >
+          Logout
+        </button>
       </div>
     </div>
   );

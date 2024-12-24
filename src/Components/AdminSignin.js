@@ -20,7 +20,6 @@ const AdminSignin = () => {
       if (response.data.success) {
         // Store token in cookies or localStorage
         document.cookie = `adminToken=${response.data.token}; path=/;`;
-
         // Navigate to Admin Dashboard
         navigate("/admin-dashboard");
       }

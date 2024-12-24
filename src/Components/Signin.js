@@ -15,7 +15,7 @@ const Signin = () => {
       const response = await axios.post("http://localhost:8000/user/signin", { email, password });
       if (response.status === 200) {
         console.log("Signin successful:", response.data);
-        navigate("/"); // Redirect to the homepage or desired page
+        navigate("/blank"); // Redirect to the homepage or desired page
       }
     } catch (err) {
       setError("Invalid credentials. Please try again.");
