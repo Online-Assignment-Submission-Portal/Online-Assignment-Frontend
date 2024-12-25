@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 const AdminDashboard = () => {
   const [pendingUsers, setPendingUsers] = useState([]);
   const [error, setError] = useState("");
+  const [selectedRoles, setSelectedRoles] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,11 +20,13 @@ const AdminDashboard = () => {
           navigate("/admin-signin");
           return;
         }
+
         const response = await axios.get("http://localhost:8000/admin/check", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
+
         setPendingUsers(response.data);
       } catch (err) {
         setError("Unauthorized or session expired.");
@@ -66,7 +69,7 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleConfirmRole = async (userId, role) => {
+  const handleConfirmRole = async (userId) => {
     const token = document.cookie
       .split("; ")
       .find((row) => row.startsWith("adminToken="))
@@ -74,6 +77,12 @@ const AdminDashboard = () => {
 
     if (!token) {
       setError("Token not found.");
+      return;
+    }
+
+    const role = selectedRoles[userId];
+    if (!role) {
+      setError("Please select a role before confirming.");
       return;
     }
 
@@ -87,8 +96,14 @@ const AdminDashboard = () => {
           },
         }
       );
+
       if (response.data.success) {
         setPendingUsers(pendingUsers.filter((user) => user._id !== userId));
+        setSelectedRoles((prev) => {
+          const updatedRoles = { ...prev };
+          delete updatedRoles[userId];
+          return updatedRoles;
+        });
       }
     } catch (err) {
       setError(err.response?.data?.message || "Failed to confirm role.");
@@ -115,6 +130,7 @@ const AdminDashboard = () => {
           },
         }
       );
+
       if (response.data.success) {
         setPendingUsers(pendingUsers.filter((user) => user._id !== userId));
       }
@@ -124,77 +140,84 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div style={{ textAlign: "center", backgroundColor: "#000", height: "100vh", width:"100vh", marginTop : "7rem", padding: "2rem" }}>
-      <div style={{
-        backgroundColor: "#008000",
-        padding: "2rem",
-        borderRadius: "10px",
-        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.5)",
-        maxWidth: "800px",
-        margin: "auto",
-        color: "#fff"
-      }}>
-        <h2>Admin Dashboard</h2>
+    <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center py-10">
+      <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-4xl">
+        <h2 className="text-2xl font-bold mb-6">Admin Dashboard</h2>
 
         {error && (
-          <div style={{
-            color: "#cc0000",
-            backgroundColor: "#ffe6e6",
-            padding: "10px",
-            borderRadius: "5px",
-            marginBottom: "10px",
-          }}>
+          <div className="bg-red-600 text-white py-2 px-4 rounded-md mb-4">
             {error}
           </div>
         )}
 
+        <h3 className="text-xl font-semibold mb-4">Pending Users</h3>
 
-        <h2>Pending Users</h2>
         {pendingUsers.length === 0 ? (
-          <p>No pending users.</p>
+          <p className="text-center">No pending users.</p>
         ) : (
-          <table style={{ width: "100%", color: "#fff", marginTop: "20px", borderCollapse: "collapse" }}>
-            <thead>
-              <tr style={{ backgroundColor: "#006400", textAlign: "left" }}>
-                <th style={{ padding: "10px", border: "1px solid #fff" }}>Name</th>
-                <th style={{ padding: "10px", border: "1px solid #fff" }}>Email</th>
-                <th style={{ padding: "10px", border: "1px solid #fff" }}>Actions</th>
+          <table className="table-auto w-full text-left text-sm bg-gray-700 rounded-lg overflow-hidden">
+            <thead className="bg-green-700">
+              <tr>
+                <th className="px-4 py-2 text-center">Name</th>
+                <th className="px-4 py-2 text-center">Email</th>
+                <th className="px-4 py-2 text-center">Set role</th>
+                <th className="px-4 py-2 text-center">Options</th>
               </tr>
             </thead>
             <tbody>
               {pendingUsers.map((user) => (
-                <tr key={user._id} style={{ textAlign: "left", backgroundColor: "#004d00" }}>
-                  <td style={{ padding: "10px", border: "1px solid #fff" }}>{user.firstName} {user.lastName}</td>
-                  <td style={{ padding: "10px", border: "1px solid #fff" }}>{user.email}</td>
-                  <td style={{ padding: "10px", border: "1px solid #fff" }}>
-                    <div style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
-                      <label>
+                <tr key={user._id} className="odd:bg-gray-600 even:bg-gray-700">
+                  <td className="px-4 py-2">{`${user.firstName} ${user.lastName}`}</td>
+                  <td className="px-4 py-2">{user.email}</td>
+                  <td className="px-4 py-2">
+                    <div className="flex items-center gap-4">
+                      <label className="flex items-center">
                         <input
                           type="radio"
                           name={`role-${user._id}`}
-                          onClick={() => handleConfirmRole(user._id, "student")}
+                          value="student"
+                          checked={selectedRoles[user._id] === "student"}
+                          onChange={() =>
+                            setSelectedRoles((prev) => ({
+                              ...prev,
+                              [user._id]: "student",
+                            }))
+                          }
+                          className="mr-2"
                         />
                         Student
                       </label>
-                      <label>
+                      <label className="flex items-center">
                         <input
                           type="radio"
                           name={`role-${user._id}`}
-                          onClick={() => handleConfirmRole(user._id, "teacher")}
+                          value="teacher"
+                          checked={selectedRoles[user._id] === "teacher"}
+                          onChange={() =>
+                            setSelectedRoles((prev) => ({
+                              ...prev,
+                              [user._id]: "teacher",
+                            }))
+                          }
+                          className="mr-2"
                         />
                         Teacher
                       </label>
+                    </div>
+                  </td>
+                  <td className="px-4 py-2 text-right">
+                    <div className="flex justify-end gap-2">
+                      <button
+                        onClick={() => handleConfirmRole(user._id)}
+                        className="bg-green-600 text-white py-1 px-4 rounded-md hover:bg-green-500 transition"
+                      >
+                        Confirm role
+                      </button>
                       <button
                         onClick={() => handleDeleteUser(user._id)}
-                        style={{
-                          backgroundColor: "#cc0000",
-                          color: "#fff",
-                          padding: "5px 10px",
-                          borderRadius: "5px",
-                          cursor: "pointer",
-                        }}
+                        className="bg-red-600 text-white py-1 px-4 rounded-md hover:bg-red-500 transition"
                       >
-                        Delete
+                        Delete user
                       </button>
                     </div>
                   </td>
@@ -203,18 +226,10 @@ const AdminDashboard = () => {
             </tbody>
           </table>
         )}
-        
+
         <button
           onClick={handleLogout}
-          style={{
-            backgroundColor: "#005f00",
-            padding: "10px 20px",
-            fontWeight: "bold",
-            borderRadius: "5px",
-            color: "#fff",
-            cursor: "pointer",
-            marginBottom: "20px",
-          }}
+          className="mt-6 bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-500 transition"
         >
           Logout
         </button>

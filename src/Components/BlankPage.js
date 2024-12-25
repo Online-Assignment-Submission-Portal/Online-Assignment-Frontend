@@ -8,7 +8,7 @@ const BlankPage = () => {
   const navigate = useNavigate();
   const handleLogout = async () => {
     try {
-      const token = localStorage.getItem("token"); // Retrieve token from storage
+      const token = localStorage.getItem("token"); 
       if (!token) {
         console.error("No token available for logout.");
         navigate("/signin");
@@ -19,7 +19,7 @@ const BlankPage = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // Send token in Authorization header
+          Authorization: `Bearer ${token}`, 
         },
       });
 
@@ -27,8 +27,8 @@ const BlankPage = () => {
 
       if (response.ok) {
         console.log(data.message);
-        localStorage.clear(); // Clear local storage
-        navigate("/signin"); // Redirect to sign-in page
+        localStorage.clear();
+        navigate("/signin"); 
       } else {
         console.error(data.message || "Failed to log out.");
       }
