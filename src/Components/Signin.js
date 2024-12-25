@@ -22,7 +22,8 @@ const Signin = () => {
         const { token, user } = response.data;
         console.log(token, user._id)
         document.cookie = `token=${token}; path=/`;
-        navigate(`/dashboard/${user._id}`);
+        const id = user._id;
+        navigate(`/dashboard/${id}`);
       }
     } catch (err) {
       setError(err.response?.data?.message || "Invalid credentials. Please try again.");

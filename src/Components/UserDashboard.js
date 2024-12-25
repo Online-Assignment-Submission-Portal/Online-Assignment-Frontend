@@ -10,7 +10,7 @@ const UserDashboard = () => {
 
 
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchUserData = async (id) => {
       try {
         const token = document.cookie
           .split("; ")
@@ -21,16 +21,18 @@ const UserDashboard = () => {
           navigate("/signin");
           return;
         }
-
+        console.log(id);
         const response = await axios.get(`http://localhost:8000/user/dashboard/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-
+         console.log('hello',response.data);
         if (response.data.success) {
+          console.log("hello user");
           setUser(response.data.user);
         } else {
+          console.log('KemCho Majama')
           setError("Failed to fetch user data.");
         }
       } catch (err) {
@@ -40,7 +42,7 @@ const UserDashboard = () => {
       }
     };
 
-    fetchUserData();
+    fetchUserData(id);
   }, [id, navigate]);
 
   const handleLogout = async () => {
@@ -66,7 +68,7 @@ const UserDashboard = () => {
       );
   
       if (response.status === 200) {
-        document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+        document.cookie = "token=; path=/; expires=Wed, 01 Jan 2025 00:00:00 UTC;";
         navigate("/signin");
       } else {
         console.error("Logout failed:", response.data.message);
