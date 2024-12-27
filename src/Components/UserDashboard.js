@@ -106,9 +106,18 @@ const UserDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">
-      <div className="bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-3xl">
+    <div className="min-h-screen bg-gray-900 text-white flex justify-center">
+      
+      <div className="bg-gray-800 p-6 rounded-lg shadow-lg w-full ">
+        <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold text-center mb-4">Welcome, {user.firstName}!</h1>
+        <button
+          onClick={handleLogout}
+          className="bg-red-600 hover:bg-red-500 text-white font-bold py-2 px-4 rounded-lg "
+        >
+          Logout
+        </button>
+        </div>
         <div className="mb-4">
           <h2 className="text-lg font-semibold mb-2">Your Details:</h2>
           <div className="bg-gray-700 p-4 rounded-lg">
@@ -127,12 +136,7 @@ const UserDashboard = () => {
           </div>
         </div>
 
-        <button
-          onClick={handleLogout}
-          className="bg-red-600 hover:bg-red-500 text-white font-bold py-2 px-4 rounded-lg w-full"
-        >
-          Logout
-        </button>
+        
       </div>
     </div>
   );
