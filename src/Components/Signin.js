@@ -70,7 +70,11 @@ const Signin = () => {
               className="w-full p-2 bg-gray-700 rounded-md text-white outline-none focus:ring-2 focus:ring-green-500"
             />
           </div>
-
+          <p className="text-right text-sm mt-4">
+          <a href="/forgot-password" className="text-end text-blue-400 hover:underline">
+            Forgot Password?
+          </a>
+        </p>
           <button
             type="submit"
             className="w-full bg-green-600 hover:bg-green-500 text-white py-2 px-4 rounded-md font-bold transition"
