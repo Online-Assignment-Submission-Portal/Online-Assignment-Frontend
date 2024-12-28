@@ -175,15 +175,16 @@ const UserDashboard = () => {
         </div>
 
         {user.role === "teacher" && (
-        <div className="mt-6">
+        <div className="mt-6 flex justify-end">
           <button
             onClick={() => navigate("/add-subject", { state: { teacherId: user.id } })}
             className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg"
           >
-            Add Subject
+            + Add Subject
           </button>
         </div>
       )}
+
       </div>
     </div>
   );
