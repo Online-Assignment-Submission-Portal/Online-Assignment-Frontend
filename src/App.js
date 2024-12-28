@@ -11,6 +11,7 @@ import UserDashboard from "./Components/UserDashboard";
 import Home from "./Components/Home"; 
 import ForgotPassword from "./Components/ForgotPassEmail";
 import ResetPassword from "./Components/ResetPass";
+import AddSubject from "./Components/AddSubject";
 
 const App = () => {
   return (
@@ -26,6 +27,7 @@ const App = () => {
         <Route path="/admin-signin" element={<AdminSignin />} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
         <Route path="/dashboard/:id" element={<UserDashboard />} />
+        <Route path="/add-subject" element={<AddSubject />} />
       </Routes>
     </Router>
   );
