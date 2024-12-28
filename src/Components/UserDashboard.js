@@ -129,7 +129,9 @@ const UserDashboard = () => {
             </p>
             <p>
               <span className="font-semibold">Role:</span>{" "}
-              {user.role[0].toUpperCase() + user.role.slice(1)}
+              {user.role && Array.isArray(user.role)
+                ? user.role[0]
+                : user.role}
             </p>
             <p>
               <span className="font-semibold">Member Since:</span>{" "}
@@ -175,15 +177,17 @@ const UserDashboard = () => {
         </div>
 
         {user.role === "teacher" && (
-        <div className="mt-6">
-          <button
-            onClick={() => navigate("/add-subject", { state: { teacherId: user.id } })}
-            className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg"
-          >
-            Add Subject
-          </button>
-        </div>
-      )}
+          <div className="mt-6">
+            <button
+              onClick={() =>
+                navigate("/add-subject", { state: { teacherId: user.id } })
+              }
+              className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg"
+            >
+              Add Subject
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

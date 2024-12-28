@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -12,7 +12,7 @@ const AddSubject = () => {
 
   const handleAddSubject = async () => {
     if (!teacherId) {
-      setError("Teacher ID is missing.");
+      setError("An error occurred while creating the subject.");
       return;
     }
 
@@ -26,13 +26,15 @@ const AddSubject = () => {
         navigate("/signin");
         return;
       }
-      if(!subjectName){
+
+      if (!subjectName) {
         alert("Subject name can't be empty");
         return;
       }
+
       const response = await axios.post(
-        "http://localhost:8000/user/addsubject",
-        { name: subjectName, teacherId }, // Include teacherId in the payload
+        `http://localhost:8000/user/addsubject/${teacherId}`, // Pass teacherId in the URL
+        { subject_name: subjectName }, // Send only the subject name in the payload
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -43,10 +45,10 @@ const AddSubject = () => {
       if (response.data.success) {
         navigate("/dashboard");
       } else {
-        setError(response.data.message || "Failed to add subject.");
+        setError("An error occurred while creating the subject.");
       }
     } catch (err) {
-      setError(err.response?.data?.message || "An error occurred.");
+      setError("An error occurred while creating the subject.");
     }
   };
 
@@ -59,7 +61,7 @@ const AddSubject = () => {
           type="text"
           value={subjectName}
           onChange={(e) => setSubjectName(e.target.value)}
-          placeholder="Enter subject name"
+          placeholder="hindi"
           className="w-full p-2 rounded-lg bg-gray-700 text-white mb-4"
         />
         <button
