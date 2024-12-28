@@ -136,6 +136,31 @@ const UserDashboard = () => {
           </div>
         </div>
 
+        <div className="mb-4">
+  <h2 className="text-lg font-semibold mb-4 text-center">Your Subjects</h2>
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {user.subjects && user.subjects.length > 0 ? (
+      user.subjects.map((subject, index) => (
+        <div
+          key={index}
+          className="bg-gray-800 p-4 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+        >
+          <h3 className="text-xl font-bold mb-2 text-white">{subject.name}</h3>
+          <p className="text-gray-400 mb-2">
+            <span className="font-semibold text-gray-300">Teacher:</span> {subject.teacher}
+          </p>
+          <p className="text-gray-400">
+            <span className="font-semibold text-gray-300">Credits:</span> {subject.credits}
+          </p>
+        </div>
+      ))
+    ) : (
+      <p className="text-center col-span-full text-gray-400">No subjects found.</p>
+    )}
+  </div>
+</div>
+
+
         
       </div>
     </div>
