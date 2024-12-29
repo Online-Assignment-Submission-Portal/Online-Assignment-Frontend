@@ -17,6 +17,7 @@ const Signin = () => {
         email,
         password,
       });
+      console.log("SIGNIN ");
       console.log(response);
       if (response.data.success) {
         const { token, user } = response.data;
