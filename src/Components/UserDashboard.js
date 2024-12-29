@@ -121,7 +121,7 @@ const UserDashboard = () => {
           </button>
         </div>
 
-        <div className="mb-4">
+        <div className="mb-4 w-1/3">
           <h2 className="text-lg font-semibold mb-2">Your Details:</h2>
           <div className="bg-gray-700 p-4 rounded-lg">
             <p className="text-gray-300">
@@ -142,23 +142,34 @@ const UserDashboard = () => {
           </div>
         </div>
 
+        {user.role === "teacher" && (
+        <div className="mt-6 flex justify-end">
+          <button
+            onClick={() => navigate("/add-subject", { state: { teacherId: user.id } })}
+            className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg"
+          >
+            + Add Subject
+          </button>
+        </div>
+      )}
+
         <div className="mb-4">
           <h2 className="text-lg font-semibold mb-4 text-center">
             Your Subjects
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 bg-[#64748b] sm:grid-cols-2 lg:grid-cols-4 gap-6 h-80 flex justify-center items-center overflow-y-auto">
           {user.subjectDetails && user.subjectDetails.length > 0 ? (
             user.subjectDetails.map((subject, index) => (
               <div
                 key={index}
-                className="bg-gray-700 p-4 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                className="bg-gray-700 p-4 rounded-lg h-64 w-56 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
               >
-                <p className="text-gray-300">
-                  <span className="font-semibold text-gray-200">Subject name:</span>{" "}
+                <p className="text-black-800 h-1/2 bg-[#3b82f6] rounded-md flex items-center justify-center">
+                  <span className="font-semibold text-gray-200"></span>{" "}
                   {subject.subjectName}
                 </p>
-                <p className="text-gray-300">
-                  <span className="font-semibold text-gray-200">Teacher name:</span>{" "}
+                <p className=" mt-1 rounded-md h-1/2 bg-[#8b5cf6] flex items-center justify-center">
+                  <span className="font-semibold "></span>{" "}
                   {subject.teacherName}
                 </p>
                 {/* <p className="text-gray-300">
@@ -174,16 +185,7 @@ const UserDashboard = () => {
 
         </div>
 
-        {user.role === "teacher" && (
-        <div className="mt-6 flex justify-end">
-          <button
-            onClick={() => navigate("/add-subject", { state: { teacherId: user.id } })}
-            className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg"
-          >
-            + Add Subject
-          </button>
-        </div>
-      )}
+        
 
       </div>
     </div>
