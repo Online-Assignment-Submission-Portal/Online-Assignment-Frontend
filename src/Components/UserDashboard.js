@@ -158,13 +158,13 @@ const UserDashboard = () => {
                   {subject.subjectName}
                 </p>
                 <p className="text-gray-400">
-                  <span className="font-semibold text-gray-300">Teacher ID:</span>{" "}
+                  <span className="font-semibold text-gray-300">Teacher Name:</span>{" "}
                   {subject.teacherName}
                 </p>
-                <p className="text-gray-400">
+                {/* <p className="text-gray-400">
                 <span className="font-semibold text-gray-300">Subject ID:</span>{" "}
                 {subject.subjectId} 
-                </p>
+                </p> */}
               </div>
             ))
           ) : (
