@@ -17,8 +17,7 @@ const UserDashboard = () => {
           ?.split("=")[1];
 
         if (!token) {
-          navigate("/signin");
-          return;
+          return navigate("/signin");
         }
 
         const response = await axios.get(
@@ -29,15 +28,20 @@ const UserDashboard = () => {
             },
           }
         );
-
+        console.log("DASHBOARD ");
+        console.log(response);
         if (response.data.success) {
           setUser(response.data.user);
         } else {
           setError("Failed to fetch user data.");
         }
       } catch (err) {
-        setError(err.response?.data?.message || "An error occurred.");
-        navigate("/signin");
+        console.log("error is", err)
+        if (err.response && err.response.status === 401) {
+          navigate("/signin");
+        } else {
+          setError(err.response?.data?.message || "An error occurred.");
+        }
       }
     };
 
@@ -129,9 +133,7 @@ const UserDashboard = () => {
             </p>
             <p>
               <span className="font-semibold">Role:</span>{" "}
-              {user.role && Array.isArray(user.role)
-                ? user.role[0]
-                : user.role}
+              {user.role[0].toUpperCase() + user.role.slice(1)}
             </p>
             <p>
               <span className="font-semibold">Member Since:</span>{" "}
@@ -145,49 +147,44 @@ const UserDashboard = () => {
             Your Subjects
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {user.subjects && user.subjects.length > 0 ? (
-              user.subjects.map((subject, index) => (
-                <div
-                  key={index}
-                  className="bg-gray-800 p-4 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
-                >
-                  <h3 className="text-xl font-bold mb-2 text-white">
-                    {subject.name}
-                  </h3>
-                  <p className="text-gray-400 mb-2">
-                    <span className="font-semibold text-gray-300">
-                      Teacher:
-                    </span>{" "}
-                    {subject.teacher}
-                  </p>
-                  <p className="text-gray-400">
-                    <span className="font-semibold text-gray-300">
-                      Credits:
-                    </span>{" "}
-                    {subject.credits}
-                  </p>
-                </div>
-              ))
-            ) : (
-              <p className="text-center col-span-full text-gray-400">
-                No subjects found.
-              </p>
-            )}
-          </div>
+          {user.subjectDetails && user.subjectDetails.length > 0 ? (
+            user.subjectDetails.map((subject, index) => (
+              <div
+                key={index}
+                className="bg-gray-800 p-4 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+              >
+                <p className="text-gray-400">
+                  <span className="font-semibold text-gray-300">Subject name:</span>{" "}
+                  {subject.subjectName}
+                </p>
+                <p className="text-gray-400">
+                  <span className="font-semibold text-gray-300">Teacher ID:</span>{" "}
+                  {subject.teacherName}
+                </p>
+                <p className="text-gray-400">
+                <span className="font-semibold text-gray-300">Subject ID:</span>{" "}
+                {subject.subjectId} 
+                </p>
+              </div>
+            ))
+          ) : (
+            <p className="text-center col-span-full text-gray-400">No subjects found.</p>
+          )}
+        </div>
+
         </div>
 
         {user.role === "teacher" && (
-          <div className="mt-6">
-            <button
-              onClick={() =>
-                navigate("/add-subject", { state: { teacherId: user.id } })
-              }
-              className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg"
-            >
-              Add Subject
-            </button>
-          </div>
-        )}
+        <div className="mt-6 flex justify-end">
+          <button
+            onClick={() => navigate("/add-subject", { state: { teacherId: user.id } })}
+            className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg"
+          >
+            + Add Subject
+          </button>
+        </div>
+      )}
+
       </div>
     </div>
   );
