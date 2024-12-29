@@ -43,7 +43,7 @@ const AddSubject = () => {
       );
 
       if (response.data.success) {
-        navigate("/dashboard");
+        navigate("/dashboard/${teacherId}"); // Redirect to the teacher's dashboard with the newly created subject
       } else {
         setError("An error occurred while creating the subject.");
       }
