@@ -107,8 +107,8 @@ const UserDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex justify-center">
-      <div className="bg-gray-800 p-6 rounded-lg shadow-lg w-full">
+    <div className="min-h-screen bg-gray-900 text-gray-200 flex justify-center">
+      <div className="bg-gray-800 p-6 shadow-lg w-full">
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-bold text-center mb-4">
             Welcome, {user.firstName}!
@@ -124,19 +124,19 @@ const UserDashboard = () => {
         <div className="mb-4">
           <h2 className="text-lg font-semibold mb-2">Your Details:</h2>
           <div className="bg-gray-700 p-4 rounded-lg">
-            <p>
-              <span className="font-semibold">Name:</span> {user.firstName}{" "}
+            <p className="text-gray-300">
+              <span className="font-semibold text-gray-200">Name:</span> {user.firstName}{" "}
               {user.lastName}
             </p>
-            <p>
-              <span className="font-semibold">Email:</span> {user.email}
+            <p className="text-gray-300">
+              <span className="font-semibold text-gray-200">Email:</span> {user.email}
             </p>
-            <p>
-              <span className="font-semibold">Role:</span>{" "}
+            <p className="text-gray-300">
+              <span className="font-semibold text-gray-200">Role:</span>{" "}
               {user.role[0].toUpperCase() + user.role.slice(1)}
             </p>
-            <p>
-              <span className="font-semibold">Member Since:</span>{" "}
+            <p className="text-gray-300">
+              <span className="font-semibold text-gray-200">Member Since:</span>{" "}
               {new Date(user.createdAt).toLocaleDateString()}
             </p>
           </div>
@@ -151,24 +151,24 @@ const UserDashboard = () => {
             user.subjectDetails.map((subject, index) => (
               <div
                 key={index}
-                className="bg-gray-800 p-4 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                className="bg-gray-700 p-4 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
               >
-                <p className="text-gray-400">
-                  <span className="font-semibold text-gray-300">Subject name:</span>{" "}
+                <p className="text-gray-300">
+                  <span className="font-semibold text-gray-200">Subject name:</span>{" "}
                   {subject.subjectName}
                 </p>
-                <p className="text-gray-400">
-                  <span className="font-semibold text-gray-300">Teacher Name:</span>{" "}
+                <p className="text-gray-300">
+                  <span className="font-semibold text-gray-200">Teacher name:</span>{" "}
                   {subject.teacherName}
                 </p>
-                {/* <p className="text-gray-400">
-                <span className="font-semibold text-gray-300">Subject ID:</span>{" "}
+                {/* <p className="text-gray-300">
+                <span className="font-semibold text-gray-200">Subject ID:</span>{" "}
                 {subject.subjectId} 
                 </p> */}
               </div>
             ))
           ) : (
-            <p className="text-center col-span-full text-gray-400">No subjects found.</p>
+            <p className="text-center col-span-full text-gray-300">No subjects found.</p>
           )}
         </div>
 
