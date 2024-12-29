@@ -3,11 +3,10 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 
 const UserDashboard = () => {
-  const { id } = useParams(); 
+  const { id } = useParams();
   const navigate = useNavigate();
-  const [user, setUser] = useState(null); 
-  const [error, setError] = useState(""); 
-
+  const [user, setUser] = useState(null);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchUserData = async (id) => {
@@ -18,27 +17,31 @@ const UserDashboard = () => {
           ?.split("=")[1];
 
         if (!token) {
-          navigate("/signin");
-          return;
+          return navigate("/signin");
         }
-        console.log(id);
-        const response = await axios.get(`http://localhost:8000/user/dashboard/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-         console.log('hello',response.data);
+
+        const response = await axios.get(
+          `http://localhost:8000/user/dashboard/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log("DASHBOARD ");
+        console.log(response);
         if (response.data.success) {
-          console.log("hello user");
           setUser(response.data.user);
         } else {
-          console.log('KemCho Majama')
           setError("Failed to fetch user data.");
         }
       } catch (err) {
-        console.error("Error fetching user data:", err);
-        setError(err.response?.data?.message || "An error occurred.");
-        navigate("/signin");
+        console.log("error is", err)
+        if (err.response && err.response.status === 401) {
+          navigate("/signin");
+        } else {
+          setError(err.response?.data?.message || "An error occurred.");
+        }
       }
     };
 
@@ -51,12 +54,12 @@ const UserDashboard = () => {
         .split("; ")
         .find((row) => row.startsWith("token="))
         ?.split("=")[1];
-  
+
       if (!token) {
         navigate("/signin");
         return;
       }
-  
+
       const response = await axios.post(
         "http://localhost:8000/user/logout",
         {},
@@ -66,20 +69,18 @@ const UserDashboard = () => {
           },
         }
       );
-  
+
       if (response.status === 200) {
-        document.cookie = "token=; path=/; expires=Wed, 01 Jan 2025 00:00:00 UTC;";
+        document.cookie =
+          "token=; path=/; expires=Wed, 01 Jan 2025 00:00:00 UTC;";
         navigate("/signin");
       } else {
-        console.error("Logout failed:", response.data.message);
         setError(response.data.message || "Logout failed.");
       }
     } catch (err) {
-      console.error("Error during logout:", err);
       setError(err.response?.data?.message || "An error occurred during logout.");
     }
   };
-  
 
   if (error) {
     return (
@@ -107,61 +108,83 @@ const UserDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white flex justify-center">
-      
-      <div className="bg-gray-800 p-6 rounded-lg shadow-lg w-full ">
+      <div className="bg-gray-800 p-6 rounded-lg shadow-lg w-full">
         <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-center mb-4">Welcome, {user.firstName}!</h1>
-        <button
-          onClick={handleLogout}
-          className="bg-red-600 hover:bg-red-500 text-white font-bold py-2 px-4 rounded-lg "
-        >
-          Logout
-        </button>
+          <h1 className="text-2xl font-bold text-center mb-4">
+            Welcome, {user.firstName}!
+          </h1>
+          <button
+            onClick={handleLogout}
+            className="bg-red-600 hover:bg-red-500 text-white font-bold py-2 px-4 rounded-lg"
+          >
+            Logout
+          </button>
         </div>
+
         <div className="mb-4">
           <h2 className="text-lg font-semibold mb-2">Your Details:</h2>
           <div className="bg-gray-700 p-4 rounded-lg">
             <p>
-              <span className="font-semibold">Name:</span> {user.firstName} {user.lastName}
+              <span className="font-semibold">Name:</span> {user.firstName}{" "}
+              {user.lastName}
             </p>
             <p>
               <span className="font-semibold">Email:</span> {user.email}
             </p>
             <p>
-            <span className="font-semibold">Role:</span> {user.role[0].toUpperCase() + user.role.slice(1)}
+              <span className="font-semibold">Role:</span>{" "}
+              {user.role[0].toUpperCase() + user.role.slice(1)}
             </p>
             <p>
-              <span className="font-semibold">Member Since:</span> {new Date(user.createdAt).toLocaleDateString()}
+              <span className="font-semibold">Member Since:</span>{" "}
+              {new Date(user.createdAt).toLocaleDateString()}
             </p>
           </div>
         </div>
 
         <div className="mb-4">
-  <h2 className="text-lg font-semibold mb-4 text-center">Your Subjects</h2>
-  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-    {user.subjects && user.subjects.length > 0 ? (
-      user.subjects.map((subject, index) => (
-        <div
-          key={index}
-          className="bg-gray-800 p-4 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
-        >
-          <h3 className="text-xl font-bold mb-2 text-white">{subject.name}</h3>
-          <p className="text-gray-400 mb-2">
-            <span className="font-semibold text-gray-300">Teacher:</span> {subject.teacher}
-          </p>
-          <p className="text-gray-400">
-            <span className="font-semibold text-gray-300">Credits:</span> {subject.credits}
-          </p>
+          <h2 className="text-lg font-semibold mb-4 text-center">
+            Your Subjects
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {user.subjectDetails && user.subjectDetails.length > 0 ? (
+            user.subjectDetails.map((subject, index) => (
+              <div
+                key={index}
+                className="bg-gray-800 p-4 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+              >
+                <p className="text-gray-400">
+                  <span className="font-semibold text-gray-300">Subject name:</span>{" "}
+                  {subject.subjectName}
+                </p>
+                <p className="text-gray-400">
+                  <span className="font-semibold text-gray-300">Teacher Name:</span>{" "}
+                  {subject.teacherName}
+                </p>
+                {/* <p className="text-gray-400">
+                <span className="font-semibold text-gray-300">Subject ID:</span>{" "}
+                {subject.subjectId} 
+                </p> */}
+              </div>
+            ))
+          ) : (
+            <p className="text-center col-span-full text-gray-400">No subjects found.</p>
+          )}
         </div>
-      ))
-    ) : (
-      <p className="text-center col-span-full text-gray-400">No subjects found.</p>
-    )}
-  </div>
-</div>
 
+        </div>
 
-        
+        {user.role === "teacher" && (
+        <div className="mt-6 flex justify-end">
+          <button
+            onClick={() => navigate("/add-subject", { state: { teacherId: user.id } })}
+            className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg"
+          >
+            + Add Subject
+          </button>
+        </div>
+      )}
+
       </div>
     </div>
   );
