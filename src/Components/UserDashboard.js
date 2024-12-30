@@ -82,6 +82,37 @@ const UserDashboard = () => {
     }
   };
 
+  const handleSubject = async (subject) => { 
+    try {
+      const token = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("token="))
+      ?.split("=")[1];
+
+      console.log('hello', subject);
+      const response = await axios.get(
+        `http://localhost:8000/user/getsubject/${subject.subjectId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.status === 200 && response.data) {
+        console.log("subject", response.data);
+        navigate(`/subject/${subject.subjectId}`, { state: { subject: response.data } });
+      }
+    } catch (err) {
+      if (err.response && err.response.status === 404) {
+        console.log("backend me problem hai");
+        alert("Subject details not found.");
+      } else {
+        console.error(err);
+        alert("An error occurred while fetching subject details.");
+      }
+    }
+  }
+
   if (error) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">

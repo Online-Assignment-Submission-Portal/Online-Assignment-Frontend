@@ -23,15 +23,15 @@ function SubjectDetails() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 py-8">
-      <div className="container mx-auto bg-white p-8 rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold text-gray-800 mb-4">{subject.name}</h1>
-        <p className="text-gray-600 mb-2">Subject ID: {subject.subjectId}</p>
-        <p className="text-gray-600 mb-2">Number of Students: {subject.numberOfStudents}</p>
+    <div className="min-h-screen bg-gray-900 py-8">
+      <div className="container mx-auto bg-gray-800 p-8 rounded-lg shadow-lg">
+        <h1 className="text-3xl font-bold text-gray-200 mb-4">{subject.teacher_name}</h1>
+        <p className="text-gray-200 mb-2">Subject ID: {subject.subject_id}</p>
+        <p className="text-gray-200 mb-2">Number of Students: {subject.numberOfStudents}</p>
 
-        <h2 className="text-2xl font-semibold text-gray-700 mt-6 mb-2">Assignments</h2>
-        {subject.assignments.length > 0 ? (
-          <ul className="list-disc list-inside text-gray-600">
+        <h2 className="text-2xl font-semibold text-gray-200 mt-6 mb-2">Assignments</h2>
+        {subject.assignments?.length > 0 ? (
+          <ul className="list-disc list-inside text-gray-200">
             {subject.assignments.map((assignment) => (
               <li key={assignment.id}>
                 <strong>{assignment.title}</strong> - Due: {assignment.dueDate}
@@ -39,18 +39,18 @@ function SubjectDetails() {
             ))}
           </ul>
         ) : (
-          <p className="text-gray-600">No assignments available.</p>
+          <p className="text-gray-200">No assignments available.</p>
         )}
 
-        <h2 className="text-2xl font-semibold text-gray-700 mt-6 mb-2">Students</h2>
-        {subject.students.length > 0 ? (
-          <ul className="list-disc list-inside text-gray-600">
+        <h2 className="text-2xl font-semibold text-gray-200 mt-6 mb-2">Students</h2>
+        {subject.students?.length > 0 ? (
+          <ul className="list-disc list-inside text-gray-200">
             {subject.students.map((student) => (
               <li key={student.id}>{student.name}</li>
             ))}
           </ul>
         ) : (
-          <p className="text-gray-600">No students enrolled.</p>
+          <p className="text-gray-200">No students enrolled.</p>
         )}
 
         <button
