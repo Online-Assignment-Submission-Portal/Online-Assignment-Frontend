@@ -82,12 +82,24 @@ const UserDashboard = () => {
     }
   };
 
-  const handleSubject = async (subject) => {
+  const handleSubject = async (subject) => { 
     try {
+      const token = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("token="))
+      ?.split("=")[1];
+
+      console.log('hello', subject);
       const response = await axios.get(
-        `http://localhost:8000/user/getsubject/${subject.subject_id}`
+        `http://localhost:8000/user/getsubject/${subject.subjectId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       if (response.status === 200 && response.data) {
+        console.log("subject", response.data);
         navigate(`/subject/${subject.subjectId}`, { state: { subject: response.data } });
       }
     } catch (err) {
@@ -182,7 +194,7 @@ const UserDashboard = () => {
               <div
                 key={index}
                 className="bg-gray-700 p-4 rounded-lg h-64 w-56 shadow-lg hover:shadow-xl transform hover:scale-105 
-                transition-all duration-300" onClick={handleSubject}>
+                transition-all duration-300" onClick={() => handleSubject(subject)}>
                 <p className="text-black-800 h-1/2 bg-[#3b82f6] rounded-md flex items-center justify-center">
                   <span className="font-semibold text-gray-200"></span>{" "}
                   {subject.subjectName}
