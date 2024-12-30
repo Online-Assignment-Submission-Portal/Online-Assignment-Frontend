@@ -78,7 +78,7 @@ function SubjectDetails() {
   return (
     <div className="min-h-screen bg-gray-900 py-8 flex">
       <div className="container mx-auto bg-gray-800 p-8 rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold text-gray-200 mb-4">{subjectName}</h1>
+        <h1 className="text-3xl font-bold text-gray-200 mb-4 overflow-auto scrollbar-none">{subjectName}</h1>
         <div className="flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-300 mb-2">Teacher Name: <span className="font-medium text-gray-100">{subject.teacher_name}</span></p>
           <p className="text-gray-300 mb-2">Number of Students: <span className="font-medium text-gray-100">{subject.numberOfStudents}</span></p>
