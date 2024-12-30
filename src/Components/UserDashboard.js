@@ -165,7 +165,7 @@ const UserDashboard = () => {
                 className="bg-gray-700 p-4 rounded-lg h-64 w-56 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300" onClick={async () => {
                   try {
                     const response = await axios.get(
-                      `http://localhost:8000/subject/${subject.subjectId}`
+                      `http://localhost:8000/user/subject/${subject.subjectId}`
                     );
                     if (response.status === 200 && response.data) {
                       navigate(`/subject/${subject.subjectId}`, { state: { subject: response.data } });
@@ -174,6 +174,7 @@ const UserDashboard = () => {
                     if (err.response && err.response.status === 404) {
                       console.log("backend me problem hai");
                       alert("Subject details not found.");
+                      navigate(`/subject/${subject.subjectId}`, { state: { subject: "", userID : id } });
                     } else {
                       console.error(err);
                       alert("An error occurred while fetching subject details.");
