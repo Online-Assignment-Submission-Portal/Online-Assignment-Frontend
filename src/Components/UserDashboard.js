@@ -82,6 +82,25 @@ const UserDashboard = () => {
     }
   };
 
+  const handleSubject = async (subject) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/user/getsubject/${subject.subject_id}`
+      );
+      if (response.status === 200 && response.data) {
+        navigate(`/subject/${subject.subjectId}`, { state: { subject: response.data } });
+      }
+    } catch (err) {
+      if (err.response && err.response.status === 404) {
+        console.log("backend me problem hai");
+        alert("Subject details not found.");
+      } else {
+        console.error(err);
+        alert("An error occurred while fetching subject details.");
+      }
+    }
+  }
+
   if (error) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
@@ -157,31 +176,13 @@ const UserDashboard = () => {
           <h2 className="text-lg font-semibold mb-4 text-center">
             Your Subjects
           </h2>
-          <div className="grid grid-cols-1 bg-[#64748b] sm:grid-cols-2 lg:grid-cols-4 gap-6 h-80 flex justify-center items-center overflow-y-auto">
+          <div className="grid grid-cols-1 bg-[#64748b] sm:grid-cols-2 lg:grid-cols-4 gap-6 h-80 flex justify-center items-center overflow-y-auto overflow-x-hidden">
           {user.subjectDetails && user.subjectDetails.length > 0 ? (
             user.subjectDetails.map((subject, index) => (
               <div
                 key={index}
-                className="bg-gray-700 p-4 rounded-lg h-64 w-56 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300" onClick={async () => {
-                  try {
-                    const response = await axios.get(
-                      `http://localhost:8000/user/subject/${subject.subjectId}`
-                    );
-                    if (response.status === 200 && response.data) {
-                      navigate(`/subject/${subject.subjectId}`, { state: { subject: response.data } });
-                    }
-                  } catch (err) {
-                    if (err.response && err.response.status === 404) {
-                      console.log("backend me problem hai");
-                      alert("Subject details not found.");
-                      navigate(`/subject/${subject.subjectId}`, { state: { subject: "", userID : id } });
-                    } else {
-                      console.error(err);
-                      alert("An error occurred while fetching subject details.");
-                    }
-                  }
-                }}
-              >
+                className="bg-gray-700 p-4 rounded-lg h-64 w-56 shadow-lg hover:shadow-xl transform hover:scale-105 
+                transition-all duration-300" onClick={handleSubject}>
                 <p className="text-black-800 h-1/2 bg-[#3b82f6] rounded-md flex items-center justify-center">
                   <span className="font-semibold text-gray-200"></span>{" "}
                   {subject.subjectName}
@@ -190,10 +191,10 @@ const UserDashboard = () => {
                   <span className="font-semibold "></span>{" "}
                   {subject.teacherName}
                 </p>
-                {/* <p className="text-gray-300">
+                <p className="text-gray-300">
                 <span className="font-semibold text-gray-200">Subject ID:</span>{" "}
                 {subject.subjectId} 
-                </p> */}
+                </p>  
               </div>
             ))
           ) : (
