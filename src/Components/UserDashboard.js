@@ -157,7 +157,7 @@ const UserDashboard = () => {
           <h2 className="text-lg font-semibold mb-4 text-center">
             Your Subjects
           </h2>
-          <div className="grid grid-cols-1 bg-[#64748b] sm:grid-cols-2 lg:grid-cols-4 gap-6 h-80 flex justify-center items-center overflow-y-auto">
+          <div className="grid grid-cols-1 bg-[#64748b] sm:grid-cols-2 lg:grid-cols-4 gap-6 h-80 flex justify-center items-center overflow-y-auto overflow-x-hidden">
           {user.subjectDetails && user.subjectDetails.length > 0 ? (
             user.subjectDetails.map((subject, index) => (
               <div
