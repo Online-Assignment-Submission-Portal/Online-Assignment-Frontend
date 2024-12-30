@@ -8,43 +8,43 @@ const UserDashboard = () => {
   const [user, setUser] = useState(null);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    const fetchUserData = async (id) => {
-      try {
-        const token = document.cookie
-          .split("; ")
-          .find((row) => row.startsWith("token="))
-          ?.split("=")[1];
+  const fetchUserData = async (id) => {
+    try {
+      const token = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("token="))
+        ?.split("=")[1];
 
-        if (!token) {
-          return navigate("/signin");
-        }
-
-        const response = await axios.get(
-          `http://localhost:8000/user/dashboard/${id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        console.log("DASHBOARD ");
-        console.log(response);
-        if (response.data.success) {
-          setUser(response.data.user);
-        } else {
-          setError("Failed to fetch user data.");
-        }
-      } catch (err) {
-        console.log("error is", err)
-        if (err.response && err.response.status === 401) {
-          navigate("/signin");
-        } else {
-          setError(err.response?.data?.message || "An error occurred.");
-        }
+      if (!token) {
+        return navigate("/signin");
       }
-    };
 
+      const response = await axios.get(
+        `http://localhost:8000/user/dashboard/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("DASHBOARD ");
+      console.log(response);
+      if (response.data.success) {
+        setUser(response.data.user);
+      } else {
+        setError("Failed to fetch user data.");
+      }
+    } catch (err) {
+      console.log("error is", err)
+      if (err.response && err.response.status === 401) {
+        navigate("/signin");
+      } else {
+        setError(err.response?.data?.message || "An error occurred.");
+      }
+    }
+  };
+
+  useEffect(() => {
     fetchUserData(id);
   }, [id, navigate]);
 
@@ -153,11 +153,11 @@ const UserDashboard = () => {
         </div>
       )}
 
-        <div className="mb-4">
-          <h2 className="text-lg font-semibold mb-4 text-center">
+        <div className="mb-4 mt-1">
+          <h2 className="text-lg font-semibold mb-6 text-center">
             Your Subjects
           </h2>
-          <div className="grid grid-cols-1 bg-[#64748b] sm:grid-cols-2 lg:grid-cols-4 gap-6 h-80 flex justify-center items-center overflow-y-auto">
+          <div className="grid grid-cols-1 bg-gray-800 rounded-lg sm:grid-cols-2 lg:grid-cols-4 gap-6 h-full text-center justify-center items-center overflow-visible">
           {user.subjectDetails && user.subjectDetails.length > 0 ? (
             user.subjectDetails.map((subject, index) => (
               <div
@@ -182,11 +182,11 @@ const UserDashboard = () => {
                   }
                 }}
               >
-                <p className="text-black-800 h-1/2 bg-[#3b82f6] rounded-md flex items-center justify-center">
+                <p className="text-black-800 h-1/2 bg-[#3b82f6] rounded-md overflow-auto flex items-center justify-center">
                   <span className="font-semibold text-gray-200"></span>{" "}
                   {subject.subjectName}
                 </p>
-                <p className=" mt-1 rounded-md h-1/2 bg-[#8b5cf6] flex items-center justify-center">
+                <p className=" mt-1 rounded-md h-1/2 bg-[#8b5cf6] overflow-x-auto flex items-center justify-center">
                   <span className="font-semibold "></span>{" "}
                   {subject.teacherName}
                 </p>
@@ -197,7 +197,7 @@ const UserDashboard = () => {
               </div>
             ))
           ) : (
-            <p className="text-center col-span-full text-gray-300">No subjects found.</p>
+            <p className="text-center col-span-full text-gray-200">No subjects found.</p>
           )}
         </div>
 
