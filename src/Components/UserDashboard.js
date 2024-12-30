@@ -8,43 +8,41 @@ const UserDashboard = () => {
   const [user, setUser] = useState(null);
   const [error, setError] = useState("");
 
-  const fetchUserData = async (id) => {
-    try {
-      const token = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("token="))
-        ?.split("=")[1];
-
-      if (!token) {
-        return navigate("/signin");
-      }
-
-      const response = await axios.get(
-        `http://localhost:8000/user/dashboard/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log("DASHBOARD ");
-      console.log(response);
-      if (response.data.success) {
-        setUser(response.data.user);
-      } else {
-        setError("Failed to fetch user data.");
-      }
-    } catch (err) {
-      console.log("error is", err)
-      if (err.response && err.response.status === 401) {
-        navigate("/signin");
-      } else {
-        setError(err.response?.data?.message || "An error occurred.");
-      }
-    }
-  };
-
   useEffect(() => {
+    const fetchUserData = async (id) => {
+      try {
+        const token = document.cookie
+          .split("; ")
+          .find((row) => row.startsWith("token="))
+          ?.split("=")[1];
+
+        if (!token) {
+          return navigate("/signin");
+        }
+
+        const response = await axios.get(
+          `http://localhost:8000/user/dashboard/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.data.success) {
+          setUser(response.data.user);
+        } else {
+          setError("Failed to fetch user data.");
+        }
+      } catch (err) {
+        if (err.response && err.response.status === 401) {
+          navigate("/signin");
+        } else {
+          setError(err.response?.data?.message || "An error occurred.");
+        }
+      }
+    };
+
     fetchUserData(id);
   }, [id, navigate]);
 
@@ -82,14 +80,13 @@ const UserDashboard = () => {
     }
   };
 
-  const handleSubject = async (subject) => { 
+  const handleSubject = async (subject) => {
     try {
       const token = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("token="))
-      ?.split("=")[1];
+        .split("; ")
+        .find((row) => row.startsWith("token="))
+        ?.split("=")[1];
 
-      console.log('hello', subject);
       const response = await axios.get(
         `http://localhost:8000/user/getsubject/${subject.subjectId}`,
         {
@@ -98,26 +95,26 @@ const UserDashboard = () => {
           },
         }
       );
+      const subjectName = subject.subjectName;
       if (response.status === 200 && response.data) {
-        console.log("subject", response.data);
-        navigate(`/subject/${subject.subjectId}`, { state: { subject: response.data } });
+        navigate(`/subject/${subject.subjectId}`, {
+          state: { subject: response.data, userID: id, subjectName },
+        });
       }
     } catch (err) {
       if (err.response && err.response.status === 404) {
-        console.log("backend me problem hai");
         alert("Subject details not found.");
       } else {
-        console.error(err);
         alert("An error occurred while fetching subject details.");
       }
     }
-  }
+  };
 
   if (error) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
         <div className="text-center">
-          <p className="text-red-500 mb-4">{error}</p>
+          <p className="text-red-500 text-lg mb-4">{error}</p>
           <button
             onClick={() => navigate("/signin")}
             className="bg-green-600 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-lg"
@@ -138,12 +135,10 @@ const UserDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-200 flex justify-center">
-      <div className="bg-gray-800 p-6 shadow-lg w-full">
-        <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-center mb-4">
-            Welcome, {user.firstName}!
-          </h1>
+    <div className="min-h-screen bg-gray-900 text-gray-200">
+      <div className="container mx-auto py-8 px-6">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold">Welcome, {user.firstName}!</h1>
           <button
             onClick={handleLogout}
             className="bg-red-600 hover:bg-red-500 text-white font-bold py-2 px-4 rounded-lg"
@@ -152,90 +147,66 @@ const UserDashboard = () => {
           </button>
         </div>
 
-        <div className="mb-4 w-1/3">
-          <h2 className="text-lg font-semibold mb-2">Your Details:</h2>
-          <div className="bg-gray-700 p-4 rounded-lg">
-            <p className="text-gray-300">
-              <span className="font-semibold text-gray-200">Name:</span> {user.firstName}{" "}
-              {user.lastName}
+        <div className="mb-8">
+          <h2 className="text-xl font-semibold mb-4">Your Details</h2>
+          <div className="bg-gray-800 p-4 rounded-lg shadow-lg">
+            <p>
+              <span className="font-semibold text-gray-100">Name:</span>{" "}
+              {user.firstName} {user.lastName}
             </p>
-            <p className="text-gray-300">
-              <span className="font-semibold text-gray-200">Email:</span> {user.email}
+            <p>
+              <span className="font-semibold text-gray-100">Email:</span>{" "}
+              {user.email}
             </p>
-            <p className="text-gray-300">
-              <span className="font-semibold text-gray-200">Role:</span>{" "}
+            <p>
+              <span className="font-semibold text-gray-100">Role:</span>{" "}
               {user.role[0].toUpperCase() + user.role.slice(1)}
             </p>
-            <p className="text-gray-300">
-              <span className="font-semibold text-gray-200">Member Since:</span>{" "}
+            <p>
+              <span className="font-semibold text-gray-100">Member Since:</span>{" "}
               {new Date(user.createdAt).toLocaleDateString()}
             </p>
           </div>
         </div>
 
-        {user.role === "teacher" && (
-        <div className="mt-6 flex justify-end">
-          <button
-            onClick={() => navigate("/add-subject", { state: { teacherId: user.id } })}
-            className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg"
-          >
-            + Add Subject
-          </button>
-        </div>
-      )}
 
-        <div className="mb-4 mt-1">
-          <h2 className="text-lg font-semibold mb-6 text-center">
+        <div>
+          <h2 className="text-xl font-semibold text-center">
             Your Subjects
           </h2>
-          <div className="grid grid-cols-1 bg-gray-800 rounded-lg sm:grid-cols-2 lg:grid-cols-4 gap-6 h-full text-center justify-center items-center overflow-visible">
-          {user.subjectDetails && user.subjectDetails.length > 0 ? (
-            user.subjectDetails.map((subject, index) => (
-              <div
-                key={index}
-                className="bg-gray-700 p-4 rounded-lg h-64 w-56 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300" onClick={async () => {
-                  try {
-                    const response = await axios.get(
-                      `http://localhost:8000/user/subject/${subject.subjectId}`
-                    );
-                    if (response.status === 200 && response.data) {
-                      navigate(`/subject/${subject.subjectId}`, { state: { subject: response.data } });
-                    }
-                  } catch (err) {
-                    if (err.response && err.response.status === 404) {
-                      console.log("backend me problem hai");
-                      alert("Subject details not found.");
-                      navigate(`/subject/${subject.subjectId}`, { state: { subject: "", userID : id } });
-                    } else {
-                      console.error(err);
-                      alert("An error occurred while fetching subject details.");
-                    }
-                  }
-                }}
-              >
-                <p className="text-black-800 h-1/2 bg-[#3b82f6] rounded-md overflow-auto flex items-center justify-center">
-                  <span className="font-semibold text-gray-200"></span>{" "}
-                  {subject.subjectName}
-                </p>
-                <p className=" mt-1 rounded-md h-1/2 bg-[#8b5cf6] overflow-x-auto flex items-center justify-center">
-                  <span className="font-semibold "></span>{" "}
-                  {subject.teacherName}
-                </p>
-                {/* <p className="text-gray-300 mt-1 rounded-md h-1/3 bg-[#8b5cf6]">
-                <span className="font-semibold text-gray-200">Subject ID:</span>{" "}
-                {subject.subjectId} 
-                </p>   */}
-              </div>
-            ))
-          ) : (
-            <p className="text-center col-span-full text-gray-200">No subjects found.</p>
-          )}
+        {user.role === "teacher" && (
+          <div className="mb-8 text-right">
+            <button
+              onClick={() =>
+                navigate("/add-subject", { state: { teacherId: user.id } })
+              }
+              className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg"
+            >
+              + Add Subject
+            </button>
+          </div>
+        )}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {user.subjectDetails && user.subjectDetails.length > 0 ? (
+              user.subjectDetails.map((subject, index) => (
+                <div
+                  key={index}
+                  className="bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 cursor-pointer"
+                  onClick={() => handleSubject(subject)}
+                >
+                  <p className="text-lg font-semibold text-blue-400 mb-2 overflow-auto scrollbar-none">
+                    {subject.subjectName}
+                  </p>
+                  <p className="text-gray-300">Teacher: {subject.teacherName}</p>
+                </div>
+              ))
+            ) : (
+              <p className="text-center col-span-full text-gray-400">
+                No subjects found.
+              </p>
+            )}
+          </div>
         </div>
-
-        </div>
-
-        
-
       </div>
     </div>
   );
