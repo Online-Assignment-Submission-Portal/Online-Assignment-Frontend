@@ -78,10 +78,10 @@ function SubjectDetails() {
   return (
     <div className="min-h-screen bg-gray-900 py-8 flex">
       <div className="container mx-auto bg-gray-800 p-8 rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold text-gray-200 mb-4 overflow-auto scrollbar-none">{subjectName}</h1>
+        <h1 className="text-3xl font-bold text-gray-200 mb-4 text-center">{subjectName}</h1>
         <div className="flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-300 mb-2">Teacher Name: <span className="font-medium text-gray-100">{subject.teacher_name}</span></p>
-          <p className="text-gray-300 mb-2">Number of Students: <span className="font-medium text-gray-100">{subject.numberOfStudents}</span></p>
+          <p className="text-gray-300 mb-2">Number of Students: <span className="font-medium text-gray-100">{foundStudents.length}</span></p>
           <p className="text-gray-300 mb-2">Subject ID: <span className="font-medium text-gray-100">{subject.subject_id}</span></p>
         </div>
 
@@ -124,31 +124,38 @@ function SubjectDetails() {
         </button>
 
         <div className='mt-6 flex justify-between items-center'>
-        <p className="text-2xl font-semibold text-gray-200">Students</p>
+        <p className="text-2xl font-semibold text-gray-200">Assignments</p>
 
+        <div className='flex justify-between items-center space-x-28'>
+          <div className="text-2xl font-semibold text-gray-200">Students</div>
         <button
           onClick={() => setIsModalOpen(true)}
           className="px-6 py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-500 transition"
           >
           + Add Students
         </button>
+        </div>
             </div>
 
-        {foundStudents.length > 0 ? (
-          <table className="mt-6 w-full border-collapse bg-gray-800 text-gray-200 rounded-lg overflow-hidden">
+        <div className=' flex justify-between items-center'>
+          <div>
+            <p className='text-zinc-100 font-bold'>Assignments will be shown here in the table form</p>
+          </div>
+        {foundStudents.length > 0 ? (          
+          <table className="mt-6 w-2/5  bg-gray-800 text-gray-200 rounded-lg overflow-hidden">
             <thead>
-              <tr className="bg-gray-700">
-                <th className="px-4 py-2 text-left">Name</th>
-                <th className="px-4 py-2 text-left">Email</th>
-                <th className="px-4 py-2 text-left">Role</th>
+              <tr className="bg-violet-800">
+                <th className="px-4 py-2 text-center ">Name</th>
+                <th className="px-4 py-2 text-center ">Email</th>
+                <th className="px-4 py-2 text-center ">Chat</th>
               </tr>
             </thead>
             <tbody>
               {foundStudents.map((student) => (
-                <tr key={student._id} className="hover:bg-gray-700 transition">
-                  <td className="border-b border-gray-600 px-4 py-2">{student.firstName} {student.lastName}</td>
-                  <td className="border-b border-gray-600 px-4 py-2">{student.email}</td>
-                  <td className="border-b border-gray-600 px-4 py-2">{student.role}</td>
+                <tr key={student._id} className="hover:bg-gray-700 transition text-center">
+                  <td className="border-b border-double border-gray-600 px-4 py-2 items-center">{student.firstName} {student.lastName}</td>
+                  <td className="border-b border-gray-600 px-4 py-2 items-center">{student.email}</td>
+                  <td className="border-b border-gray-600 px-4 py-2 items-center">Chat</td>
                 </tr>
               ))}
             </tbody>
@@ -156,6 +163,7 @@ function SubjectDetails() {
         ) : (
           <p className="text-gray-400 mt-2">No students found.</p>
         )}
+        </div>
 
         {notFoundEmails.length > 0 && (
           <>
