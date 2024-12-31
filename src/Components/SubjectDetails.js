@@ -8,7 +8,6 @@ function SubjectDetails() {
   const subject = location.state?.subject;
   const userID = location.state?.userID;
   const subjectName = location.state?.subjectName;
-  console.log(subject);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [emailInput, setEmailInput] = useState('');
   const [foundStudents, setFoundStudents] = useState([]);
@@ -41,7 +40,7 @@ function SubjectDetails() {
           },
         }
       );
-
+      console.log(response);
       if (response.data.success) {
         setFoundStudents(response.data.students_id);
         setNotFoundEmails((prev) => [...prev, ...response.data.notFoundStudents]);
@@ -55,13 +54,45 @@ function SubjectDetails() {
     }
   };
 
+  const handleRemoveStudent = async (studentId) => {
+    try {
+      const token = document.cookie
+        .split('; ')
+        .find((row) => row.startsWith('token='))
+        ?.split('=')[1];
+
+      if (!token) {
+        return navigate('/signin');
+      }
+
+      const response = await axios.post(
+        `http://localhost:8000/user/removestudent/${subject.subject_id}`,
+        { studentId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      console.log(response);
+      if (response.data.success) {
+        setFoundStudents((prev) => prev.filter((student) => student._id !== studentId));
+      } else {
+        alert(response.data.message);
+      }
+    } catch (error) {
+      console.error('Error removing student:', error);
+    }
+  };
+
   const removeNotFoundEmail = (email) => {
     setNotFoundEmails(notFoundEmails.filter((e) => e !== email));
   };
 
   if (!subject) {
     return (
-      <div className="flex items-center justify-center h-screen bg-gray-100">
+      <div className="flex items-center justify-center h-screen bg-gray-900">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-red-600">Subject Details Not Found</h1>
           <button
@@ -78,11 +109,11 @@ function SubjectDetails() {
   return (
     <div className="min-h-screen bg-gray-900 py-8 flex">
       <div className="container mx-auto bg-gray-800 p-8 rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold text-gray-200 mb-4 text-center">{subjectName}</h1>
+        <h1 className="text-3xl font-bold text-gray-200 mb-4 text-center overflow-auto scrollbar-none">{subjectName}</h1>
         <div className="flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-300 mb-2">Teacher Name: <span className="font-medium text-gray-100">{subject.teacher_name}</span></p>
           <p className="text-gray-300 mb-2">Number of Students: <span className="font-medium text-gray-100">{foundStudents.length}</span></p>
-          <p className="text-gray-300 mb-2">Subject ID: <span className="font-medium text-gray-100">{subject.subject_id}</span></p>
+          <p className="text-gray-300 mb-2">Subject Code: <span className="font-medium text-gray-100">{subject.subject_code}</span></p>
         </div>
 
         
@@ -148,6 +179,7 @@ function SubjectDetails() {
                 <th className="px-4 py-2 text-center ">Name</th>
                 <th className="px-4 py-2 text-center ">Email</th>
                 <th className="px-4 py-2 text-center ">Chat</th>
+                <th className="px-4 py-2 text-center ">Remove</th>
               </tr>
             </thead>
             <tbody>
@@ -156,12 +188,21 @@ function SubjectDetails() {
                   <td className="border-b border-double border-gray-600 px-4 py-2 items-center">{student.firstName} {student.lastName}</td>
                   <td className="border-b border-gray-600 px-4 py-2 items-center">{student.email}</td>
                   <td className="border-b border-gray-600 px-4 py-2 items-center">Chat</td>
+                  <td className="border-b border-gray-600 px-4 py-2 items-center">
+
+                  <button
+                      onClick={() => handleRemoveStudent(student._id)}
+                      className="text-red-500 hover:text-red-600"
+                      >
+                      ✕
+                    </button>
+                      </td>
                 </tr>
               ))}
             </tbody>
           </table>
         ) : (
-          <p className="text-gray-400 mt-2">No students found.</p>
+          <p className="text-gray-400 mt-2 text-left">No students found.</p>
         )}
         </div>
 
