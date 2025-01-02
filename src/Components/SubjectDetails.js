@@ -54,7 +54,7 @@ function SubjectDetails() {
     }
   };
 
-  const handleRemoveStudent = async (studentId) => {
+  const handleRemoveStudent = async (studentId, studentEmail) => {
     try {
       const token = document.cookie
         .split('; ')
@@ -67,7 +67,7 @@ function SubjectDetails() {
 
       const response = await axios.post(
         `http://localhost:8000/user/removestudent/${subject.subject_id}`,
-        { studentId },
+        { studentId, studentEmail },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -191,7 +191,7 @@ function SubjectDetails() {
                   <td className="border-b border-gray-600 px-4 py-2 items-center">
 
                   <button
-                      onClick={() => handleRemoveStudent(student._id)}
+                      onClick={() => handleRemoveStudent(student._id, student.email)}
                       className="text-red-500 hover:text-red-600"
                       >
                       ✕
