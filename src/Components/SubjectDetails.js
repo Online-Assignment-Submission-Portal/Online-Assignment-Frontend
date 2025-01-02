@@ -107,15 +107,23 @@ function SubjectDetails() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 py-8 flex">
+    <div className="min-h-screen bg-gray-900 py-8 flex flex-col">
       <div className="container mx-auto bg-gray-800 p-8 rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold text-gray-200 mb-4 text-center overflow-auto scrollbar-none">{subjectName}</h1>
-        <div className="flex flex-col md:flex-row justify-between items-center">
-          <p className="text-gray-300 mb-2">Teacher Name: <span className="font-medium text-gray-100">{subject.teacher_name}</span></p>
-          <p className="text-gray-300 mb-2">Number of Students: <span className="font-medium text-gray-100">{foundStudents.length}</span></p>
-          <p className="text-gray-300 mb-2">Subject Code: <span className="font-medium text-gray-100">{subject.subject_code}</span></p>
+        <div className="flex justify-between items-center mb-4">
+          <h1 className="text-3xl font-bold text-gray-200 text-center overflow-auto scrollbar-none">{subjectName}</h1>
+          <button
+            onClick={() => navigate(`/dashboard/${userID}`)}
+            className="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition"
+          >
+            Back to Dashboard
+          </button>
         </div>
 
+        <div className="">
+          <p className="text-gray-300 mb-2">Teacher Name: <span className="font-medium text-gray-100">{subject.teacher_name}</span></p>
+          <p className="text-gray-300 mb-2">Number of Students: <span className="font-medium text-gray-100">{foundStudents.length}</span></p>
+          <p className="text-gray-300">Subject Code: <span className="font-medium text-gray-100">{subject.subject_code}</span></p>
+        </div>
         
 
         {isModalOpen && (
@@ -146,32 +154,24 @@ function SubjectDetails() {
             </div>
           </div>
         )}
-
-        <button
-          onClick={() => navigate(`/dashboard/${userID}`)}
-          className="mt-6 px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition"
-        >
-          Back to Dashboard
-        </button>
+        
 
         <div className='mt-6 flex justify-between items-center'>
         <p className="text-2xl font-semibold text-gray-200">Assignments</p>
 
-        <div className='flex justify-between items-center space-x-28'>
+        <div className='w-[40%] flex justify-between items-center overflow-auto'>
           <div className="text-2xl font-semibold text-gray-200">Students</div>
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="px-6 py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-500 transition"
-          >
-          + Add Students
-        </button>
-        </div>
-            </div>
-
-        <div className=' flex justify-between items-center'>
-          <div>
-            <p className='text-zinc-100 font-bold'>Assignments will be shown here in the table form</p>
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="px-6 py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-500 transition"
+            >
+            + Add Students
+          </button>
           </div>
+        </div>
+
+        <div className='flex justify-between overflow-auto'>
+            <p className='text-gray-400 text-center mt-2'>Assignments will be shown here in tabular form</p>
         {foundStudents.length > 0 ? (          
           <table className="mt-6 w-2/5  bg-gray-800 text-gray-200 rounded-lg overflow-hidden">
             <thead>
@@ -202,7 +202,7 @@ function SubjectDetails() {
             </tbody>
           </table>
         ) : (
-          <p className="text-gray-400 mt-2 text-left">No students found.</p>
+            <p className="text-gray-400 text-center mt-2 mr-[15%]">No students found.</p>
         )}
         </div>
 
