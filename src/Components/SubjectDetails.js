@@ -82,7 +82,7 @@ function SubjectDetails() {
         <div className="flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-300 mb-2">Teacher Name: <span className="font-medium text-gray-100">{subject.teacher_name}</span></p>
           <p className="text-gray-300 mb-2">Number of Students: <span className="font-medium text-gray-100">{foundStudents.length}</span></p>
-          <p className="text-gray-300 mb-2">Subject ID: <span className="font-medium text-gray-100">{subject.subject_id}</span></p>
+          <p className="text-gray-300 mb-2">Subject Code: <span className="font-medium text-gray-100">{subject.subject_code}</span></p>
         </div>
 
         
