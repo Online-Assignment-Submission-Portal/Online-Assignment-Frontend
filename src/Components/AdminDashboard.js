@@ -166,11 +166,11 @@ const AdminDashboard = () => {
             </thead>
             <tbody>
               {pendingUsers.map((user) => (
-                <tr key={user._id} className="odd:bg-gray-600 even:bg-gray-700">
+                <tr key={user._id} className="odd:bg-gray-600 even:bg-gray-700 text-center">
                   <td className="px-4 py-2">{`${user.firstName} ${user.lastName}`}</td>
                   <td className="px-4 py-2">{user.email}</td>
                   <td className="px-4 py-2">
-                    <div className="flex items-center gap-4">
+                    <div className="flex justify-between">
                       <label className="flex items-center">
                         <input
                           type="radio"
@@ -205,8 +205,8 @@ const AdminDashboard = () => {
                       </label>
                     </div>
                   </td>
-                  <td className="px-4 py-2 text-right">
-                    <div className="flex justify-end gap-2">
+                  <td className="px-4 py-2">
+                    <div className="flex justify-center gap-2">
                       <button
                         onClick={() => handleConfirmRole(user._id)}
                         className="bg-green-600 text-white py-1 px-4 rounded-md hover:bg-green-500 transition"
@@ -227,12 +227,21 @@ const AdminDashboard = () => {
           </table>
         )}
 
-        <button
-          onClick={handleLogout}
-          className="mt-6 bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-500 transition"
-        >
-          Logout
-        </button>
+        <div className="flex justify-between mt-6">
+          <button
+            onClick={() => navigate("/existing-users")}
+            className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-500 transition"
+          >
+            See Existing Users
+          </button>
+
+          <button
+            onClick={handleLogout}
+            className="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-500 transition"
+          >
+            Logout
+          </button>
+        </div>
       </div>
     </div>
   );
