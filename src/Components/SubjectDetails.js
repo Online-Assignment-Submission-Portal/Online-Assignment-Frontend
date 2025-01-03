@@ -157,8 +157,17 @@ function SubjectDetails() {
         
 
         <div className='mt-6 flex justify-between items-center'>
-        <p className="text-2xl font-semibold text-gray-200">Assignments</p>
+        {/* <p className="text-2xl font-semibold text-gray-200">Assignments</p> */}
 
+        <div className='w-[40%] flex justify-between items-center overflow-auto'>
+          <div className="text-2xl font-semibold text-gray-200">Assignments</div>
+          <button
+            onClick={() => navigate('/new-assignment', { state: { subject } })}
+            className="px-6 py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-500 transition"
+            >
+            + New Assignment
+          </button>
+          </div>
         <div className='w-[40%] flex justify-between items-center overflow-auto'>
           <div className="text-2xl font-semibold text-gray-200">Students</div>
           <button

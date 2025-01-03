@@ -14,7 +14,7 @@ import ResetPassword from "./Components/ResetPass";
 import AddSubject from "./Components/AddSubject";
 import SubjectDetails from "./Components/SubjectDetails";
 import ExistingUsers from "./Components/ExistingUsers";
-
+import NewAssignment from "./Components/NewAssignment";
 
 const App = () => {
   return (
@@ -33,6 +33,7 @@ const App = () => {
         <Route path="/dashboard/:id" element={<UserDashboard />} />
         <Route path="/add-subject" element={<AddSubject />} />
         <Route path="/subject/:id" element={<SubjectDetails />} />
+        <Route path="/new-assignment" element={<NewAssignment />} />
       </Routes>
     </Router>
   );
