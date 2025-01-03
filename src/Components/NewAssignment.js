@@ -56,6 +56,8 @@ function NewAssignment() {
       formData.append('deadline', deadline);
       formData.append('createdBy', subject.teacher_id);
       formData.append('file', file);
+      // const subjectId = subject._id.toString();
+      console.log(subject);
 
       const response = await axios.post(
         `http://localhost:8000/assignment/new/${subject.subject_id}`,
