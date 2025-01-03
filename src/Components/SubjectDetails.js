@@ -12,6 +12,8 @@ function SubjectDetails() {
   const [emailInput, setEmailInput] = useState('');
   const [foundStudents, setFoundStudents] = useState([]);
   const [notFoundEmails, setNotFoundEmails] = useState([]);
+  const [assignments, setAssignments] = useState([]);
+
 
   useEffect(() => {
     if (subject?.subject_id) {
@@ -19,6 +21,44 @@ function SubjectDetails() {
     }
   }, [subject?.subject_id]);
 
+
+  useEffect(() => {
+    if (subject?.subject_id) {
+      handleAddStudents();
+      fetchAssignments();  // Add this line to fetch assignments
+    }
+  }, [subject?.subject_id]);
+  
+  const fetchAssignments = async () => {
+    try {
+      const token = document.cookie
+        .split('; ')
+        .find((row) => row.startsWith('token='))
+        ?.split('=')[1];
+  
+      if (!token) {
+        return navigate('/signin');
+      }
+  
+      const response = await axios.get(
+        `http://localhost:8000/assignment/${subject.subject_id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      if (response.data.success) {
+        setAssignments(response.data.assignments); // Set the fetched assignments
+      } else {
+        alert(response.data.message);
+      }
+    } catch (error) {
+      console.error('Error fetching assignments:', error);
+    }
+  };
+  
   const handleAddStudents = async () => {
     try {
       const token = document.cookie
@@ -105,6 +145,40 @@ function SubjectDetails() {
       </div>
     );
   }
+
+  const handleRemoveAssignment = async (assignmentId) => {
+    try {
+      const token = document.cookie
+        .split('; ')
+        .find((row) => row.startsWith('token='))
+        ?.split('=')[1];
+  
+      if (!token) {
+        return navigate('/signin');
+      }
+  
+      const response = await axios.post(
+        `http://localhost:8000/assignment/remove/${assignmentId}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      if (response.data.success) {
+        setAssignments((prevAssignments) =>
+          prevAssignments.filter((assignment) => assignment._id !== assignmentId)
+        );
+      } else {
+        alert(response.data.message);
+      }
+    } catch (error) {
+      console.error('Error removing assignment:', error);
+    }
+  };
+  
 
   return (
     <div className="min-h-screen bg-gray-900 py-8 flex flex-col">
@@ -243,10 +317,43 @@ function SubjectDetails() {
             </table>
           </>
         )}
+        {assignments.length > 0 ? (
+  <table className="mt-6 w-2/5  bg-gray-800 text-gray-200 rounded-lg overflow-hidden">
+    <thead>
+      <tr className="bg-violet-800">
+        <th className="px-4 py-2 text-center ">Assignment Name</th>
+        <th className="px-4 py-2 text-center ">Due Date</th>
+        <th className="px-4 py-2 text-center ">Details</th>
+        <th className="px-4 py-2 text-center ">Remove</th>
+      </tr>
+    </thead>
+    <tbody>
+      {assignments.map((assignment) => (
+        <tr key={assignment._id} className="hover:bg-gray-700 transition text-center">
+          <td className="border-b border-double border-gray-600 px-4 py-2 items-center">{assignment.name}</td>
+          <td className="border-b border-gray-600 px-4 py-2 items-center">{assignment.dueDate}</td>
+          <td className="border-b border-gray-600 px-4 py-2 items-center">Details</td>
+          <td className="border-b border-gray-600 px-4 py-2 items-center">
+            <button
+              onClick={() => handleRemoveAssignment(assignment._id)}
+              className="text-red-500 hover:text-red-600"
+            >
+              ✕
+            </button>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+) : (
+  <p className="text-gray-400 text-center mt-2 mr-[15%]">No assignments found.</p>
+)}
+
 
       </div>
     </div>
   );
+  
 }
 
 export default SubjectDetails;
