@@ -8,57 +8,21 @@ function SubjectDetails() {
   const subject = location.state?.subject;
   const userID = location.state?.userID;
   const subjectName = location.state?.subjectName;
+  console.log(userID, "her e ")
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [emailInput, setEmailInput] = useState('');
   const [foundStudents, setFoundStudents] = useState([]);
   const [notFoundEmails, setNotFoundEmails] = useState([]);
   const [assignments, setAssignments] = useState([]);
 
-
+  // console.log(subject);
   useEffect(() => {
     if (subject?.subject_id) {
       handleAddStudents();
     }
+    setAssignments(subject.assignments);
   }, [subject?.subject_id]);
 
-
-  useEffect(() => {
-    if (subject?.subject_id) {
-      handleAddStudents();
-      fetchAssignments();  // Add this line to fetch assignments
-    }
-  }, [subject?.subject_id]);
-  
-  const fetchAssignments = async () => {
-    try {
-      const token = document.cookie
-        .split('; ')
-        .find((row) => row.startsWith('token='))
-        ?.split('=')[1];
-  
-      if (!token) {
-        return navigate('/signin');
-      }
-  
-      const response = await axios.get(
-        `http://localhost:8000/assignment/${subject.subject_id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-  
-      if (response.data.success) {
-        setAssignments(response.data.assignments); // Set the fetched assignments
-      } else {
-        alert(response.data.message);
-      }
-    } catch (error) {
-      console.error('Error fetching assignments:', error);
-    }
-  };
-  
   const handleAddStudents = async () => {
     try {
       const token = document.cookie
@@ -145,39 +109,6 @@ function SubjectDetails() {
       </div>
     );
   }
-
-  const handleRemoveAssignment = async (assignmentId) => {
-    try {
-      const token = document.cookie
-        .split('; ')
-        .find((row) => row.startsWith('token='))
-        ?.split('=')[1];
-  
-      if (!token) {
-        return navigate('/signin');
-      }
-  
-      const response = await axios.post(
-        `http://localhost:8000/assignment/remove/${assignmentId}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-  
-      if (response.data.success) {
-        setAssignments((prevAssignments) =>
-          prevAssignments.filter((assignment) => assignment._id !== assignmentId)
-        );
-      } else {
-        alert(response.data.message);
-      }
-    } catch (error) {
-      console.error('Error removing assignment:', error);
-    }
-  };
   
 
   return (
@@ -236,7 +167,7 @@ function SubjectDetails() {
         <div className='w-[40%] flex justify-between items-center overflow-auto'>
           <div className="text-2xl font-semibold text-gray-200">Assignments</div>
           <button
-            onClick={() => navigate('/new-assignment', { state: { subject } })}
+            onClick={() => navigate('/new-assignment', { state: { subject , userID} })}
             className="px-6 py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-500 transition"
             >
             + New Assignment
@@ -254,7 +185,27 @@ function SubjectDetails() {
         </div>
 
         <div className='flex justify-between overflow-auto'>
-            <p className='text-gray-400 text-center mt-2'>Assignments will be shown here in tabular form</p>
+            {/* <p className='text-gray-400 text-center mt-2'>Assignments will be shown here in tabular form</p> */}
+            {assignments.length > 0 ? (
+      <table className="mt-6 w-2/5  bg-gray-800 text-gray-200 rounded-lg overflow-hidden">
+        <thead>
+          <tr className="bg-violet-800">
+            <th className="px-4 py-2 text-center ">Assignment Name</th>
+            <th className="px-4 py-2 text-center ">Assignment ID</th>
+          </tr>
+        </thead>
+        <tbody>
+          {assignments.map((assignment) => (
+            <tr key={assignment._id} className="hover:bg-gray-700 transition text-center">
+              <td className="border-b border-gray-600 px-4 py-2 items-center">{assignment.title}</td>
+              <td className="border-b border-double border-gray-600 px-4 py-2 items-center">{assignment._id}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    ) : (
+      <p className="text-gray-400 text-center mt-2">No assignments found.</p>
+    )}
         {foundStudents.length > 0 ? (          
           <table className="mt-6 w-2/5  bg-gray-800 text-gray-200 rounded-lg overflow-hidden">
             <thead>
@@ -308,6 +259,7 @@ function SubjectDetails() {
                         onClick={() => removeNotFoundEmail(email)}
                         className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition"
                       >
+
                         ✕
                       </button>
                     </td>
@@ -315,40 +267,8 @@ function SubjectDetails() {
                 ))}
               </tbody>
             </table>
-          </>
+          </>    
         )}
-        {assignments.length > 0 ? (
-  <table className="mt-6 w-2/5  bg-gray-800 text-gray-200 rounded-lg overflow-hidden">
-    <thead>
-      <tr className="bg-violet-800">
-        <th className="px-4 py-2 text-center ">Assignment Name</th>
-        <th className="px-4 py-2 text-center ">Due Date</th>
-        <th className="px-4 py-2 text-center ">Details</th>
-        <th className="px-4 py-2 text-center ">Remove</th>
-      </tr>
-    </thead>
-    <tbody>
-      {assignments.map((assignment) => (
-        <tr key={assignment._id} className="hover:bg-gray-700 transition text-center">
-          <td className="border-b border-double border-gray-600 px-4 py-2 items-center">{assignment.name}</td>
-          <td className="border-b border-gray-600 px-4 py-2 items-center">{assignment.dueDate}</td>
-          <td className="border-b border-gray-600 px-4 py-2 items-center">Details</td>
-          <td className="border-b border-gray-600 px-4 py-2 items-center">
-            <button
-              onClick={() => handleRemoveAssignment(assignment._id)}
-              className="text-red-500 hover:text-red-600"
-            >
-              ✕
-            </button>
-          </td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-) : (
-  <p className="text-gray-400 text-center mt-2 mr-[15%]">No assignments found.</p>
-)}
-
 
       </div>
     </div>
