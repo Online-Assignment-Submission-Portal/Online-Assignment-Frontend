@@ -60,7 +60,7 @@ function AssignmentDetails() {
     <div className="min-h-screen bg-gray-900 py-8 flex flex-col">
       <div className="container mx-auto bg-gray-800 p-8 rounded-lg shadow-lg">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold text-gray-200">Assignment Details</h1>
+          <h1 className="text-xl text-gray-200">Assignment Details</h1>
           <button
             onClick={() => navigate(-1)}
             className="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition"
@@ -69,26 +69,27 @@ function AssignmentDetails() {
           </button>
         </div>
 
-        <div className="space-y-4">
+        
+          <div className='flex justify-between items-center mb-6'> 
           <div>
-            <p className="text-gray-400">Title:</p>
-            <h2 className="text-xl font-semibold text-gray-200">{assignmentDetails.title}</h2>
+            <h2 className="text-3xl font-semibold text-gray-200">{assignmentDetails.title}</h2>
           </div>
 
-          <div>
-            <p className="text-gray-400">Deadline:</p>
-            <p className="text-gray-300">{new Date(assignmentDetails.deadline).toLocaleString()}</p>
+          <div className="text-gray-300 text-xl">
+            Deadline: {new Date(assignmentDetails.deadline).toLocaleString()}
+          </div>  
           </div>
+          
+          
 
-          <div>
-            <p className="text-gray-400">Description:</p>
-            <p className="text-gray-300">{assignmentDetails.description}</p>
+          <div className='w-4/5 bg-zinc-200 rounded-md ml-auto mr-auto'>
+            <p className="text-violet-500 text-lg">Description:</p>
+            <p className="text-black-300">{assignmentDetails.description}</p>
           </div>
-
+          <div className="space-y-4">
           {assignmentDetails.fileLink && (
-            <div>
-              <p className="text-gray-400">Attachment:</p>
-              <a
+            <div className="mt-6 text-gray-400">
+              Attachment: <a
                 href={assignmentDetails.fileLink}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -99,14 +100,22 @@ function AssignmentDetails() {
             </div>
           )}
 
-          <div className='flex flex-row gap-5'>
-            <div>
+          <div className='w-17/20 mt-6 flex justify-between items-center ml-auto mr-auto'>
+          <div className=" text-right">
+            <button
+              onClick={() => alert('Submit Assignment feature is under construction!')}
+              className="px-6 py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-500 transition"
+            >
+              Submit Assignment
+            </button>
+          </div>
+            <div className='flex flex-row gap-2'>
               <p className="text-gray-400">Marks Obtained:</p>
               <p className="text-gray-300">
                 {assignmentDetails.marksObtained !== undefined ? assignmentDetails.marksObtained : 'Not graded yet'}
               </p>
             </div>
-            <div>
+            <div className='flex flex-row gap-2'>
               <p className="text-gray-400">Max Marks:</p>
               <p className="text-gray-300">
                 {assignmentDetails.maxVal !== undefined ? assignmentDetails.maxVal : 'Not available'}
@@ -114,7 +123,7 @@ function AssignmentDetails() {
             </div>
           </div>
 
-          <div>
+          <div className='flex flex-row gap-2'>
             <p className="text-gray-400">Submitted At:</p>
             <p className="text-gray-300">
               {assignmentDetails.submittedAt
@@ -123,14 +132,7 @@ function AssignmentDetails() {
             </p>
           </div>
 
-          <div className="py-4 text-right">
-            <button
-              onClick={() => alert('Submit Assignment feature is under construction!')}
-              className="px-6 py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-500 transition"
-            >
-              Submit Assignment
-            </button>
-          </div>
+          
         </div>
       </div>
     </div>
