@@ -6,7 +6,7 @@ function AssignmentDetails() {
   const location = useLocation();
   const navigate = useNavigate();
   const assignmentId = location.state?.assignment_id;
-
+  const userRole = location.state?.userRole; 
   const [assignmentDetails, setAssignmentDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -45,7 +45,11 @@ function AssignmentDetails() {
   }, [assignmentId, navigate]);
 
   if (loading) {
-    return <div className="flex items-center justify-center h-screen bg-gray-900 text-white">Loading...</div>;
+    return (
+      <div className="flex items-center justify-center h-screen bg-gray-900 text-white">
+        Loading...
+      </div>
+    );
   }
 
   if (error) {
@@ -57,10 +61,11 @@ function AssignmentDetails() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 py-8 flex flex-col">
-      <div className="container mx-auto bg-gray-800 p-8 rounded-lg shadow-lg">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold text-gray-200">Assignment Details</h1>
+    <div className="min-h-screen bg-gray-900 text-gray-200 py-8">
+      <div className="container mx-auto bg-gray-800 p-8 rounded-lg shadow-lg max-w-4xl">
+        {/* Header */}
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold">Assignment Details</h1>
           <button
             onClick={() => navigate(-1)}
             className="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition"
@@ -69,68 +74,83 @@ function AssignmentDetails() {
           </button>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-6">
           <div>
-            <p className="text-gray-400">Title:</p>
-            <h2 className="text-xl font-semibold text-gray-200">{assignmentDetails.title}</h2>
+            <p className="text-gray-400 font-medium">Title:</p>
+            <h2 className="text-2xl font-semibold">{assignmentDetails.title}</h2>
           </div>
-
           <div>
-            <p className="text-gray-400">Deadline:</p>
-            <p className="text-gray-300">{new Date(assignmentDetails.deadline).toLocaleString()}</p>
+            <p className="text-gray-400 font-medium">Deadline:</p>
+            <p>{new Date(assignmentDetails.deadline).toLocaleString()}</p>
           </div>
-
           <div>
-            <p className="text-gray-400">Description:</p>
-            <p className="text-gray-300">{assignmentDetails.description}</p>
+            <p className="text-gray-400 font-medium">Description:</p>
+            <p>{assignmentDetails.description}</p>
           </div>
-
           {assignmentDetails.fileLink && (
             <div>
-              <p className="text-gray-400">Attachment:</p>
+              <p className="text-gray-400 font-medium">Attachment:</p>
               <a
                 href={assignmentDetails.fileLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-400 underline"
+                className="text-blue-400 hover:text-blue-300 underline"
               >
                 Download Attachment
               </a>
             </div>
           )}
+          {userRole === 'student' ? (
+            <>
+              <div className="grid grid-cols-2 gap-6">
+                <div>
+                  <p className="text-gray-400 font-medium">Marks Obtained:</p>
+                  <p>
+                    {assignmentDetails.marksObtained !== undefined
+                      ? assignmentDetails.marksObtained
+                      : 'Not graded yet'}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-gray-400 font-medium">Max Marks:</p>
+                  <p>{assignmentDetails.maxVal !== undefined ? assignmentDetails.maxVal : 'Not available'}</p>
+                </div>
+              </div>
 
-          <div className='flex flex-row gap-5'>
+              <div>
+                <p className="text-gray-400 font-medium">Submitted At:</p>
+                <p>
+                  {assignmentDetails.submittedAt
+                    ? new Date(assignmentDetails.submittedAt).toLocaleString()
+                    : 'Not submitted yet'}
+                </p>
+              </div>
+
+              <div className="mt-8 text-right">
+                <button
+                  onClick={() => alert('Submit Assignment feature is under construction!')}
+                  className="px-6 py-2 bg-green-600 hover:bg-green-500 text-white font-bold rounded-lg transition"
+                >
+                  Submit Assignment
+                </button>
+              </div>
+            </>
+          ) : userRole === 'teacher' ? (
             <div>
-              <p className="text-gray-400">Marks Obtained:</p>
-              <p className="text-gray-300">
-                {assignmentDetails.marksObtained !== undefined ? assignmentDetails.marksObtained : 'Not graded yet'}
-              </p>
+              <div> 
+                <p className="text-gray-400 font-medium">Max Marks:</p>
+                <p>{assignmentDetails.maxVal !== undefined ? assignmentDetails.maxVal : 'Not available'}</p>
+              </div>
+              <div className="mt-8 text-right">
+                <button
+                  onClick={() => alert('Check for Plagiarism feature is under construction!')}
+                  className="px-6 py-2 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-lg transition"
+                  >
+                  Check for Plagiarism
+                </button>
+              </div>
             </div>
-            <div>
-              <p className="text-gray-400">Max Marks:</p>
-              <p className="text-gray-300">
-                {assignmentDetails.maxVal !== undefined ? assignmentDetails.maxVal : 'Not available'}
-              </p>
-            </div>
-          </div>
-
-          <div>
-            <p className="text-gray-400">Submitted At:</p>
-            <p className="text-gray-300">
-              {assignmentDetails.submittedAt
-                ? new Date(assignmentDetails.submittedAt).toLocaleString()
-                : 'Not submitted yet'}
-            </p>
-          </div>
-
-          <div className="py-4 text-right">
-            <button
-              onClick={() => alert('Submit Assignment feature is under construction!')}
-              className="px-6 py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-500 transition"
-            >
-              Submit Assignment
-            </button>
-          </div>
+          ) : null}
         </div>
       </div>
     </div>
