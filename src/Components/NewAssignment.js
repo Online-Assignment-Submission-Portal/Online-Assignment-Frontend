@@ -6,7 +6,8 @@ function NewAssignment() {
   const navigate = useNavigate();
   const location = useLocation();
   const subject = location.state?.subject;
-
+  const userID = location.state?.userID;
+  console.log(userID);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [minVal, setMinVal] = useState('0');
@@ -72,7 +73,8 @@ function NewAssignment() {
 
       if (response.data.success) {
         alert('Assignment created successfully!');
-        navigate(`/dashboard/${subject.userID}`);
+        console.log(subject);
+        navigate(`/subject/${subject.subject_id}`, { state: { subject, userID }});
       } else {
         alert(response.data.message);
       }
