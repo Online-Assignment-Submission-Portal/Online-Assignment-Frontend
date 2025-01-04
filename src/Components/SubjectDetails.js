@@ -8,7 +8,6 @@ function SubjectDetails() {
   const subject = location.state?.subject;
   const userID = location.state?.userID;
   const subjectName = location.state?.subjectName;
-  console.log(userID, "her e ")
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [emailInput, setEmailInput] = useState('');
   const [foundStudents, setFoundStudents] = useState([]);
