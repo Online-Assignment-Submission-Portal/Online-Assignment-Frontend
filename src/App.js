@@ -17,6 +17,8 @@ import ExistingUsers from "./Components/ExistingUsers";
 import NewAssignment from "./Components/NewAssignment";
 import Profile from "./Components/Profile";
 import UpdateProfile from "./Components/UpdateProfile";
+import AssignmentDetails from './Components/AssignmentDetails';
+
 
 const App = () => {
   return (
@@ -38,6 +40,7 @@ const App = () => {
         <Route path="/new-assignment" element={<NewAssignment />} />
         <Route path="/profile/:id" element={<Profile />} />
         <Route path="/update-profile/:id" element={<UpdateProfile />} />
+        <Route path="/assignment/:id" element={<AssignmentDetails />} />
       </Routes>
     </Router>
   );

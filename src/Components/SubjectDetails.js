@@ -197,7 +197,10 @@ function SubjectDetails() {
         </thead>
         <tbody>
           {assignments.map((assignment) => (
-            <tr key={assignment._id} className="hover:bg-gray-700 transition text-center">
+            <tr key={assignment._id} className="hover:bg-gray-700 transition text-center"
+            onClick={() =>
+              navigate(`/assignment/${assignment._id}`, { state: { assignment_id: assignment._id } })
+            }>
               <td className="border-b border-gray-600 px-4 py-2 items-center">{assignment.title}</td>
               <td className="border-b border-double border-gray-600 px-4 py-2 items-center">{assignment._id}</td>
             </tr>
