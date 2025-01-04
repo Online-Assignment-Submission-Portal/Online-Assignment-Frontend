@@ -114,8 +114,9 @@ function SubjectDetails() {
   return (
     <div className="min-h-screen bg-gray-900 py-8 flex flex-col">
       <div className="container mx-auto bg-gray-800 p-8 rounded-lg shadow-lg">
+        <div></div>
         <div className="flex justify-between items-center mb-4">
-          <h1 className="text-3xl font-bold text-gray-200 text-center overflow-auto scrollbar-none">{subjectName}</h1>
+          <h1 className="text-3xl font-bold text-gray-200 text-center overflow-auto scrollbar-none">Subject Name: {subjectName}</h1>
           <button
             onClick={() => navigate(`/dashboard/${userID}`)}
             className="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition"
@@ -173,7 +174,7 @@ function SubjectDetails() {
             + New Assignment
           </button>
           </div>
-        <div className='w-[40%] flex justify-between items-center overflow-auto'>
+        <div className='w-[50%] flex justify-between items-center overflow-auto'>
           <div className="text-2xl font-semibold text-gray-200">Students</div>
           <button
             onClick={() => setIsModalOpen(true)}
@@ -184,10 +185,11 @@ function SubjectDetails() {
           </div>
         </div>
 
-        <div className='flex justify-between overflow-auto'>
+        <div className='flex justify-between h-82 '>
             {/* <p className='text-gray-400 text-center mt-2'>Assignments will be shown here in tabular form</p> */}
             {assignments.length > 0 ? (
-      <table className="mt-6 w-2/5  bg-gray-800 text-gray-200 rounded-lg overflow-hidden">
+      <div className='w-2/5 h-96 overflow-y-auto mt-6'>
+        <table className="w-full  bg-gray-800 text-gray-200 rounded-lg">
         <thead>
           <tr className="bg-violet-800">
             <th className="px-4 py-2 text-center ">Assignment Name</th>
@@ -203,11 +205,13 @@ function SubjectDetails() {
           ))}
         </tbody>
       </table>
+      </div>
     ) : (
       <p className="text-gray-400 text-center mt-2">No assignments found.</p>
     )}
         {foundStudents.length > 0 ? (          
-          <table className="mt-6 w-2/5  bg-gray-800 text-gray-200 rounded-lg overflow-hidden">
+          <div className='w-1/2 h-56 overflow-y-auto mt-6'>
+            <table className="w-full  bg-gray-800 text-gray-200 rounded-lg ">
             <thead>
               <tr className="bg-violet-800">
                 <th className="px-4 py-2 text-center ">Name</th>
@@ -235,6 +239,7 @@ function SubjectDetails() {
               ))}
             </tbody>
           </table>
+          </div>
         ) : (
             <p className="text-gray-400 text-center mt-2 mr-[15%]">No students found.</p>
         )}
