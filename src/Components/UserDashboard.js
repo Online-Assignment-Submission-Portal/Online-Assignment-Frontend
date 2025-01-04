@@ -10,6 +10,8 @@ const UserDashboard = () => {
   const [subjectCode, setSubjectCode] = useState("");
   const [joinMessage, setJoinMessage] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const userId = id.toString();
+  let userData;
 
   const fetchUserData = async (id) => {
     try {
@@ -33,6 +35,7 @@ const UserDashboard = () => {
 
       if (response.data.success) {
         setUser(response.data.user);
+        userData = response.data.user;
       } else {
         setError("Failed to fetch user data.");
       }
@@ -148,6 +151,33 @@ const UserDashboard = () => {
     }
   };
 
+  const handleProfile = async (userId) => {
+      try{
+        const token = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("token="))
+        ?.split("=")[1];
+        console.log(userId);
+
+      const response = await axios.get(
+        `http://localhost:8000/user/profile/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      ); 
+      console.log(response);
+      if (response.data.success) {
+        navigate(`/profile/${userId}`, {state: { profile: response.data, userID: userId}});
+      } else {
+        setError("Failed to fetch profile data.");
+      }
+      }catch(err){
+        setError(err.response?.data?.message || "An error occurred during Profile view.");
+      }
+  }
+
   if (error) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
@@ -207,7 +237,11 @@ const UserDashboard = () => {
           </div>
         </div>
 
-
+        <div>
+          <button onClick={() => handleProfile(userId)} 
+          className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg">
+          Profile</button>
+        </div>
         <div className="mb-10">
           <h2 className="text-xl font-semibold text-center">
             Your Subjects
