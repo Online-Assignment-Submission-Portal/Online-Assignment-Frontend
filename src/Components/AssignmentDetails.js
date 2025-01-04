@@ -71,7 +71,7 @@ function AssignmentDetails() {
 
         <div className="space-y-4">
           <div>
-            <p className="text-gray-400">Assignment Name:</p>
+            <p className="text-gray-400">Title:</p>
             <h2 className="text-xl font-semibold text-gray-200">{assignmentDetails.title}</h2>
           </div>
 
@@ -81,15 +81,15 @@ function AssignmentDetails() {
           </div>
 
           <div>
-            <p className="text-gray-400">Assignment Body:</p>
-            <p className="text-gray-300">{assignmentDetails.body}</p>
+            <p className="text-gray-400">Description:</p>
+            <p className="text-gray-300">{assignmentDetails.description}</p>
           </div>
 
-          {assignmentDetails.attachment && (
+          {assignmentDetails.fileLink && (
             <div>
               <p className="text-gray-400">Attachment:</p>
               <a
-                href={assignmentDetails.attachment}
+                href={assignmentDetails.fileLink}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-400 underline"
@@ -99,23 +99,37 @@ function AssignmentDetails() {
             </div>
           )}
 
+          <div className='flex flex-row gap-5'>
+            <div>
+              <p className="text-gray-400">Marks Obtained:</p>
+              <p className="text-gray-300">
+                {assignmentDetails.marksObtained !== undefined ? assignmentDetails.marksObtained : 'Not graded yet'}
+              </p>
+            </div>
+            <div>
+              <p className="text-gray-400">Max Marks:</p>
+              <p className="text-gray-300">
+                {assignmentDetails.maxVal !== undefined ? assignmentDetails.maxVal : 'Not available'}
+              </p>
+            </div>
+          </div>
+
           <div>
+            <p className="text-gray-400">Submitted At:</p>
+            <p className="text-gray-300">
+              {assignmentDetails.submittedAt
+                ? new Date(assignmentDetails.submittedAt).toLocaleString()
+                : 'Not submitted yet'}
+            </p>
+          </div>
+
+          <div className="py-4 text-right">
             <button
               onClick={() => alert('Submit Assignment feature is under construction!')}
               className="px-6 py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-500 transition"
             >
               Submit Assignment
             </button>
-          </div>
-
-          <div>
-            <p className="text-gray-400">Marks Obtained:</p>
-            <p className="text-gray-300">{assignmentDetails.marksObtained ?? 'Not graded yet'}</p>
-          </div>
-
-          <div>
-            <p className="text-gray-400">Submitted At:</p>
-            <p className="text-gray-300">{assignmentDetails.submittedAt ?? 'Not submitted yet'}</p>
           </div>
         </div>
       </div>
