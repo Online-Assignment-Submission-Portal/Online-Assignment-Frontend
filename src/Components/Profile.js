@@ -70,34 +70,55 @@ const Profile = () => {
             Change Photo
           </button>
           <button className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg"
-            onClick={() => navigate(`/update-profile/${userId}`, {state: {profile:data, userId : userId}})}>
+            onClick={() => navigate(`/update-profile/${userId}`, { state: { profile: data, userId: userId } })}>
             Edit Profile
           </button>
         </div>
         <div className="bg-gray-800 p-4 rounded-lg shadow-lg my-10">
 
           <p>
-            <span className="font-semibold text-gray-100">Email:</span>{" "}
+            <span className="font-semibold text-violet-700 mt-8">Email: </span>{" "}
             {profileData.email}
           </p>
           <p>
-            <span className="font-semibold text-gray-100">Roll No:</span>{" "}
-            {profileData.rollNo}
+            <span className="font-semibold text-violet-700 mt-8">Role: </span>{" "}
+            {profileData.role}
           </p>
+          
+          {profileData.role === 'student' ? (
+            <>
+              <p>
+                <span className="font-semibold text-violet-700 mt-8">Roll No: </span>{" "}
+                {profileData.rollNo}
+              </p>
+              <p>
+                <span className="font-semibold text-violet-700 mt-8">Branch: </span>{" "}
+                {profileData.branch}
+              </p>
+              <p>
+                <span className="font-semibold text-violet-700 mt-8">Semester: </span>{" "}
+                {profileData.semester}
+              </p>
+              <p>
+                <span className="font-semibold text-violet-700 mt-8">Section: </span>{" "}
+                {profileData.section}
+              </p>
+            </>
+          ) : (
+            <p>
+              <p>
+                <span className="font-semibold text-violet-700 mt-8">Employee Id: </span>{" "}
+                {profileData.employeeId}
+              </p>
+              <p>
+                <span className="font-semibold text-violet-700 mt-8">Experience: </span>{" "}
+                {profileData.exprerience} years
+              </p>
+            </p>
+          )}
+
           <p>
-            <span className="font-semibold text-gray-100">Branch:</span>{" "}
-            {profileData.branch}
-          </p>
-          <p>
-            <span className="font-semibold text-gray-100">Semester:</span>{" "}
-            {profileData.semester}
-          </p>
-          <p>
-            <span className="font-semibold text-gray-100">Section:</span>{" "}
-            {profileData.section}
-          </p>
-          <p>
-            <span className="font-semibold text-gray-100">Contact:</span>{" "}
+            <span className="font-semibold text-violet-700 mt-8">Contact:</span>{" "}
             {profileData.contact}
           </p>
         </div>
