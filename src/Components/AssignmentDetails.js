@@ -66,6 +66,7 @@ function AssignmentDetails() {
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold">Assignment Details</h1>
+
           <button
             onClick={() => navigate(-1)}
             className="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition"
@@ -91,6 +92,7 @@ function AssignmentDetails() {
             <div>
               <p className="text-gray-400 font-medium">Attachment:</p>
               <a
+
                 href={assignmentDetails.fileLink}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -100,6 +102,7 @@ function AssignmentDetails() {
               </a>
             </div>
           )}
+
           {userRole === 'student' ? (
             <>
               <div className="grid grid-cols-2 gap-6">
@@ -151,6 +154,7 @@ function AssignmentDetails() {
               </div>
             </div>
           ) : null}
+
         </div>
       </div>
     </div>
