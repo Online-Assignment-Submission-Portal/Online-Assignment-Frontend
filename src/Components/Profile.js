@@ -6,9 +6,15 @@ const Profile = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [error, setError] = useState("");
-  const profile = location.state?.profile;
+  const profileData = location.state?.profile;
   const userId = location.state?.userID;
+  const [data, setData] = useState(null);
+  useEffect(() => {
+    setData(profileData);
+  }, [userId, navigate]);
 
+  console.log('hello my profile:', profileData);
+  console.log(data);
   const handleLogout = async () => {
     try {
       const token = document.cookie
@@ -22,7 +28,7 @@ const Profile = () => {
       }
 
       const response = await axios.post(
-        "http://localhost:8000/user/profile/logout",
+        "http://localhost:8000/user/logout",
         {},
         {
           headers: {
@@ -43,29 +49,6 @@ const Profile = () => {
     }
   };
 
-  const handleUpdateProfile = async (userid) => {
-    try {
-      const token = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("token="))
-        ?.split("=")[1];
-      console.log(userid);
-
-      const response = await axios.post(`http://localhost:8000/user/updateprofile/${userid}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log(response);
-      if (response.data.success) {
-        navigate(`/update-profile/${userid}`, { state: { profileInput: response.data, userId: userid } });
-      }
-    } catch (err) {
-      setError(err.response?.data?.message || "An error occurred while updating profile.");
-    }
-  };
   return (
     <div className="min-h-screen bg-gray-900 text-gray-200">
       <div className="container mx-auto py-8 px-6">
@@ -74,7 +57,7 @@ const Profile = () => {
           <div>
             <p className="font-bold text-gray-100 italic hover:not-italic text-5xl">
               <span className='font-semibold text-3xl non-italic' >Hello, </span>{" "}
-              {profile.firstName} {profile.lastName}
+              {profileData.firstName} {profileData.lastName}
             </p>
           </div>
           <button onClick={handleLogout}
@@ -87,7 +70,7 @@ const Profile = () => {
             Change Photo
           </button>
           <button className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg"
-            onClick={() => handleUpdateProfile(userId)}>
+            onClick={() => navigate(`/update-profile/${userId}`, {state: {profile:data, userId : userId}})}>
             Edit Profile
           </button>
         </div>
@@ -95,27 +78,27 @@ const Profile = () => {
 
           <p>
             <span className="font-semibold text-gray-100">Email:</span>{" "}
-            {profile.email}
+            {profileData.email}
           </p>
           <p>
             <span className="font-semibold text-gray-100">Roll No:</span>{" "}
-            {profile.rollNo}
+            {profileData.rollNo}
           </p>
           <p>
             <span className="font-semibold text-gray-100">Branch:</span>{" "}
-            {profile.branch}
+            {profileData.branch}
           </p>
           <p>
             <span className="font-semibold text-gray-100">Semester:</span>{" "}
-            {profile.semester}
+            {profileData.semester}
           </p>
           <p>
             <span className="font-semibold text-gray-100">Section:</span>{" "}
-            {profile.section}
+            {profileData.section}
           </p>
           <p>
             <span className="font-semibold text-gray-100">Contact:</span>{" "}
-            {profile.contact}
+            {profileData.contact}
           </p>
         </div>
 
