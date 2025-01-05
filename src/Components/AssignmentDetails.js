@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
 function AssignmentDetails() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -43,6 +42,14 @@ function AssignmentDetails() {
 
     fetchAssignmentDetails();
   }, [assignmentId, navigate]);
+   
+  const extractFileName = (fileLink) => {
+    const fileNameWithExtension = fileLink.split('/').pop(); 
+    const lastDotIndex = fileNameWithExtension.lastIndexOf('.');
+    const fileName = fileNameWithExtension.substring(0, lastDotIndex);
+    const fileExtension = fileNameWithExtension.substring(lastDotIndex + 1);
+    return { fileName, fileExtension };
+  };
 
   if (loading) {
     return (
@@ -92,8 +99,11 @@ function AssignmentDetails() {
             <div>
               <p className="text-gray-400 font-medium">Attachment:</p>
               <a
-
-                href={assignmentDetails.fileLink}
+                href={`${assignmentDetails.fileLink}`}
+                download={(() => {
+                  const { fileName, fileExtension } = extractFileName(assignmentDetails.fileLink); // Extract name and extension
+                  return `${fileName}.${fileExtension}`; // Return the formatted download name
+                })()}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-400 hover:text-blue-300 underline"
