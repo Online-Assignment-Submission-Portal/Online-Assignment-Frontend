@@ -43,13 +43,28 @@ function AssignmentDetails() {
     fetchAssignmentDetails();
   }, [assignmentId, navigate]);
    
-  const extractFileName = (fileLink) => {
-    const fileNameWithExtension = fileLink.split('/').pop(); 
-    const lastDotIndex = fileNameWithExtension.lastIndexOf('.');
-    const fileName = fileNameWithExtension.substring(0, lastDotIndex);
-    const fileExtension = fileNameWithExtension.substring(lastDotIndex + 1);
-    return { fileName, fileExtension };
-  };
+  // const extractFileName = async (fileLink) => {
+  //   const fileNameWithExtension = fileLink.split('/').pop(); 
+  //   const lastDotIndex = fileNameWithExtension.lastIndexOf('.');
+  //   const fileName = fileNameWithExtension.substring(0, lastDotIndex);
+  //   const fileExtension = fileNameWithExtension.substring(lastDotIndex + 1);
+  //   return { fileName, fileExtension };
+  // };
+
+  // const handleDownload = async (fileLink, fileName) => {
+  //   const fileUrl = fileLink;
+  //   console.log('File URL:', fileUrl);
+  //   console.log('File Name:', fileName);
+  //   const link = document.createElement('a');
+  //   link.href = fileUrl;
+  //   link.target="_blank"
+  //   link.rel="noopener noreferrer"
+  //   link.setAttribute('download', fileName);
+  //   document.body.appendChild(link);
+  //   link.click();
+  //   document.body.removeChild(link);
+
+  // }
 
   if (loading) {
     return (
@@ -100,10 +115,12 @@ function AssignmentDetails() {
               <p className="text-gray-400 font-medium">Attachment:</p>
               <a
                 href={`${assignmentDetails.fileLink}`}
-                download={(() => {
-                  const { fileName, fileExtension } = extractFileName(assignmentDetails.fileLink); // Extract name and extension
-                  return `${fileName}.${fileExtension}`; // Return the formatted download name
-                })()}
+                // onClick={() => handleDownload(assignmentDetails.fileLink, extractFileName(assignmentDetails.fileLink).fileName)}
+                // download={(() => {
+                //   const { fileName, fileExtension } = extractFileName(assignmentDetails.fileLink); // Extract name and extension
+                //   return `${fileName}.${fileExtension}`; // Return the formatted download name
+                // })()}
+                download
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-400 hover:text-blue-300 underline"
@@ -112,7 +129,7 @@ function AssignmentDetails() {
               </a>
             </div>
           )}
-
+          
           {userRole === 'student' ? (
             <>
               <div className="grid grid-cols-2 gap-6">
