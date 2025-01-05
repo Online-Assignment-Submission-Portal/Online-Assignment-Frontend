@@ -7,6 +7,7 @@ function NewAssignment() {
   const location = useLocation();
   const subject = location.state?.subject;
   const userID = location.state?.userID;
+  const userRole = location.state?.userRole;
   console.log(userID);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -73,8 +74,23 @@ function NewAssignment() {
 
       if (response.data.success) {
         alert('Assignment created successfully!');
-        console.log(subject);
-        navigate(`/subject/${subject.subject_id}`, { state: { subject, userID }});
+        // console.log(subject);
+        const response2 = await axios.get(
+          `http://localhost:8000/user/getsubject/${subject.subject_id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log(response2, " resp2 ");
+        if (response2.status === 200 && response2.data) {
+          console.log(response2.data, " here ");
+          navigate(`/subject/${subject.subject_id}`, { state: { subject: response2.data, userID, userRole }});
+        }
+        else{
+          alert(response2.data.message);
+        }
       } else {
         alert(response.data.message);
       }
@@ -151,7 +167,7 @@ function NewAssignment() {
             <input
               type="file"
               onChange={handleFileUpload}
-              className="block w-full text-gray-400 file:py-2 file:px-4 file:rounded file:border-0 file:bg-blue-600 file:text-white hover:file:bg-blue-700 transition"
+              className="block w-full text-gray-400 file:py-2 file:px-4 file:rounded file:border-0 file:bg-blue-600 file:text-white hover:file:bg-blue-500 transition"
               accept=".pdf,.doc,.docx,.txt,.xls,.xlsx,.ppt,.pptx"
               required
             />
@@ -161,13 +177,13 @@ function NewAssignment() {
             <button
               type="button"
               onClick={() => navigate(-1)}
-              className="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition"
+              className="px-6 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition"
             >
               Create Assignment
             </button>

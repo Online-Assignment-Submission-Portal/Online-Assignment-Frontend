@@ -7,20 +7,19 @@ function SubjectDetails() {
   const navigate = useNavigate();
   const subject = location.state?.subject;
   const userID = location.state?.userID;
-  const subjectName = location.state?.subjectName;
+  const userRole = location.state?.userRole;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [emailInput, setEmailInput] = useState('');
   const [foundStudents, setFoundStudents] = useState([]);
   const [notFoundEmails, setNotFoundEmails] = useState([]);
   const [assignments, setAssignments] = useState([]);
 
-  // console.log(subject);
+  console.log(location.state, " there ");
+
   useEffect(() => {
-    if (subject?.subject_id) {
-      handleAddStudents();
-    }
+    handleAddStudents();
     setAssignments(subject.assignments);
-  }, [subject?.subject_id]);
+  }, [navigate]);
 
   const handleAddStudents = async () => {
     try {
@@ -115,7 +114,7 @@ function SubjectDetails() {
       <div className="container mx-auto bg-gray-800 p-8 rounded-lg shadow-lg">
         <div></div>
         <div className="flex justify-between items-center mb-4">
-          <h1 className="text-3xl font-bold text-gray-200 text-center overflow-auto scrollbar-none">Subject Name: {subjectName}</h1>
+          <h1 className="text-3xl font-bold text-gray-200 text-center overflow-auto scrollbar-none">Subject Name: {subject.subject_name}</h1>
           <button
             onClick={() => navigate(`/dashboard/${userID}`)}
             className="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition"
@@ -166,21 +165,26 @@ function SubjectDetails() {
 
         <div className='w-[40%] flex justify-between items-center overflow-auto'>
           <div className="text-2xl font-semibold text-gray-200">Assignments</div>
-          <button
-            onClick={() => navigate('/new-assignment', { state: { subject , userID} })}
+          {userRole === 'teacher' && (
+            <button
+            onClick={() => navigate('/new-assignment', { state: { subject , userID, userRole} })}
             className="px-6 py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-500 transition"
             >
+              
             + New Assignment
           </button>
+          )}
           </div>
         <div className='w-[50%] flex justify-between items-center overflow-auto'>
           <div className="text-2xl font-semibold text-gray-200">Students</div>
-          <button
+          {userRole === 'teacher' && (
+            <button
             onClick={() => setIsModalOpen(true)}
             className="px-6 py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-500 transition"
             >
             + Add Students
           </button>
+            )}
           </div>
         </div>
 
@@ -199,7 +203,7 @@ function SubjectDetails() {
           {assignments.map((assignment) => (
             <tr key={assignment._id} className="hover:bg-gray-700 transition text-center"
             onClick={() =>
-              navigate(`/assignment/${assignment._id}`, { state: { assignment_id: assignment._id } })
+              navigate(`/assignment/${assignment._id}`, { state: { assignment_id: assignment._id, userRole } })
             }>
               <td className="border-b border-gray-600 px-4 py-2 items-center">{assignment.title}</td>
               <td className="border-b border-double border-gray-600 px-4 py-2 items-center">{assignment._id}</td>
@@ -209,7 +213,7 @@ function SubjectDetails() {
       </table>
       </div>
     ) : (
-      <p className="text-gray-400 text-center mt-2">No assignments found.</p>
+      <p className="text-gray-400 text-center mt-2 m-auto">No assignments found.</p>
     )}
         {foundStudents.length > 0 ? (          
           <div className='w-1/2 h-56 overflow-y-auto mt-6'>
@@ -218,8 +222,12 @@ function SubjectDetails() {
               <tr className="bg-violet-800">
                 <th className="px-4 py-2 text-center ">Name</th>
                 <th className="px-4 py-2 text-center ">Email</th>
-                <th className="px-4 py-2 text-center ">Chat</th>
-                <th className="px-4 py-2 text-center ">Remove</th>
+                { userRole === 'teacher' &&(
+                  <th className="px-4 py-2 text-center ">Chat</th> 
+                )}
+                { userRole === 'teacher' &&(
+                  <th className="px-4 py-2 text-center ">Remove</th>
+                )}
               </tr>
             </thead>
             <tbody>
@@ -227,23 +235,26 @@ function SubjectDetails() {
                 <tr key={student._id} className="hover:bg-gray-700 transition text-center">
                   <td className="border-b border-double border-gray-600 px-4 py-2 items-center">{student.firstName} {student.lastName}</td>
                   <td className="border-b border-gray-600 px-4 py-2 items-center">{student.email}</td>
+                { userRole === 'teacher' &&(
                   <td className="border-b border-gray-600 px-4 py-2 items-center">Chat</td>
+                )}
+                { userRole === 'teacher' &&(
                   <td className="border-b border-gray-600 px-4 py-2 items-center">
-
                   <button
-                      onClick={() => handleRemoveStudent(student._id, student.email)}
-                      className="text-red-500 hover:text-red-600"
-                      >
+                  onClick={() => handleRemoveStudent(student._id, student.email)}
+                  className="text-red-500 hover:text-red-600"
+                  >
                       ✕
                     </button>
                       </td>
+                  )}
                 </tr>
               ))}
             </tbody>
           </table>
           </div>
         ) : (
-            <p className="text-gray-400 text-center mt-2 mr-[15%]">No students found.</p>
+            <p className="text-gray-400 text-center mt-2 m-auto">No students found.</p>
         )}
         </div>
 

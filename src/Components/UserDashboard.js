@@ -135,11 +135,10 @@ const UserDashboard = () => {
         }
       );
 
-      const subjectName = subject.subjectName;
       if (response.status === 200 && response.data) {
         console.log(response);
         navigate(`/subject/${subject.subjectId}`, {
-          state: { subject: response.data, userID: id, subjectName },
+          state: { subject: response.data, userID: id, userRole : user.role  },
         });
       }
     } catch (err) {
