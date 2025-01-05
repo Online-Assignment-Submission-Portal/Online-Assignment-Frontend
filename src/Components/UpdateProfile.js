@@ -68,7 +68,9 @@ const UpdateProfile = () => {
                     focus:ring-green-500" 
                 />
             </div>
-            <div>
+            {profile.role === 'student' ? (
+                <>
+                <div>
                 <label htmlFor="Roll No" className="block text-sm font-medium mb-1">Roll No:</label>
                 <input
                     type="text"
@@ -118,6 +120,37 @@ const UpdateProfile = () => {
                     focus:ring-green-500"
                 />
             </div>
+                </>
+            ):(
+                <>
+                  <div>
+                <label htmlFor="exprerience" className="block text-sm font-medium mb-1">
+                Experience:
+                </label>
+                <input
+                    type="number"
+                    name="exprerience"
+                    value={profileInput.exprerience || 0.5}
+                    onChange={(e) => setProfileInput({ ...profileInput, exprerience: e.target.value })}
+                    className="w-full p-2 bg-gray-700 rounded-md text-white outline-none focus:ring-2 \
+                    focus:ring-green-500"
+                />
+            </div>
+            <div>
+                <label htmlFor="employeeId" className="block text-sm font-medium mb-1">
+                Employee Id:
+                </label>
+                <input
+                    type="text"
+                    name="employeeId"
+                    value={profileInput.employeeId || ''}
+                    onChange={(e) => setProfileInput({ ...profileInput, employeeId: e.target.value })}
+                    className="w-full p-2 bg-gray-700 rounded-md text-white outline-none focus:ring-2 \
+                    focus:ring-green-500"
+                />
+            </div>
+                </>
+            )}
             <div>
                 <label htmlFor="Contact" className="block text-sm font-medium mb-1">
                 Contact:
