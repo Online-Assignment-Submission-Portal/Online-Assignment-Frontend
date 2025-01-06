@@ -69,10 +69,16 @@ const Profile = () => {
           <button className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg">
             Change Photo
           </button>
+          <div className="flex justify-between items-center mb-8">
+          <button className="mr-5 bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg"
+            onClick={() => navigate(`/dashboard/${userId}`, { state: { profile: data, userId: userId } })}>
+            Go to dashboard
+          </button>
           <button className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg"
             onClick={() => navigate(`/update-profile/${userId}`, { state: { profile: data, userId: userId } })}>
             Edit Profile
           </button>
+          </div>
         </div>
         <div className="bg-gray-800 p-4 rounded-lg shadow-lg my-10">
 
