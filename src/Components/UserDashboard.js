@@ -239,7 +239,7 @@ const UserDashboard = () => {
         <div>
           <button onClick={() => handleProfile(userId)} 
           className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg">
-          Profile</button>
+          View Profile</button>
         </div>
         <div className="mb-10">
           <h2 className="text-xl font-semibold text-center">
@@ -249,7 +249,7 @@ const UserDashboard = () => {
             <div className="mb-8 text-right">
               <button
                 onClick={() => {setJoinMessage("");setIsModalOpen(true);setSubjectCode("");}}
-                className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg"
+                className="bg-green-600 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-lg"
               >
                 Join Subject
               </button>
@@ -293,9 +293,9 @@ const UserDashboard = () => {
               onClick={() =>
                 navigate("/add-subject", { state: { teacherId: user.id } })
               }
-              className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg"
+              className="bg-green-600 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-lg"
             >
-              + Add Subject
+              + Create Subject
             </button>
           </div>
         )}
