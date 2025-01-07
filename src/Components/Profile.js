@@ -15,7 +15,7 @@ const Profile = () => {
 
   useEffect(() => {
     setData(profileData);
-  }, [userId]);
+  }, [userId, navigate]);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
