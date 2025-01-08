@@ -66,7 +66,7 @@ const AddSubject = () => {
           onClick={handleAddSubject}
           className="bg-green-600 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-lg w-full"
         >
-          Create Subject
+          Create
         </button>
       </div>
     </div>
