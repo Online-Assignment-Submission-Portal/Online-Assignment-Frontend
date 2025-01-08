@@ -14,7 +14,7 @@ const Profile = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    setData(profileData);
+    setData({...data, data:profileData});
   }, [userId, navigate]);
 
   const handleFileChange = (e) => {
@@ -38,7 +38,7 @@ const Profile = () => {
 
     const formData = new FormData();
     formData.append('displayPicture', selectedFile);
-
+    console.log('hello photo:', selectedFile);
     try {
       setIsUploading(true);
       const token = document.cookie
@@ -58,6 +58,7 @@ const Profile = () => {
 
       if (response.data.success) {
         alert('Profile picture updated successfully!');
+        console.log(response.data);
         setData({ ...data, image: response.data.data.image });
         closeModal();
       } else {
