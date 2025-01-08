@@ -167,7 +167,7 @@ function NewAssignment() {
             <input
               type="file"
               onChange={handleFileUpload}
-              className="block w-full text-gray-400 file:py-2 file:px-4 file:rounded file:border-0 file:bg-blue-600 file:text-white hover:file:bg-blue-500 transition"
+              className="block w-full text-gray-400 file:py-2 file:px-4 file:mr-4 file:rounded file:border-0 file:bg-blue-600 file:text-white hover:file:bg-blue-500 transition"
               accept=".pdf,.doc,.docx,.txt,.xls,.xlsx,.ppt,.pptx"
               required
             />

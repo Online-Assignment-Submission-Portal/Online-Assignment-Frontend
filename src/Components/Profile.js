@@ -1,34 +1,89 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation, useParams } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
 const Profile = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const profileData = location.state?.profile;
   const userId = location.state?.userID;
   const [data, setData] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   useEffect(() => {
-    setData(profileData);
+    setData({...data, data:profileData});
   }, [userId, navigate]);
 
-  console.log('hello my profile:', profileData);
-  console.log(data);
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const fileType = file.type;
+      if (fileType !== 'image/jpeg' && fileType !== 'image/jpg') {
+        alert('Please upload a JPG or JPEG file.');
+        e.target.value = '';
+        return;
+      }
+      setSelectedFile(file);
+    }
+  };
+
+  const handlePhotoUpload = async () => {
+    if (!selectedFile) {
+      setError('Please select a file to upload.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('displayPicture', selectedFile);
+    console.log('hello photo:', selectedFile);
+    try {
+      setIsUploading(true);
+      const token = document.cookie
+        .split('; ')
+        .find((row) => row.startsWith('token='))?.split('=')[1];
+
+      const response = await axios.put(
+        `http://localhost:8000/user/updatedisplaypicture/${userId}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+
+      if (response.data.success) {
+        alert('Profile picture updated successfully!');
+        console.log(response.data);
+        setData({ ...data, image: response.data.data.image });
+        closeModal();
+      } else {
+        setError(response.data.message || 'Failed to update profile picture.');
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || 'An error occurred during upload.');
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   const handleLogout = async () => {
     try {
       const token = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("token="))
-        ?.split("=")[1];
+        .split('; ')
+        .find((row) => row.startsWith('token='))?.split('=')[1];
 
       if (!token) {
-        navigate("/signin");
+        navigate('/signin');
         return;
       }
 
       const response = await axios.post(
-        "http://localhost:8000/user/logout",
+        'http://localhost:8000/user/logout',
         {},
         {
           headers: {
@@ -38,102 +93,143 @@ const Profile = () => {
       );
 
       if (response.status === 200) {
-        document.cookie =
-          "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-        navigate("/signin");
+        document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
+        navigate('/signin');
       } else {
-        setError(response.data.message || "Logout failed.");
+        setError(response.data.message || 'Logout failed.');
       }
     } catch (err) {
-      setError(err.response?.data?.message || "An error occurred during logout.");
+      setError(err.response?.data?.message || 'An error occurred during logout.');
     }
+  };
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedFile(null);
+    setError('');
   };
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-200">
       <div className="container mx-auto py-8 px-6">
-        <div className="flex justify-between items-center mb-8">
-          <div className='bg-white rounded-full px-10 py-11'>Image</div>
-          <div>
-            <p className="font-bold text-gray-100 italic hover:not-italic text-5xl">
-              <span className='font-semibold text-3xl non-italic' >Hello, </span>{" "}
-              {profileData.firstName} {profileData.lastName}
-            </p>
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center space-x-6">
+            <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-gray-600">
+              {data?.image ? (
+                <img src={data.image} alt="Profile" className="object-cover w-full h-full" />
+              ) : (
+                <div className="flex items-center justify-center h-full bg-gray-700 text-gray-400">
+                  No Image
+                </div>
+              )}
+            </div>
+            <div>
+              <h1 className="text-3xl font-semibold text-white">
+                Hello, {profileData.firstName} {profileData.lastName}
+              </h1>
+            </div>
           </div>
-          <button onClick={handleLogout}
-            className="bg-red-600 hover:bg-red-500 text-white font-bold py-2 px-4 rounded-lg">
+          <button
+            onClick={handleLogout}
+            className="bg-red-600 hover:bg-red-500 text-white font-bold py-2 px-4 rounded-lg"
+          >
             Logout
           </button>
         </div>
+
         <div className="flex justify-between items-center mb-8">
+          <div className="space-x-4">
+            <button
+              onClick={openModal}
+              className="bg-green-600 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-lg"
+            >
+              Change Photo
+            </button>
+            <button
+              className="bg-green-600 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-lg"
+              onClick={() =>
+                navigate(`/update-profile/${userId}`, { state: { profile: data, userId } })
+              }
+            >
+              Edit Profile
+            </button>
+          </div>
           <button
-          // onClick={handleDisplayPicture}
-          className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg"
-          accept=".jpeg,.jpg"
-          required
+            className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg"
+            onClick={() =>
+              navigate(`/dashboard/${userId}`, { state: { profile: data, userId } })
+            }
           >
-            Change Photo
+            Back to Dashboard
           </button>
-          <div className="flex justify-between items-center mb-8">
-          <button className="mr-5 bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg"
-            onClick={() => navigate(`/dashboard/${userId}`, { state: { profile: data, userId: userId } })}>
-            Go to dashboard
-          </button>
-          <button className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg"
-            onClick={() => navigate(`/update-profile/${userId}`, { state: { profile: data, userId: userId } })}>
-            Edit Profile
-          </button>
+        </div>
+
+        {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50">
+          <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-[90%] md:w-[50%]">
+            <h2 className="text-xl font-semibold mb-4 text-white text-center">Upload Profile Picture</h2>
+            <input
+              type="file"
+              onChange={handleFileChange}
+              className="block w-full text-gray-400 file:py-2 file:px-4 file:mr-4 file:rounded file:border-0 file:bg-blue-600 file:text-white hover:file:bg-blue-500 transition"
+              accept=".jpg, .jpeg"
+              />
+            <div className="flex justify-end">
+              <button
+                onClick={closeModal}
+                className="mr-2 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handlePhotoUpload}
+                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500 transition"
+                disabled={isUploading}
+              >
+                {isUploading ? 'Uploading...' : 'Upload'}
+              </button>
+            </div>
+            {error && <p className="text-red-500 mt-4 text-center">{error}</p>}
           </div>
         </div>
-        <div className="bg-gray-800 p-4 rounded-lg shadow-lg my-10">
-
+      )}
+        <div className="bg-gray-800 p-6 rounded-lg shadow-lg mb-8">
           <p>
-            <span className="font-semibold text-violet-700 mt-8">Email: </span>{" "}
-            {profileData.email}
+            <span className="font-semibold text-indigo-400">Email:</span> {profileData.email}
           </p>
           <p>
-            <span className="font-semibold text-violet-700 mt-8">Role: </span>{" "}
-            {profileData.role}
+            <span className="font-semibold text-indigo-400">Role:</span> {profileData.role.charAt(0).toUpperCase() + profileData.role.slice(1).toLowerCase()}
           </p>
-          
           {profileData.role === 'student' ? (
             <>
               <p>
-                <span className="font-semibold text-violet-700 mt-8">Roll No: </span>{" "}
-                {profileData.rollNo}
+                <span className="font-semibold text-indigo-400">Roll No:</span> {profileData.rollNo}
               </p>
               <p>
-                <span className="font-semibold text-violet-700 mt-8">Branch: </span>{" "}
-                {profileData.branch}
+                <span className="font-semibold text-indigo-400">Branch:</span> {profileData.branch}
               </p>
               <p>
-                <span className="font-semibold text-violet-700 mt-8">Semester: </span>{" "}
-                {profileData.semester}
+                <span className="font-semibold text-indigo-400">Semester:</span> {profileData.semester}
               </p>
               <p>
-                <span className="font-semibold text-violet-700 mt-8">Section: </span>{" "}
-                {profileData.section}
+                <span className="font-semibold text-indigo-400">Section:</span> {profileData.section}
               </p>
             </>
           ) : (
-            <p>
+            <>
               <p>
-                <span className="font-semibold text-violet-700 mt-8">Employee Id: </span>{" "}
-                {profileData.employeeId}
+                <span className="font-semibold text-indigo-400">Employee ID:</span> {profileData.employeeId}
               </p>
               <p>
-                <span className="font-semibold text-violet-700 mt-8">Experience: </span>{" "}
-                {profileData.exprerience} years
+                <span className="font-semibold text-indigo-400">Experience:</span> {profileData.experience} years
               </p>
-            </p>
+            </>
           )}
-
           <p>
-            <span className="font-semibold text-violet-700 mt-8">Contact:</span>{" "}
-            {profileData.contact}
+            <span className="font-semibold text-indigo-400">Contact:</span> {profileData.contact}
           </p>
         </div>
-
       </div>
     </div>
   );
