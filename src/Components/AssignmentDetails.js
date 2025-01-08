@@ -259,10 +259,19 @@ function AssignmentDetails() {
                 <p className="text-gray-400 font-medium">Max Marks:</p>
                 <p>{assignmentDetails.maxVal !== undefined ? assignmentDetails.maxVal : 'Not available'}</p>
               </div>
+              <div className="mt-8 text-left">
+                <button
+                onClick={() => navigate(`/view-submission/${assignmentId}`, {state : {assignment_id: assignmentId}})}
+                className="px-6 py-2 bg-purple-600 hover:bg-purple-500 text-white font-bold 
+                rounded-lg transition">
+                  View Assignment
+                </button>
+              </div>
               <div className="mt-8 text-right">
                 <button
                   onClick={() => alert('Check for Plagiarism feature is under construction!')}
-                  className="px-6 py-2 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-lg transition"
+                  className="px-6 py-2 bg-purple-600 hover:bg-purple-500 text-white font-bold 
+                  rounded-lg transition"
                   >
                   Check for Plagiarism
                 </button>
