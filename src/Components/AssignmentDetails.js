@@ -9,6 +9,10 @@ function AssignmentDetails() {
   const [assignmentDetails, setAssignmentDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [file, setFile] = useState(null);
 
   useEffect(() => {
     const fetchAssignmentDetails = async () => {
@@ -42,7 +46,65 @@ function AssignmentDetails() {
 
     fetchAssignmentDetails();
   }, [assignmentId, navigate]);
-   
+  
+  const handleFileUpload = (e) => {
+    const uploadedFile = e.target.files[0];
+    const allowedFormats = ['pdf', 'doc', 'docx', 'txt', 'xls', 'xlsx', 'ppt', 'pptx'];
+    const maxSize = 5 * 1024 * 1024;
+    
+    if (uploadedFile && allowedFormats.includes(uploadedFile.name.split('.').pop().toLowerCase())) {
+      if (uploadedFile.size <= maxSize) {
+        setSelectedFile(uploadedFile);
+      } else {
+        alert('File size exceeds 5MB.');
+      }
+    } else {
+      alert('Unsupported file format. Allowed formats: pdf, doc, docx, txt, xls, xlsx, ppt, pptx.');
+    }
+  };
+
+  const handleSubmitAssignment = async () => {
+    const token = document.cookie
+    .split('; ')
+    .find((row) => row.startsWith('token='))
+    ?.split('=')[1];
+    
+    if (!selectedFile) {
+      setError('Please select a file to upload.');
+      return;
+    }
+    
+    const formData = new FormData();
+    formData.append('fileupload', selectedFile);
+    console.log('hello file:', selectedFile);
+    try{
+      
+      const response = await axios.post(`http://localhost:8000/assignment/submitassignment/${assignmentId}`, 
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      }); 
+      console.log(response);
+      if(response.data.success) {
+        alert('Assignment submitted successfully!');
+        console.log(response.data);
+        // setData({ ...data, : response.data.data.image });
+        closeModal();
+      }
+    }catch(err) {
+      setError('An error occurred while submitting assignment');
+    }
+  }
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedFile(null);
+    setError('');
+  };
   // const extractFileName = async (fileLink) => {
   //   const fileNameWithExtension = fileLink.split('/').pop(); 
   //   const lastDotIndex = fileNameWithExtension.lastIndexOf('.');
@@ -115,11 +177,6 @@ function AssignmentDetails() {
               <p className="text-gray-400 font-medium">Attachment:</p>
               <a
                 href={`${assignmentDetails.fileLink}`}
-                // onClick={() => handleDownload(assignmentDetails.fileLink, extractFileName(assignmentDetails.fileLink).fileName)}
-                // download={(() => {
-                //   const { fileName, fileExtension } = extractFileName(assignmentDetails.fileLink); // Extract name and extension
-                //   return `${fileName}.${fileExtension}`; // Return the formatted download name
-                // })()}
                 download
                 target="_blank"
                 rel="noopener noreferrer"
@@ -158,12 +215,43 @@ function AssignmentDetails() {
 
               <div className="mt-8 text-right">
                 <button
-                  onClick={() => alert('Submit Assignment feature is under construction!')}
+                  // onClick={() => handleSubmitAssignment(assignmentDetails)}
+                  onClick={openModal}
                   className="px-6 py-2 bg-green-600 hover:bg-green-500 text-white font-bold rounded-lg transition"
                 >
                   Submit Assignment
                 </button>
               </div>
+              {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50">
+          <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-[90%] md:w-[50%]">
+            <h2 className="text-xl font-semibold mb-4 text-white text-center">Upload Assignment</h2>
+            <input
+              type="file"
+              onChange={handleFileUpload}
+              className="block w-full text-gray-400 file:py-2 file:px-4 file:mr-4 file:rounded file:border-0 file:bg-blue-600 file:text-white hover:file:bg-blue-500 transition"
+              accept=".pdf,.doc,.docx,.txt,.xls,.xlsx,.ppt,.pptx"
+              required
+            />
+            <div className="flex justify-end">
+              <button
+                onClick={closeModal}
+                className="mr-2 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => handleSubmitAssignment()}
+                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500 transition"
+                disabled={isUploading}
+              >
+                {isUploading ? 'Uploading...' : 'Upload'}
+              </button>
+            </div>
+            {error && <p className="text-red-500 mt-4 text-center">{error}</p>}
+          </div>
+        </div>
+      )}
             </>
           ) : userRole === 'teacher' ? (
             <div>
