@@ -15,7 +15,7 @@ const Profile = () => {
 
   useEffect(() => {
     setData({...data, data:profileData});
-  }, [userId, navigate]);
+  }, [userId, navigate, profileData]);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -58,8 +58,8 @@ const Profile = () => {
 
       if (response.data.success) {
         alert('Profile picture updated successfully!');
-        console.log(response.data);
-        setData({ ...data, image: response.data.data.image });
+        console.log(response.data, " updated ");
+        profileData.image = response.data.data.image;
         closeModal();
       } else {
         setError(response.data.message || 'Failed to update profile picture.');
@@ -116,8 +116,8 @@ const Profile = () => {
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center space-x-6">
             <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-gray-600">
-              {data?.image ? (
-                <img src={data.image} alt="Profile" className="object-cover w-full h-full" />
+              {profileData?.image ? (
+                <img src={profileData.image} alt="Profile" className="object-cover w-full h-full" />
               ) : (
                 <div className="flex items-center justify-center h-full bg-gray-700 text-gray-400">
                   No Image
