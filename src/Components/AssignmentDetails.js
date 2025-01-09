@@ -5,7 +5,9 @@ function AssignmentDetails() {
   const location = useLocation();
   const navigate = useNavigate();
   const assignmentId = location.state?.assignment_id;
-  const userRole = location.state?.userRole; 
+  const userRole = location.state?.userRole;
+  const assignment = location.state?.assignment_details;
+  // console.log('kya be assignment:', assignment); 
   const [assignmentDetails, setAssignmentDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -212,7 +214,6 @@ function AssignmentDetails() {
                     : 'Not submitted yet'}
                 </p>
               </div>
-
               <div className="mt-8 text-right">
                 <button
                   // onClick={() => handleSubmitAssignment(assignmentDetails)}
@@ -258,6 +259,16 @@ function AssignmentDetails() {
               <div> 
                 <p className="text-gray-400 font-medium">Max Marks:</p>
                 <p>{assignmentDetails.maxVal !== undefined ? assignmentDetails.maxVal : 'Not available'}</p>
+              </div>
+              <div>
+                <button
+                className='px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500 
+                transition'
+                onClick={()=> navigate(`/updateassignment/${assignmentId}`, {state : {assignment_id : assignmentId, 
+                assignment_details : assignmentDetails}})}
+                >
+                  Update Details
+                </button>
               </div>
               <div className='flex justify-between items-center mb-8'>
               <div className="mt-8 text-left">
