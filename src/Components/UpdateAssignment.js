@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import AssignmentDetails from './AssignmentDetails';
 
 function UpdateAssignment () {
@@ -32,11 +34,13 @@ const handleSubmit = async (e) => {
      if(response.data.success) {
         console.log(response.data);
         console.log("Assignment updated successfully");
+        toast.success("Assignment updated successfully!", { autoClose: 1500 });
         setAssignment({...assignment, assignment: response.data})
         navigate(`/assignment/${assignmentId}`, { state: {assignment_details : assignment, assignment_id : assignmentId} });
      }
     } catch(err) {
-        setError(err.response?.data?.message || "An error occurred during updating assignment.");
+      //   setError(err.response?.data?.message || "An error occurred during updating assignment.");
+        toast.error(err.response?.data?.message || "Failed to update assignment.", { autoClose: 1500 });
     }
 
 }
@@ -157,6 +161,7 @@ return (
             </button>
         </div>
        </form>
+       <ToastContainer position="top-center" autoClose={1500}/>
     </div>
 </div>
 );

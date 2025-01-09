@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -14,10 +18,11 @@ const ForgotPassword = () => {
     try {
       const response = await axios.post("http://localhost:8000/user/sendresetotp", { email });
       if (response.data.success) {
+        toast.success("OTP sent successfully! Check your email.");
         navigate("/reset-password", { state: { email } });
     }
     } catch (err) {
-      setError(err.response?.data?.message || "Error sending OTP. Please try again.");
+      toast.error(err.response?.data?.message || "Error sending OTP. Please try again.");
     }
   };
 
@@ -46,6 +51,7 @@ const ForgotPassword = () => {
             Send OTP
           </button>
         </form>
+        <ToastContainer position="top-center" autoClose={1500} />
       </div>
     </div>
   );

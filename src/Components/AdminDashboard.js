@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AdminDashboard = () => {
   const [pendingUsers, setPendingUsers] = useState([]);
@@ -17,6 +19,7 @@ const AdminDashboard = () => {
           ?.split("=")[1];
 
         if (!token) {
+          toast.error("Unauthorized access. Please log in.");
           navigate("/admin-signin");
           return;
         }
@@ -29,7 +32,7 @@ const AdminDashboard = () => {
 
         setPendingUsers(response.data);
       } catch (err) {
-        setError("Unauthorized or session expired.");
+        toast.error("Unauthorized or session expired.");
         navigate("/admin-signin");
       }
     };
@@ -45,6 +48,7 @@ const AdminDashboard = () => {
         ?.split("=")[1];
 
       if (!token) {
+        toast.error("Session expired. Please log in again.");
         navigate("/admin-signin");
         return;
       }
@@ -61,10 +65,11 @@ const AdminDashboard = () => {
 
       if (response.data.success) {
         document.cookie = "adminToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+        toast.success("Logout successful!");
         navigate("/admin-signin");
       }
     } catch (err) {
-      setError("Unauthorized or session expired.");
+      toast.error("Failed to log out. Please try again.");
       navigate("/admin-signin");
     }
   };
@@ -76,13 +81,13 @@ const AdminDashboard = () => {
       ?.split("=")[1];
 
     if (!token) {
-      setError("Token not found.");
+      toast.error("Token not found. Please log in.");
       return;
     }
 
     const role = selectedRoles[userId];
     if (!role) {
-      setError("Please select a role before confirming.");
+      toast.warning("Please select a role before confirming.");
       return;
     }
 
@@ -104,9 +109,10 @@ const AdminDashboard = () => {
           delete updatedRoles[userId];
           return updatedRoles;
         });
+        toast.success("Role confirmed successfully!");
       }
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to confirm role.");
+      toast.error(err.response?.data?.message || "Failed to confirm role.");
     }
   };
 
@@ -117,7 +123,7 @@ const AdminDashboard = () => {
       ?.split("=")[1];
 
     if (!token) {
-      setError("Token not found.");
+      toast.error("Token not found. Please log in.");
       return;
     }
 
@@ -133,14 +139,16 @@ const AdminDashboard = () => {
 
       if (response.data.success) {
         setPendingUsers(pendingUsers.filter((user) => user._id !== userId));
+        toast.success("User deleted successfully!");
       }
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to delete user.");
+      toast.error(err.response?.data?.message || "Failed to delete user.");
     }
   };
 
   return (
     <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center py-10">
+            <ToastContainer position="top-center" autoClose={1500} />
       <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-4xl">
         <h2 className="text-2xl font-bold mb-6">Admin Dashboard</h2>
 

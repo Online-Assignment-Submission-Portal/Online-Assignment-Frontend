@@ -2,6 +2,8 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 const BlankPage = () => {
@@ -10,7 +12,7 @@ const BlankPage = () => {
     try {
       const token = localStorage.getItem("token"); 
       if (!token) {
-        console.error("No token available for logout.");
+        toast.error("No token available for logout.");
         navigate("/signin");
         return;
       }
@@ -26,19 +28,21 @@ const BlankPage = () => {
       const data = await response.json();
 
       if (response.ok) {
-        console.log(data.message);
+        toast.success(data.message || "Logged out successfully.");
         localStorage.clear();
         navigate("/signin"); 
       } else {
-        console.error(data.message || "Failed to log out.");
+        toast.error(data.message || "Failed to log out.");
       }
     } catch (error) {
+      toast.error("An error occurred during logout.");
       console.error("Error during logout:", error);
     }
   };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+            <ToastContainer position="top-center" autoClose={1500} />
       <h1 className="text-3xl font-bold text-gray-800 mb-6">
         Welcome to Your Dashboard
       </h1>

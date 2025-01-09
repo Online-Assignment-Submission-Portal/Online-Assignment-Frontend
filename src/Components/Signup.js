@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Signup = () => {
   const [firstName, setFirstName] = useState("");
@@ -32,7 +34,7 @@ const Signup = () => {
         }
       }
     } catch (err) {
-      setError("Signup failed. Please try again.");
+      toast.error(err.response?.data?.message||"Signup failed. Please try again.");
       console.error(err);
     }
   };
@@ -144,6 +146,7 @@ const Signup = () => {
           </a>
         </p>
       </div>
+     <ToastContainer position="top-center" autoClose={2500} />
     </div>
   );
 };

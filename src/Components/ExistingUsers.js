@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ExistingUsers = () => {
   const [students, setStudents] = useState([]);
@@ -29,8 +31,9 @@ const ExistingUsers = () => {
 
         setStudents(response.data.students || []);
         setTeachers(response.data.teachers || []);
+        toast.success("Users fetched successfully!");
       } catch (err) {
-        setError("Failed to fetch users. Please try again.");
+        toast.error("Failed to fetch users. Please try again.");
       }
     };
 
@@ -49,7 +52,7 @@ const ExistingUsers = () => {
       ?.split("=")[1];
 
     if (!token) {
-      setError("Unauthorized access. Please log in.");
+      toast.error("Unauthorized access. Please log in.");
       return;
     }
 
@@ -66,11 +69,13 @@ const ExistingUsers = () => {
       if (response.data.success) {
         setStudents(students.filter((user) => user._id !== userId));
         setTeachers(teachers.filter((user) => user._id !== userId));
+        toast.success("User deleted successfully!");
       } else {
-        setError("Failed to delete user.");
+        // setError("Failed to delete user.");
+        toast.error("Failed to delete user.");
       }
     } catch (err) {
-      setError("Error occurred while deleting the user.");
+      toast.error("Error occurred while deleting the user.");
     }
   };
 
@@ -98,16 +103,19 @@ const ExistingUsers = () => {
 
       if (response.data.success) {
         document.cookie = "adminToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+        toast.success("Logged out successfully!");
         navigate("/admin-signin");
       }
     } catch (err) {
-      setError("Unauthorized or session expired.");
+      // setError("Unauthorized or session expired.");
+      toast.error("Unauthorized or session expired.");
       navigate("/admin-signin");
     }
   };
 
   return (
     <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center py-10">
+            <ToastContainer position="top-center" autoClose={1500} />
       <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full w-4/5">
       <div className="flex justify-between">
           <button
