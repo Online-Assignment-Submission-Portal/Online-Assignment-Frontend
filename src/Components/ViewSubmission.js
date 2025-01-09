@@ -45,7 +45,8 @@ fetchSubmissions();
   function extractFileName (fileLink) {
     const fileNameWithExtension = fileLink.split('/').pop(); 
     const lastDotIndex = fileNameWithExtension.lastIndexOf('.');
-    const fileName = fileNameWithExtension.substring(0, lastDotIndex);
+    let fileName = fileNameWithExtension.substring(0, lastDotIndex);
+     fileName=decodeURIComponent(fileName);
     return fileName;
   };
 
@@ -75,6 +76,7 @@ if (error) {
 return(
 <div className="min-h-screen bg-gray-900 text-gray-200 py-8">
     <div className="container mx-auto bg-gray-800 p-8 rounded-lg shadow-lg max-w-4xl">
+                <div className='flex justify-between items-center mb-8'>
                 <h1 className="text-3xl font-semibold">
                 Assignment Submission
                 </h1>
@@ -85,6 +87,7 @@ return(
                 >
                    Back
                 </button>
+                </div>
         <div className="flex justify-between items-center mb-8">
         <div className='w-5/5 h-96 overflow-y-auto mt-6'>
         <table className="w-full  bg-gray-800 text-gray-200 rounded-lg">
