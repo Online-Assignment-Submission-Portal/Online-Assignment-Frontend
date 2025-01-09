@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 function AssignmentDetails() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -39,10 +42,13 @@ function AssignmentDetails() {
         if (response.data.success) {
           setAssignmentDetails(response.data.assignment);
         } else {
-          setError('Failed to fetch assignment details.');
+          // setError('Failed to fetch assignment details.');
+          toast.error('Failed to fetch assignment details.');
         }
       } catch (err) {
-        setError('An error occurred while fetching assignment details.');
+        // setError('An error occurred while fetching assignment details.');
+        toast.error('An error occurred while fetching assignment details.');
+
       } finally {
         setLoading(false);
       }
@@ -60,10 +66,10 @@ function AssignmentDetails() {
       if (uploadedFile.size <= maxSize) {
         setSelectedFile(uploadedFile);
       } else {
-        alert('File size exceeds 5MB.');
+        toast.error('File size exceeds 5MB.');
       }
     } else {
-      alert('Unsupported file format. Allowed formats: pdf, doc, docx, txt, xls, xlsx, ppt, pptx.');
+      toast.error('Unsupported file format. Allowed formats: pdf, doc, docx, txt, xls, xlsx, ppt, pptx.');
     }
   };
 
@@ -74,7 +80,8 @@ function AssignmentDetails() {
     ?.split('=')[1];
     
     if (!selectedFile) {
-      setError('Please select a file to upload.');
+      // setError('Please select a file to upload.');
+      toast.error('Please select a file to upload.');
       return;
     }
     
@@ -93,13 +100,14 @@ function AssignmentDetails() {
       }); 
       console.log(response);
       if(response.data.success) {
-        alert('Assignment submitted successfully!');
+        toast.success('Assignment submitted successfully!');
         console.log(response.data);
         // setData({ ...data, : response.data.data.image });
         closeModal();
       }
     }catch(err) {
-      setError('An error occurred while submitting assignment');
+      // setError('An error occurred while submitting assignment');
+      toast.error('An error occurred while submitting the assignment.');
     }
   }
 
@@ -150,6 +158,7 @@ function AssignmentDetails() {
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-200 py-8">
+            <ToastContainer position="top-center" autoClose={1500} />
       <div className="container mx-auto bg-gray-800 p-8 rounded-lg shadow-lg max-w-4xl">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">

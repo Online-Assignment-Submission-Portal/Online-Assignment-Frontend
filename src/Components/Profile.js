@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -24,7 +26,8 @@ const Profile = () => {
     if (file) {
       const fileType = file.type;
       if (fileType !== 'image/jpeg' && fileType !== 'image/jpg') {
-        alert('Please upload a JPG or JPEG file.');
+        // alert('Please upload a JPG or JPEG file.');
+        toast.error('Please upload a JPG or JPEG file.');
         e.target.value = '';
         return;
       }
@@ -34,7 +37,7 @@ const Profile = () => {
 
   const handlePhotoUpload = async () => {
     if (!selectedFile) {
-      setError('Please select a file to upload.');
+      toast.error('Please select a file to upload.');
       return;
     }
 
@@ -59,15 +62,15 @@ const Profile = () => {
       );
 
       if (response.data.success) {
-        alert('Profile picture updated successfully!');
+        toast.success('Profile picture updated successfully!');
         console.log(response.data, " updated ");
         profileData.image = response.data.data.image;
         closeModal();
       } else {
-        setError(response.data.message || 'Failed to update profile picture.');
+        toast.error(response.data.message || 'Failed to update profile picture.');
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'An error occurred during upload.');
+      toast.error(err.response?.data?.message || 'An error occurred during upload.');
     } finally {
       setIsUploading(false);
     }
@@ -98,10 +101,11 @@ const Profile = () => {
         document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
         navigate('/signin');
       } else {
-        setError(response.data.message || 'Logout failed.');
+        // setError(response.data.message || 'Logout failed.');
+        toast.error(response.data.message || 'Logout failed.');
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'An error occurred during logout.');
+      toast.error(err.response?.data?.message || 'An error occurred during logout.');
     }
   };
 
@@ -114,6 +118,7 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-200">
+      <ToastContainer position="top-center" autoClose={1500} />
       <div className="container mx-auto py-8 px-6">
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center space-x-6">

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function NewAssignment() {
   const navigate = useNavigate();
@@ -25,10 +27,10 @@ function NewAssignment() {
       if (uploadedFile.size <= maxSize) {
         setFile(uploadedFile);
       } else {
-        alert('File size exceeds 5MB.');
-      }
+        toast.error('File size exceeds 5MB.');
+            }
     } else {
-      alert('Unsupported file format. Allowed formats: pdf, doc, docx, txt, xls, xlsx, ppt, pptx.');
+      toast.error('Unsupported file format. Allowed formats: pdf, doc, docx, txt, xls, xlsx, ppt, pptx.');
     }
   };
 
@@ -36,7 +38,7 @@ function NewAssignment() {
     e.preventDefault();
 
     if (!file) {
-      alert('Please upload a file.');
+      toast.error('Please upload a file.');
       return;
     }
 
@@ -47,6 +49,7 @@ function NewAssignment() {
         ?.split('=')[1];
 
       if (!token) {
+        toast.error('Token not found, redirecting to sign-in.');
         return navigate('/signin');
       }
 
@@ -72,7 +75,7 @@ function NewAssignment() {
       );
 
       if (response.data.success) {
-        alert('Assignment created successfully!');
+        toast.success('Assignment created successfully!');
         // console.log(subject);
         const response2 = await axios.get(
           `http://localhost:8000/user/getsubject/${subject.subject_id}`,
@@ -88,19 +91,20 @@ function NewAssignment() {
           navigate(`/subject/${subject.subject_id}`, { state: { subject: response2.data, userID, userRole }});
         }
         else{
-          alert(response2.data.message);
+          toast.error(response2.data.message);
         }
       } else {
-        alert(response.data.message);
+        toast.error(response.data.message);
       }
     } catch (error) {
       console.error('Error creating assignment:', error);
-      alert('An error occurred. Please try again.');
+      toast.error('An error occurred. Please try again.');
     }
   };
 
   return (
     <div className="min-h-screen bg-gray-900 py-12 flex items-center justify-center">
+            <ToastContainer position="top-center" autoClose={1500} hideProgressBar={false} />
       <div className="bg-gray-800 p-10 rounded-lg shadow-xl w-full max-w-3xl">
         <h1 className="text-4xl font-extrabold text-gray-200 mb-8 text-center">Create New Assignment</h1>
         <form onSubmit={handleSubmit} className="space-y-6">

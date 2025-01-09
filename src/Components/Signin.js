@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 const Signin = () => {
   const [email, setEmail] = useState("");
@@ -23,11 +26,11 @@ const Signin = () => {
         const { token, user } = response.data;
         console.log(token, user._id)
         document.cookie = `token=${token}; path=/`;
-        const id = user._id;
-        navigate(`/dashboard/${id}`);
+        toast.success("Signin successful!");
+        setTimeout(() => navigate(`/dashboard/${user._id}`), 1500); // Redirect after 2 seconds
       }
     } catch (err) {
-      setError(err.response?.data?.message || "Invalid credentials. Please try again.");
+      toast.error(err.response?.data?.message || "Invalid credentials. Please try again.");
       console.error("Signin error:", err);
     }
   };
@@ -96,6 +99,7 @@ const Signin = () => {
           </a>
         </p>
       </div>
+      <ToastContainer position="top-center" autoClose={2500} />
     </div>
   );
 };
