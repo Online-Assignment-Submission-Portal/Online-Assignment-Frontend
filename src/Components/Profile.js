@@ -13,6 +13,8 @@ const Profile = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // console.log(data);
+
   useEffect(() => {
     setData({...data, data:profileData});
   }, [userId, navigate, profileData]);
@@ -222,7 +224,7 @@ const Profile = () => {
                 <span className="font-semibold text-indigo-400">Employee ID:</span> {profileData.employeeId}
               </p>
               <p>
-                <span className="font-semibold text-indigo-400">Experience:</span> {profileData.experience} years
+                <span className="font-semibold text-indigo-400">Experience:</span> {profileData.exprerience} years
               </p>
             </>
           )}

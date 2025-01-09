@@ -5,7 +5,7 @@ import axios from 'axios';
 const UpdateProfile = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const profile = location.state?.profile;
+    const profile = location.state?.profile.data;
     const userId = location.state?.userId;
     const [error, setError] = useState("");
     const [profileInput, setProfileInput] = useState({...profile});
@@ -30,7 +30,8 @@ const UpdateProfile = () => {
          if(response.data.success) {
             console.log(response.data);
             console.log("Profile updated successfully");
-            navigate(`/profile/${userId}`, { state: {profile: response.data, userID: userId } });
+            setProfileInput({...profileInput, profileInput: response.data})
+            navigate(`/profile/${userId}`, { state: {profile: profileInput, userID: userId } });
          }
         } catch(err) {
             setError(err.response?.data?.message || "An error occurred during updating profile.");
