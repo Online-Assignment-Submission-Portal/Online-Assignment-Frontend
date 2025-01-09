@@ -56,7 +56,6 @@ function NewAssignment() {
       formData.append('minVal', minVal);
       formData.append('maxVal', maxVal);
       formData.append('deadline', deadline);
-      formData.append('createdBy', subject.teacher_id);
       formData.append('file', file);
       // const subjectId = subject._id.toString();
       console.log(subject);
@@ -124,7 +123,7 @@ function NewAssignment() {
               onChange={(e) => setDescription(e.target.value)}
               className="w-full p-3 border border-gray-600 rounded bg-gray-700 text-gray-200 placeholder-gray-500 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter assignment description"
-              rows={5}
+              rows={10}
             />
           </div>
 
@@ -176,7 +175,7 @@ function NewAssignment() {
           <div className="flex justify-between items-center">
             <button
               type="button"
-              onClick={() => navigate(-1)}
+              onClick={() => navigate(`/subject/${userID}`)}
               className="px-6 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition"
             >
               Cancel
