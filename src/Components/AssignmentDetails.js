@@ -9,6 +9,8 @@ function AssignmentDetails() {
   const navigate = useNavigate();
   const assignmentId = location.state?.assignment_id;
   const userRole = location.state?.userRole;
+  const userID = location.state?.userID;
+  // console.log(userID, "role2")
   const assignment = location.state?.assignment_details;
   // console.log('kya be assignment:', assignment); 
   const [assignmentDetails, setAssignmentDetails] = useState(null);
@@ -161,19 +163,32 @@ function AssignmentDetails() {
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold">Assignment Details</h1>
-
+          <div className='space-x-4'>
+            { userRole === 'teacher' ? (
+              <>
+              <button
+              className="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition"
+              onClick={()=> navigate(`/updateassignment/${assignmentId}`, {state : {assignment_id : assignmentId, 
+                assignment_details : assignmentDetails ,userRole ,userID}})}
+                >
+              Update Details
+            </button>
+                  </>
+                ) : <></>}
           <button
-            onClick={() => navigate(-1)}
+            onClick={() => navigate(`/dashboard/${userID}`)} // to be changed
             className="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition"
           >
             Back
           </button>
+
+          </div>
         </div>
 
         <div className="space-y-6">
           <div>
             <p className="text-gray-400 font-medium">Title:</p>
-            <h2 className="text-2xl font-semibold">{assignmentDetails.title}</h2>
+            <p>{assignmentDetails.title}</p>
           </div>
           <div>
             <p className="text-gray-400 font-medium">Deadline:</p>
@@ -265,19 +280,20 @@ function AssignmentDetails() {
             </>
           ) : userRole === 'teacher' ? (
             <div>
-              <div> 
-                <p className="text-gray-400 font-medium">Max Marks:</p>
-                <p>{assignmentDetails.maxVal !== undefined ? assignmentDetails.maxVal : 'Not available'}</p>
+              <div className="grid grid-cols-2 gap-6">
+                <div>
+                  <p className="text-gray-400 font-medium">Min Marks:</p>
+                  <p>
+                    {assignmentDetails.minVal !== undefined ? assignmentDetails.minVal : 'Not graded yet'}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-gray-400 font-medium">Max Marks:</p>
+                  <p>{assignmentDetails.maxVal !== undefined ? assignmentDetails.maxVal : 'Not available'}</p>
+                </div>
               </div>
               <div>
-                <button
-                className='px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500 
-                transition'
-                onClick={()=> navigate(`/updateassignment/${assignmentId}`, {state : {assignment_id : assignmentId, 
-                assignment_details : assignmentDetails}})}
-                >
-                  Update Details
-                </button>
+                
               </div>
               <div className='flex justify-between items-center mb-8'>
               <div className="mt-8 text-left">
