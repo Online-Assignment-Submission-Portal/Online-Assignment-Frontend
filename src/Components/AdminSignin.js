@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AdminSignin = () => {
   const [email, setEmail] = useState("");
@@ -19,15 +21,21 @@ const AdminSignin = () => {
 
       if (response.data.success) {
         document.cookie = `adminToken=${response.data.token}; path=/;`;
-        navigate("/admin-dashboard");
+        // navigate("/admin-dashboard");
+        toast.success("Login successful! Redirecting to dashboard...");
+        setTimeout(() => {
+          navigate("/admin-dashboard");
+        }, 1500); // Redirect after 1.5 seconds
+
       }
     } catch (err) {
-      setError(err.response?.data?.message || "Login failed.");
+      toast.error(err.response?.data?.message || "Login failed. Please try again.");
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
+            <ToastContainer position="top-center" autoClose={1500} />
       <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold text-center mb-6">Admin Login</h2>
         {error && (

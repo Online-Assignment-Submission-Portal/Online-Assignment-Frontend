@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const UserDashboard = () => {
   const { id } = useParams();
@@ -37,13 +39,13 @@ const UserDashboard = () => {
         setUser(response.data.user);
         userData = response.data.user;
       } else {
-        setError("Failed to fetch user data.");
+        toast.error("Failed to fetch user data.");
       }
     } catch (err) {
       if (err.response && err.response.status === 401) {
         navigate("/signin");
       } else {
-        setError(err.response?.data?.message || "An error occurred.");
+        toast.error(err.response?.data?.message || "An error occurred.");
       }
     }
   };
@@ -78,10 +80,10 @@ const UserDashboard = () => {
           "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
         navigate("/signin");
       } else {
-        setError(response.data.message || "Logout failed.");
+        toast.error(response.data.message || "Logout failed.");
       }
     } catch (err) {
-      setError(err.response?.data?.message || "An error occurred during logout.");
+      toast.error(err.response?.data?.message || "An error occurred during logout.");
     }
   };
 
@@ -104,7 +106,8 @@ const UserDashboard = () => {
       );
 
       if (response.data.success) {
-        setJoinMessage(`Successfully joined subject: ${response.data.subject.subject_name}`);
+        // setJoinMessage(`Successfully joined subject: ${response.data.subject.subject_name}`);
+        toast.success(`Successfully joined subject: ${response.data.subject.subject_name}`);
         setSubjectCode("");
         setUser((prevUser) => ({
           ...prevUser,
@@ -113,9 +116,11 @@ const UserDashboard = () => {
         fetchUserData(id);
       }
     } catch (err) {
-      setJoinMessage(
-        err.response?.data?.message || "An error occurred while joining the subject."
-      );
+      // setJoinMessage(
+      //   err.response?.data?.message || "An error occurred while joining the subject."
+      // );
+      toast.error(err.response?.data?.message || "An error occurred while joining the subject.");
+
     }
   };
 
@@ -143,9 +148,9 @@ const UserDashboard = () => {
       }
     } catch (err) {
       if (err.response && err.response.status === 404) {
-        alert("Subject details not found.");
+        toast.error("Subject details not found.");
       } else {
-        alert("An error occurred while fetching subject details.");
+        toast.error("An error occurred while fetching subject details.");
       }
     }
   };
@@ -170,10 +175,10 @@ const UserDashboard = () => {
       if (response.data.success) {
         navigate(`/profile/${userId}`, {state: { profile: response.data, userID: userId}});
       } else {
-        setError("Failed to fetch profile data.");
+        toast.error("Failed to fetch profile data.");
       }
       }catch(err){
-        setError(err.response?.data?.message || "An error occurred during Profile view.");
+        toast.error(err.response?.data?.message || "An error occurred during Profile view.");
       }
   }
 
@@ -203,6 +208,7 @@ const UserDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-200">
+            <ToastContainer position="top-center" autoClose={1500}/>
       <div className="container mx-auto py-8 px-6">  
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold">Welcome, {user.firstName}!</h1>

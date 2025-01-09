@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const UpdateProfile = () => {
     const navigate = useNavigate();
@@ -30,17 +32,20 @@ const UpdateProfile = () => {
          if(response.data.success) {
             console.log(response.data);
             console.log("Profile updated successfully");
+            toast.success("Profile updated successfully!");
             setProfileInput({...profileInput, profileInput: response.data})
             navigate(`/profile/${userId}`, { state: {profile: profileInput, userID: userId } });
          }
         } catch(err) {
-            setError(err.response?.data?.message || "An error occurred during updating profile.");
+            // setError(err.response?.data?.message || "An error occurred during updating profile.");
+            toast.error(err.response?.data?.message || "An error occurred during updating profile.");
         }
 
     }
 
     return (
    <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
+                <ToastContainer position="top-center" autoClose={1500} />
     <div className="bg-gray-800 mt-3 mb-3 p-6 rounded-lg shadow-lg w-full max-w-md">
             <form onSubmit={handleSubmit} className="space-y-4">
             <div>

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const OTPVerification = () => {
   const [otp, setOtp] = useState("");
@@ -15,17 +17,18 @@ const OTPVerification = () => {
       const response = await axios.post("http://localhost:8000/user/verifyotp", { email: state.email, otp });
       if (response.status === 200) {
         console.log("OTP Verified!");
-        alert("OTP verified. Pending admin approval.");
+        toast.success("OTP verified. Pending admin approval.");
         navigate("/");
       }
     } catch (err) {
-      setError("Invalid OTP. Please try again.");
+      toast.error("Invalid OTP. Please try again.");
       console.error(err);
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
+            <ToastContainer position="top-center" autoClose={1500} />
       <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-sm">
         <h2 className="text-2xl font-bold text-center mb-6">Enter OTP</h2>
         {error && (

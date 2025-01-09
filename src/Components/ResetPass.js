@@ -2,6 +2,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ResetPassword = () => {
   const [otp, setOtp] = useState("");
@@ -16,7 +18,7 @@ const ResetPassword = () => {
     setError("");
 
     if (newPassword !== confirmPassword) {
-      setError("Passwords do not match.");
+     toast.error(e.response?.data?.message || "Passwords do not match.");
       return;
     }
 
@@ -28,10 +30,12 @@ const ResetPassword = () => {
         confirmPassword
       });
       if (response.data.success) {
-        navigate("/signin");
+        toast.success("Reset Successful");
+        // navigate("/signin");
+        setTimeout(() => navigate(`/signin/`), 1500);
       }
     } catch (err) {
-      setError(err.response?.data?.message || "Error resetting password. Please try again.");
+      toast.error(err.response?.data?.message || "Error resetting password. Please try again.");
     }
   };
 
@@ -85,6 +89,7 @@ const ResetPassword = () => {
           </button>
         </form>
       </div>
+            <ToastContainer position="top-center" autoClose={2500} />
     </div>
   );
 };

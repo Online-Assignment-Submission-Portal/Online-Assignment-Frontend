@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';  // Import Toastify
+import 'react-toastify/dist/ReactToastify.css';  // Import styles for Toastify
 
 function SubjectDetails() {
   const location = useLocation();
@@ -48,11 +50,13 @@ function SubjectDetails() {
         setNotFoundEmails((prev) => [...prev, ...response.data.notFoundStudents]);
         setEmailInput('');
         setIsModalOpen(false);
+        toast.success('Students added successfully!'); // Success toast
       } else {
-        alert(response.data.message);
+        toast.error(response.data.message);
       }
     } catch (error) {
       console.error('Error adding students:', error);
+      toast.error('Error adding students.'); // Error toast
     }
   };
 
@@ -80,16 +84,19 @@ function SubjectDetails() {
       console.log(response);
       if (response.data.success) {
         setFoundStudents((prev) => prev.filter((student) => student._id !== studentId));
+        toast.success('Student removed successfully!'); // Success toast
       } else {
-        alert(response.data.message);
+        toast.error(response.data.message);
       }
     } catch (error) {
       console.error('Error removing student:', error);
+      toast.error('Error removing student.'); // Error toast
     }
   };
 
   const removeNotFoundEmail = (email) => {
     setNotFoundEmails(notFoundEmails.filter((e) => e !== email));
+    // toast.info('Email removed from list.'); Info toast
   };
 
   if (!subject) {
@@ -111,6 +118,7 @@ function SubjectDetails() {
 
   return (
     <div className="min-h-screen bg-gray-900 py-8 flex flex-col">
+            <ToastContainer position="top-center" autoClose={1500}/>
       <div className="container mx-auto bg-gray-800 p-8 rounded-lg shadow-lg">
         <div></div>
         <div className="flex justify-between items-center mb-4">
