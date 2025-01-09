@@ -259,6 +259,7 @@ function AssignmentDetails() {
                 <p className="text-gray-400 font-medium">Max Marks:</p>
                 <p>{assignmentDetails.maxVal !== undefined ? assignmentDetails.maxVal : 'Not available'}</p>
               </div>
+              <div className='flex justify-between items-center mb-8'>
               <div className="mt-8 text-left">
                 <button
                 onClick={() => navigate(`/view-submission/${assignmentId}`, {state : {assignment_id: assignmentId}})}
@@ -275,6 +276,7 @@ function AssignmentDetails() {
                   >
                   Check for Plagiarism
                 </button>
+              </div>
               </div>
             </div>
           ) : null}
