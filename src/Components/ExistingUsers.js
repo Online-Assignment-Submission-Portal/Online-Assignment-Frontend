@@ -3,7 +3,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const ExistingUsers = () => {
-  const [users, setUsers] = useState([]);
+  const [students, setStudents] = useState([]);
+  const [teachers, setTeachers] = useState([]);
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -26,7 +27,8 @@ const ExistingUsers = () => {
           },
         });
 
-        setUsers(response.data.users || []);
+        setStudents(response.data.students || []);
+        setTeachers(response.data.teachers || []);
       } catch (err) {
         setError("Failed to fetch users. Please try again.");
       }
@@ -62,7 +64,8 @@ const ExistingUsers = () => {
       );
 
       if (response.data.success) {
-        setUsers(users.filter((user) => user._id !== userId));
+        setStudents(students.filter((user) => user._id !== userId));
+        setTeachers(teachers.filter((user) => user._id !== userId));
       } else {
         setError("Failed to delete user.");
       }
@@ -105,33 +108,55 @@ const ExistingUsers = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center py-10">
-      <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-4xl">
-        <h2 className="text-2xl font-bold mb-6">Existing Users</h2>
+      <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full w-4/5">
+      <div className="flex justify-between">
+          <button
+            onClick={() => navigate("/admin-dashboard")}
+            className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-500 transition"
+          >
+            Back to Dashboard
+          </button>
+          <div></div>
+          <button
+            onClick={handleLogout}
+            className="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-500 transition"
+          >
+            Logout
+          </button>
+        </div>
+        <h2 className="text-3xl font-bold text-center mb-6">Existing Users</h2>
+        
 
         {error && (
           <div className="bg-red-600 text-white py-2 px-4 rounded-md mb-4">
             {error}
           </div>
         )}
-
-        {users.length === 0 ? (
-          <p className="text-center">No existing users.</p>
+  
+      
+      <div className="flex justify-between  mb-8">
+      
+        <div className="w-[45%]  justify-between items-center h-96 overflow-y-auto">
+          <div><h3 className="text-xl font-bold mb-4">Students</h3></div>
+        {students.length === 0 ? (
+          <p className="text-center">No students found.</p>
         ) : (
-          <table className="table-auto w-full text-left text-sm bg-gray-700 rounded-lg overflow-hidden">
+          <table className="table-auto w-full text-left text-sm bg-gray-700 rounded-lg overflow-hidden mb-6">
             <thead className="bg-green-700">
               <tr>
                 <th className="px-4 py-2 text-center">Name</th>
                 <th className="px-4 py-2 text-center">Email</th>
-                <th className="px-4 py-2 text-center">Role</th>
                 <th className="px-4 py-2 text-center">Delete User</th>
               </tr>
             </thead>
             <tbody>
-              {users.map((user) => (
-                <tr key={user._id} className="odd:bg-gray-600 even:bg-gray-700 items-center text-center">
+              {students.map((user) => (
+                <tr
+                  key={user._id}
+                  className="odd:bg-gray-600 even:bg-gray-700 items-center text-center"
+                >
                   <td className="px-4 py-2">{user.name}</td>
                   <td className="px-4 py-2">{user.email}</td>
-                  <td className="px-4 py-2 capitalize">{user.role}</td>
                   <td className="px-4 py-2">
                     <button
                       onClick={() => handleDeleteUser(user._id)}
@@ -145,21 +170,45 @@ const ExistingUsers = () => {
             </tbody>
           </table>
         )}
-
-        <div className="flex justify-between mt-6">
-          <button
-            onClick={() => navigate("/admin-dashboard")}
-            className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-500 transition"
-          >
-            Back to Dashboard
-          </button>
-          <button
-            onClick={handleLogout}
-            className="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-500 transition"
-          >
-            Logout
-          </button>
         </div>
+
+        <div className="w-[45%] h-96  justify-between items-center overflow-y-auto">
+        <div><h3 className="text-xl font-bold mb-4">Teachers</h3></div>
+        {teachers.length === 0 ? (
+          <p className="text-center">No teachers found.</p>
+        ) : (
+          <table className="table-auto w-full text-left text-sm bg-gray-700 rounded-lg overflow-hidden">
+            <thead className="bg-green-700">
+              <tr>
+                <th className="px-4 py-2 text-center">Name</th>
+                <th className="px-4 py-2 text-center">Email</th>
+                <th className="px-4 py-2 text-center">Delete User</th>
+              </tr>
+            </thead>
+            <tbody>
+              {teachers.map((user) => (
+                <tr
+                  key={user._id}
+                  className="odd:bg-gray-600 even:bg-gray-700 items-center text-center"
+                >
+                  <td className="px-4 py-2">{user.name}</td>
+                  <td className="px-4 py-2">{user.email}</td>
+                  <td className="px-4 py-2">
+                    <button
+                      onClick={() => handleDeleteUser(user._id)}
+                      className="bg-red-600 text-white py-1 px-4 rounded-md hover:bg-red-500 transition"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+        </div>
+      </div>
+
       </div>
     </div>
   );
