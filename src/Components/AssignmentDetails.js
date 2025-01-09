@@ -155,14 +155,17 @@ function AssignmentDetails() {
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold">Assignment Details</h1>
           <div className='space-x-4'>
-          <button
-            className="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition"
-            onClick={()=> navigate(`/updateassignment/${assignmentId}`, {state : {assignment_id : assignmentId, 
-            assignment_details : assignmentDetails ,userRole ,userID}})}
-            >
+            { userRole === 'teacher' ? (
+              <>
+              <button
+              className="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition"
+              onClick={()=> navigate(`/updateassignment/${assignmentId}`, {state : {assignment_id : assignmentId, 
+                assignment_details : assignmentDetails ,userRole ,userID}})}
+                >
               Update Details
             </button>
-        
+                  </>
+                ) : <></>}
           <button
             onClick={() => navigate(`/dashboard/${userID}`)} // to be changed
             className="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition"
