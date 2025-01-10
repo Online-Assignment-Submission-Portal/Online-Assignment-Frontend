@@ -49,7 +49,7 @@ const AdminDashboard = () => {
 
       if (!token) {
         toast.error("Session expired. Please log in again.");
-        navigate("/admin-signin");
+        setTimeout(()=>navigate("/admin-signin"),1500);
         return;
       }
 
@@ -66,7 +66,7 @@ const AdminDashboard = () => {
       if (response.data.success) {
         document.cookie = "adminToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
         toast.success("Logout successful!");
-        navigate("/admin-signin");
+        setTimeout(()=>navigate("/admin-signin"),1500);
       }
     } catch (err) {
       toast.error("Failed to log out. Please try again.");
