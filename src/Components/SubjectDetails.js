@@ -198,10 +198,10 @@ function SubjectDetails() {
           </div>
         </div>
 
-        <div className='flex justify-between h-82 '>
+        <div className='flex justify-between max-h-96 '>
             {/* <p className='text-gray-400 text-center mt-2'>Assignments will be shown here in tabular form</p> */}
             {assignments.length > 0 ? (
-      <div className='w-2/5 h-96 overflow-y-auto mt-6'>
+      <div className='w-2/5 max-h-96 overflow-y-auto mt-6'>
         <table className="w-full  bg-gray-800 text-gray-200 rounded-lg">
         <thead>
           <tr className="bg-violet-800">
@@ -226,7 +226,7 @@ function SubjectDetails() {
       <p className="text-gray-400 text-center mt-2 m-auto">No assignments found.</p>
     )}
         {foundStudents.length > 0 ? (          
-          <div className='w-1/2 h-56 overflow-y-auto mt-6'>
+          <div className='w-1/2 max-h-96 overflow-y-auto mt-6'>
             <table className="w-full  bg-gray-800 text-gray-200 rounded-lg ">
             <thead>
               <tr className="bg-violet-800">
