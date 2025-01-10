@@ -50,7 +50,9 @@ function SubjectDetails() {
         setNotFoundEmails((prev) => [...prev, ...response.data.notFoundStudents]);
         setEmailInput('');
         setIsModalOpen(false);
-        toast.success('Students added successfully!'); // Success toast
+        if(emailInput.length !== 0){
+          toast.success('Students added successfully!'); // Success toast
+        }
       } else {
         toast.error(response.data.message);
       }
