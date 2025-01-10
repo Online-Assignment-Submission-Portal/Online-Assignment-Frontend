@@ -49,7 +49,7 @@ function AssignmentDetails() {
         toast.error('No submission found.');
       }
     } catch (err) {
-      toast.error('An error occurred while fetching your submission.');
+      toast.error(err?.response?.data?.message || 'An error occurred while fetching your submission.');
     }
   };
 
