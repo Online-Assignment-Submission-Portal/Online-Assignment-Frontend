@@ -3,15 +3,19 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-
+import io from "socket.io-client";
 const UserDashboard = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
+  const socket = io("http://localhost:8000", {
+    transports: ['websocket'],
+  });
   const [error, setError] = useState("");
   const [subjectCode, setSubjectCode] = useState("");
   const [joinMessage, setJoinMessage] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [notification, setNotification] = useState([]);
   const userId = id.toString();
   let userData;
 
@@ -52,6 +56,18 @@ const UserDashboard = () => {
   useEffect(() => {
     fetchUserData(id);
   }, [id, navigate]);
+  
+  useEffect(() => {
+    console.log("hello");
+    socket.on('notification', (notification) => {
+      console.log(notification.message); // Handle the notification (e.g., show an alert or update UI)
+    });
+  
+    return () => {
+      socket.off('notification'); // Clean up socket listeners
+    };
+  }, []);
+  
 
   const handleLogout = async () => {
     try {
@@ -142,6 +158,8 @@ const UserDashboard = () => {
 
       if (response.status === 200 && response.data) {
         console.log(response);
+        socket.emit('New Subject', { message: 'New subject has been fetched successfully!', 
+          subjectId: subject.subjectId });
         navigate(`/subject/${subject.subjectId}`, {
           state: { subject: response.data, userID: id, userRole : user.role  },
         });
