@@ -130,14 +130,28 @@ function ViewSubmission() {
                   </td>
                   {submission.fileURL && (
                     <td className="border-b border-gray-600 px-4 py-2 items-center">
-                      <a 
-                        href={`https://docs.google.com/gview?url=${encodeURIComponent(submission.fileURL)}&embedded=true`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-400 hover:text-blue-300 underline"
-                      >
-                        {extractFileName(submission.fileURL)}.{extractFileExtension(submission.fileURL)}
-                      </a>
+                      <div className="flex flex-col items-center">
+                        <span className="font-medium text-gray-200">
+                          {extractFileName(submission.fileURL)}.{extractFileExtension(submission.fileURL)}
+                        </span>
+                        <div className="flex space-x-7 mt-2">
+                          <a
+                            href={`https://docs.google.com/gview?url=${encodeURIComponent(submission.fileURL)}&embedded=true`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-400 hover:text-blue-300 underline"
+                          >
+                            View File
+                          </a>
+                          <a
+                            href={submission.fileURL}
+                            download
+                            className="text-blue-400 hover:text-blue-300 underline"
+                          >
+                            Download File
+                          </a>
+                        </div>
+                      </div>
                     </td>
                   )}
                 </tr>
@@ -147,7 +161,7 @@ function ViewSubmission() {
         </div>
 
         {/* Late Submissions Table */}
-        <h2 className="text-2xl font-semibold mb-4 mt-8">Late Submissions</h2>
+        <h2 className="text-2xl font-semibold mb-4 mt-16">Late Submissions</h2>
         <div className='w-5/5 max-h-96 overflow-y-auto mt-6'>
           <table className="w-full bg-gray-800 text-gray-200 rounded-lg">
             <thead>
@@ -172,15 +186,28 @@ function ViewSubmission() {
                   </td>
                   {submission.fileURL && (
                     <td className="border-b border-gray-600 px-4 py-2 items-center">
-                      <a 
-                        href={`https://docs.google.com/gview?url=${encodeURIComponent(submission.fileURL)}&embedded=true`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-400 hover:text-blue-300 underline"
-                      >
-                        {extractFileName(submission.fileURL)}.{extractFileExtension(submission.fileURL)}
-                      </a>
-
+                      <div className="flex flex-col items-center">
+                        <span className="font-medium text-gray-200">
+                          {extractFileName(submission.fileURL)}.{extractFileExtension(submission.fileURL)}
+                        </span>
+                        <div className="flex space-x-7 mt-2">
+                          <a
+                            href={`https://docs.google.com/gview?url=${encodeURIComponent(submission.fileURL)}&embedded=true`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-400 hover:text-blue-300 underline"
+                          >
+                            View File
+                          </a>
+                          <a
+                            href={submission.fileURL}
+                            download
+                            className="text-blue-400 hover:text-blue-300 underline"
+                          >
+                            Download File
+                          </a>
+                        </div>
+                      </div>
                     </td>
                   )}
                 </tr>

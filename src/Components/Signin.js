@@ -75,22 +75,22 @@ const Signin = () => {
             />
           </div>
           <p className="text-right text-sm mt-4">
-          <a href="/forgot-password" className="text-end text-blue-400 hover:underline">
-            Forgot Password?
-          </a>
-        </p>
+            <a href="/forgot-password" className="text-end text-blue-400 hover:underline">
+              Forgot Password?
+            </a>
+          </p>
           <button
             type="submit"
             className="w-full bg-green-600 hover:bg-green-500 text-white py-2 px-4 rounded-md font-bold transition"
           >
             Sign In
           </button>
-        <button
-          onClick={() => navigate("/")}
-          className="w-full bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-md font-bold transition"
-        >
-          Go to Home
-        </button>
+          <button
+            onClick={() => navigate("/")}
+            className="w-full bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-md font-bold transition"
+          >
+            Go to Home
+          </button>
         </form>
         <p className="text-center text-sm mt-4">
           Not a user?{" "}
