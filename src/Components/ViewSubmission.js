@@ -106,7 +106,7 @@ function ViewSubmission() {
 
         {/* Submitted Submissions Table */}
         <h2 className="text-2xl font-semibold mb-4">Submissions</h2>
-        <div className='w-5/5 h-96 overflow-y-auto mt-6'>
+        <div className='w-5/5 max-h-96 overflow-y-auto mt-6'>
           <table className="w-full bg-gray-800 text-gray-200 rounded-lg">
             <thead>
               <tr className="bg-violet-800">
@@ -148,7 +148,7 @@ function ViewSubmission() {
 
         {/* Late Submissions Table */}
         <h2 className="text-2xl font-semibold mb-4 mt-8">Late Submissions</h2>
-        <div className='w-5/5 h-96 overflow-y-auto mt-6'>
+        <div className='w-5/5 max-h-96 overflow-y-auto mt-6'>
           <table className="w-full bg-gray-800 text-gray-200 rounded-lg">
             <thead>
               <tr className="bg-red-800">
