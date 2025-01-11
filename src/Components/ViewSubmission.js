@@ -112,7 +112,6 @@ function ViewSubmission() {
               <tr className="bg-violet-800">
                 <th className="px-4 py-2 text-center">Student Name</th>
                 <th className="px-4 py-2 text-center">Roll No</th>
-                <th className="px-4 py-2 text-center">Student ID</th>
                 <th className="px-4 py-2 text-center">Assignment Submission</th>
               </tr>
             </thead>
@@ -124,9 +123,6 @@ function ViewSubmission() {
                   </td>
                   <td className="border-b border-gray-600 px-4 py-2 items-center">
                     {submission.rollNo}
-                  </td>
-                  <td className="border-b border-gray-600 px-4 py-2 items-center">
-                    {submission.studentId}
                   </td>
                   {submission.fileURL && (
                     <td className="border-b border-gray-600 px-4 py-2 items-center">
@@ -168,7 +164,6 @@ function ViewSubmission() {
               <tr className="bg-red-800">
                 <th className="px-4 py-2 text-center">Student Name</th>
                 <th className="px-4 py-2 text-center">Roll No</th>
-                <th className="px-4 py-2 text-center">Student ID</th>
                 <th className="px-4 py-2 text-center">Assignment Submission</th>
               </tr>
             </thead>
@@ -180,9 +175,6 @@ function ViewSubmission() {
                   </td>
                   <td className="border-b border-gray-600 px-4 py-2 items-center">
                     {submission.rollNo}
-                  </td>
-                  <td className="border-b border-gray-600 px-4 py-2 items-center">
-                    {submission.studentId}
                   </td>
                   {submission.fileURL && (
                     <td className="border-b border-gray-600 px-4 py-2 items-center">
