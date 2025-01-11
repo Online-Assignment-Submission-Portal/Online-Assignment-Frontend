@@ -92,9 +92,11 @@ const UserDashboard = () => {
       );
 
       if (response.status === 200) {
-        document.cookie =
-          "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-        navigate("/signin");
+        document.cookie ="token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+          toast.success("Logout Successful")
+        setTimeout(() => navigate(`/signin`),1500);
+        // setTimeout(() => navigate(`/dashboard/${user._id}`), 1500); // Redirect after 2 seconds
+
       } else {
         toast.error(response.data.message || "Logout failed.");
       }
