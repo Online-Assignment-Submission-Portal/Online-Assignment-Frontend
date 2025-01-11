@@ -29,13 +29,13 @@ const AddSubject = () => {
         navigate("/signin");
         return;
       }
-      if(!subjectName){
+      if (!subjectName) {
         toast.warning("Subject name can't be empty.");
         return;
       }
       const response = await axios.post(
         `http://localhost:8000/user/addsubject/${teacherId}`,
-        { subject_name: subjectName}, // Include teacherId in the payload
+        { subject_name: subjectName }, // Include teacherId in the payload
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -56,7 +56,7 @@ const AddSubject = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">
-            <ToastContainer position="top-center" autoClose={1500} />
+      <ToastContainer position="top-center" autoClose={1500} />
       <div className="bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold text-center mb-4">Add a New Subject</h2>
         {error && <p className="text-red-500 mb-4">{error}</p>}

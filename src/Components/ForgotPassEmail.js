@@ -20,7 +20,7 @@ const ForgotPassword = () => {
       if (response.data.success) {
         toast.success("OTP sent successfully! Check your email.");
         navigate("/reset-password", { state: { email } });
-    }
+      }
     } catch (err) {
       toast.error(err.response?.data?.message || "Error sending OTP. Please try again.");
     }

@@ -18,7 +18,7 @@ const Profile = () => {
   // console.log(data);
 
   useEffect(() => {
-    setData({...data, data:profileData});
+    setData({ ...data, data: profileData });
   }, [userId, navigate, profileData]);
 
   const handleFileChange = (e) => {
@@ -173,34 +173,34 @@ const Profile = () => {
         </div>
 
         {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50">
-          <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-[90%] md:w-[50%]">
-            <h2 className="text-xl font-semibold mb-4 text-white text-center">Upload Profile Picture</h2>
-            <input
-              type="file"
-              onChange={handleFileChange}
-              className="block w-full text-gray-400 file:py-2 file:px-4 file:mr-4 file:rounded file:border-0 file:bg-blue-600 file:text-white hover:file:bg-blue-500 transition"
-              accept=".jpg, .jpeg"
+          <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50">
+            <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-[90%] md:w-[50%]">
+              <h2 className="text-xl font-semibold mb-4 text-white text-center">Upload Profile Picture</h2>
+              <input
+                type="file"
+                onChange={handleFileChange}
+                className="block w-full text-gray-400 file:py-2 file:px-4 file:mr-4 file:rounded file:border-0 file:bg-blue-600 file:text-white hover:file:bg-blue-500 transition"
+                accept=".jpg, .jpeg"
               />
-            <div className="flex justify-end">
-              <button
-                onClick={closeModal}
-                className="mr-2 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handlePhotoUpload}
-                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500 transition"
-                disabled={isUploading}
-              >
-                {isUploading ? 'Uploading...' : 'Upload'}
-              </button>
+              <div className="flex justify-end">
+                <button
+                  onClick={closeModal}
+                  className="mr-2 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handlePhotoUpload}
+                  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500 transition"
+                  disabled={isUploading}
+                >
+                  {isUploading ? 'Uploading...' : 'Upload'}
+                </button>
+              </div>
+              {error && <p className="text-red-500 mt-4 text-center">{error}</p>}
             </div>
-            {error && <p className="text-red-500 mt-4 text-center">{error}</p>}
           </div>
-        </div>
-      )}
+        )}
         <div className="bg-gray-800 p-6 rounded-lg shadow-lg mb-8">
           <p>
             <span className="font-semibold text-indigo-400">Email:</span> {profileData.email}

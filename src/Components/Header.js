@@ -42,9 +42,8 @@ const Header = () => {
         </button>
       </div>
       <nav
-        className={`transition-all duration-300 bg-gradient-to-r from-blue-600 to-blue-800 ${
-          isMenuOpen ? "block" : "hidden"
-        }`}
+        className={`transition-all duration-300 bg-gradient-to-r from-blue-600 to-blue-800 ${isMenuOpen ? "block" : "hidden"
+          }`}
       >
         <ul className="flex flex-col items-center space-y-4 py-4">
           <li>
