@@ -131,8 +131,7 @@ function ViewSubmission() {
                   {submission.fileURL && (
                     <td className="border-b border-gray-600 px-4 py-2 items-center">
                       <a 
-                        href={`${submission.fileURL}`}
-                        download
+                        href={`https://docs.google.com/gview?url=${encodeURIComponent(submission.fileURL)}&embedded=true`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-blue-400 hover:text-blue-300 underline"
@@ -174,14 +173,14 @@ function ViewSubmission() {
                   {submission.fileURL && (
                     <td className="border-b border-gray-600 px-4 py-2 items-center">
                       <a 
-                        href={`${submission.fileURL}`}
-                        download
+                        href={`https://docs.google.com/gview?url=${encodeURIComponent(submission.fileURL)}&embedded=true`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-blue-400 hover:text-blue-300 underline"
                       >
                         {extractFileName(submission.fileURL)}.{extractFileExtension(submission.fileURL)}
                       </a>
+
                     </td>
                   )}
                 </tr>
