@@ -16,36 +16,36 @@ function UpdateAssignment() {
   console.log(userRole, "role");
   const [assignment, setAssignment] = useState({ ...assignmentDetails });
   const [error, setError] = useState(null);
-//   console.log(assignmentDetails, "assign dets");
-//   console.log(assignment, "assign dets");
-//   console.log(assignment.deadline, "assign dets");
+  //   console.log(assignmentDetails, "assign dets");
+  //   console.log(assignment, "assign dets");
+  //   console.log(assignment.deadline, "assign dets");
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = document.cookie
 
-    .split("; ")
-    .find((row) => row.startsWith("token="))
-    ?.split("=")[1];
+      .split("; ")
+      .find((row) => row.startsWith("token="))
+      ?.split("=")[1];
     console.log('hello', assignment);
-    try{
-    const response = await axios.put(`http://localhost:8000/assignment/updateassignment/${assignmentId}`, 
-     {assignment},
-     {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-     });
-     
-     if(response.data.success) {
+    try {
+      const response = await axios.put(`http://localhost:8000/assignment/updateassignment/${assignmentId}`,
+        { assignment },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+      if (response.data.success) {
         console.log(response.data);
         console.log("Assignment updated successfully");
         toast.success("Assignment updated successfully!", { autoClose: 1500 });
-        setAssignment({...assignment, assignment: response.data})
-        navigate(`/assignment/${assignmentId}`, { state: {assignment_details : assignment, assignment_id : assignmentId} });
-     }
-    } catch(err) {
+        setAssignment({ ...assignment, assignment: response.data })
+        navigate(`/assignment/${assignmentId}`, { state: { assignment_details: assignment, assignment_id: assignmentId } });
+      }
+    } catch (err) {
       //   setError(err.response?.data?.message || "An error occurred during updating assignment.");
-        toast.error(err.response?.data?.message || "Failed to update assignment.", { autoClose: 1500 });
+      toast.error(err.response?.data?.message || "Failed to update assignment.", { autoClose: 1500 });
     }
 
 
@@ -62,7 +62,7 @@ function UpdateAssignment() {
 
       if (response.data.success) {
         console.log('Assignment updated successfully:', response.data);
-        navigate(`/assignment/${assignmentId}`, { state: { assignment_details: assignment, assignment_id: assignmentId, userRole , userID} });
+        navigate(`/assignment/${assignmentId}`, { state: { assignment_details: assignment, assignment_id: assignmentId, userRole, userID } });
       }
     } catch (err) {
       setError(err.response?.data?.message || 'An error occurred during updating the assignment.');
@@ -109,13 +109,13 @@ function UpdateAssignment() {
           <div>
             <label className="block text-gray-400 mb-2 font-medium">Description</label>
             <textarea
-               value={assignment.description || ''}
-               onChange={(e) => setAssignment({ ...assignment, description: e.target.value })}
-               className="w-full p-3 border border-gray-600 rounded bg-gray-700 text-gray-200 placeholder-gray-500 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
-               placeholder="Enter assignment description"
-               rows={10}
+              value={assignment.description || ''}
+              onChange={(e) => setAssignment({ ...assignment, description: e.target.value })}
+              className="w-full p-3 border border-gray-600 rounded bg-gray-700 text-gray-200 placeholder-gray-500 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter assignment description"
+              rows={10}
             />
-            </div>
+          </div>
 
           <div>
             <label className="block text-gray-400 mb-2 font-medium">Deadline</label>
@@ -164,7 +164,7 @@ function UpdateAssignment() {
           <div className="flex justify-between items-center">
             <button
               type="button"
-              onClick={() => navigate(`/assignment/${assignmentId}`, { state: { assignment_details: assignment, assignment_id: assignmentId, userRole, userID } }) }
+              onClick={() => navigate(`/assignment/${assignmentId}`, { state: { assignment_details: assignment, assignment_id: assignmentId, userRole, userID } })}
               className="px-6 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition"
             >
               Cancel
@@ -180,7 +180,7 @@ function UpdateAssignment() {
         </form>
       </div>
 
-       <ToastContainer position="top-center" autoClose={1500}/>
+      <ToastContainer position="top-center" autoClose={1500} />
 
     </div>
   );

@@ -12,7 +12,7 @@ const OTPVerification = () => {
 
   const handleOTPSubmit = async (e) => {
     e.preventDefault();
-   
+
     try {
       const response = await axios.post("http://localhost:8000/user/verifyotp", { email: state.email, otp });
       if (response.status === 200) {
@@ -28,7 +28,7 @@ const OTPVerification = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
-            <ToastContainer position="top-center" autoClose={1500} />
+      <ToastContainer position="top-center" autoClose={1500} />
       <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-sm">
         <h2 className="text-2xl font-bold text-center mb-6">Enter OTP</h2>
         {error && (

@@ -18,7 +18,7 @@ const ResetPassword = () => {
     setError("");
 
     if (newPassword !== confirmPassword) {
-     toast.error(e.response?.data?.message || "Passwords do not match.");
+      toast.error(e.response?.data?.message || "Passwords do not match.");
       return;
     }
 
@@ -26,7 +26,7 @@ const ResetPassword = () => {
       const response = await axios.post("http://localhost:8000/user/resetpassword", {
         email: state.email,
         otp,
-        password : newPassword,
+        password: newPassword,
         confirmPassword
       });
       if (response.data.success) {
@@ -89,7 +89,7 @@ const ResetPassword = () => {
           </button>
         </form>
       </div>
-            <ToastContainer position="top-center" autoClose={2500} />
+      <ToastContainer position="top-center" autoClose={2500} />
     </div>
   );
 };

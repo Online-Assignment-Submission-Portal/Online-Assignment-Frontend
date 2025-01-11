@@ -49,7 +49,7 @@ const AdminDashboard = () => {
 
       if (!token) {
         toast.error("Session expired. Please log in again.");
-        navigate("/admin-signin");
+        setTimeout(() => navigate("/admin-signin"), 1500);
         return;
       }
 
@@ -66,7 +66,7 @@ const AdminDashboard = () => {
       if (response.data.success) {
         document.cookie = "adminToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
         toast.success("Logout successful!");
-        navigate("/admin-signin");
+        setTimeout(() => navigate("/admin-signin"), 1500);
       }
     } catch (err) {
       toast.error("Failed to log out. Please try again.");
@@ -148,7 +148,7 @@ const AdminDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center py-10">
-            <ToastContainer position="top-center" autoClose={1500} />
+      <ToastContainer position="top-center" autoClose={1500} />
       <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-4xl">
         <h2 className="text-2xl font-bold mb-6">Admin Dashboard</h2>
 
