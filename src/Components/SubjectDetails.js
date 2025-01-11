@@ -50,6 +50,7 @@ function SubjectDetails() {
         setNotFoundEmails((prev) => [...prev, ...response.data.notFoundStudents]);
         setEmailInput('');
         setIsModalOpen(false);
+
         if (emailInput.length !== 0) {
           toast.success('Students added successfully!'); // Success toast
         }
@@ -284,7 +285,7 @@ function SubjectDetails() {
                     <td className="border-b border-gray-600 px-4 py-2 break-all w-[75%]">{email}</td>
                     <td className="border-b border-gray-600 px-4 py-2">
                       <button
-                        onClick={() => removeNotFoundEmail(email)}
+                        onClick={() => () => removeNotFoundEmail(email)}
                         className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition"
                       >
 

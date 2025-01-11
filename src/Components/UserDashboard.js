@@ -7,10 +7,10 @@ import io from "socket.io-client";
 const UserDashboard = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
   const socket = io("http://localhost:8000", {
     transports: ['websocket'],
   });
+  const [user, setUser] = useState(null);
   const [error, setError] = useState("");
   const [subjectCode, setSubjectCode] = useState("");
   const [joinMessage, setJoinMessage] = useState("");
@@ -160,6 +160,7 @@ const UserDashboard = () => {
 
       if (response.status === 200 && response.data) {
         console.log(response);
+
         socket.emit('New Subject', {
           message: 'New subject has been fetched successfully!',
           subjectId: subject.subjectId
