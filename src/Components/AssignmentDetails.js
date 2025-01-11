@@ -22,6 +22,7 @@ function AssignmentDetails() {
   const [file, setFile] = useState(null);
   const [submission, setSubmission] = useState(null);
   const [isSubmissionModalOpen, setIsSubmissionModalOpen] = useState(false);
+  const [submit , setSubmit] = useState(false);
 
 
 
@@ -109,6 +110,7 @@ function AssignmentDetails() {
   };
 
   const handleSubmitAssignment = async () => {
+    setIsUploading(true);
     const token = document.cookie
       .split('; ')
       .find((row) => row.startsWith('token='))
@@ -145,6 +147,8 @@ function AssignmentDetails() {
     } catch (err) {
       // setError('An error occurred while submitting assignment');
       toast.error('An error occurred while submitting the assignment.');
+    } finally {
+      setIsUploading(false)
     }
   }
 
@@ -314,7 +318,7 @@ function AssignmentDetails() {
                     onClick={openModal}
                     className="px-6 py-2 bg-green-600 hover:bg-green-500 text-white font-bold rounded-lg transition"
                   >
-                    Submit Assignment
+                   {submit ? "Submitting..." : "Submit Assignment"}
                   </button>
 
                 )}

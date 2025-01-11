@@ -17,6 +17,7 @@ function NewAssignment() {
   const [maxVal, setMaxVal] = useState('');
   const [deadline, setDeadline] = useState('');
   const [file, setFile] = useState(null);
+  const [loading, setLoading] = useState(false); // Add loading state
 
   const handleFileUpload = (e) => {
     const uploadedFile = e.target.files[0];
@@ -36,6 +37,7 @@ function NewAssignment() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true)
 
     if (!file) {
       toast.error('Please upload a file.');
@@ -99,6 +101,8 @@ function NewAssignment() {
     } catch (error) {
       console.error('Error creating assignment:', error);
       toast.error('An error occurred. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -187,8 +191,9 @@ function NewAssignment() {
             <button
               type="submit"
               className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition"
+              disabled={loading}
             >
-              Create Assignment
+              {loading ? "Creating..." : "Create Assignment"}
             </button>
           </div>
         </form>

@@ -11,10 +11,13 @@ const UpdateProfile = () => {
     const userId = location.state?.userId;
     const [error, setError] = useState("");
     const [profileInput, setProfileInput] = useState({ ...profile });
+    const [loading, setLoading] = useState(false); // Loading state
+
     // console.log(profile);
     // console.log(userId);
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
         const token = document.cookie
             .split("; ")
             .find((row) => row.startsWith("token="))
@@ -34,11 +37,13 @@ const UpdateProfile = () => {
                 console.log("Profile updated successfully");
                 toast.success("Profile updated successfully!");
                 setProfileInput({ ...profileInput, profileInput: response.data })
-                navigate(`/profile/${userId}`, { state: { profile: profileInput, userID: userId } });
+                setTimeout(()=>navigate(`/profile/${userId}`, { state: { profile: profileInput, userID: userId } }),1500);
             }
         } catch (err) {
             // setError(err.response?.data?.message || "An error occurred during updating profile.");
             toast.error(err.response?.data?.message || "An error occurred during updating profile.");
+        } finally {
+            setLoading(false);
         }
 
     }
@@ -175,8 +180,9 @@ const UpdateProfile = () => {
                             type="submit"
                             className="w-full bg-green-600 hover:bg-green-500 text-white py-2 px-4 rounded-md 
             font-bold transition"
+            disabled={loading}
                         >
-                            Update Profile
+                            {loading ? "Updating..." : "Update Profile"}
                         </button>
                     </div>
                 </form>
