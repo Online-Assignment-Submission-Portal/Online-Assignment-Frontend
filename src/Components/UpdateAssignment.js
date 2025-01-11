@@ -16,11 +16,16 @@ function UpdateAssignment() {
   console.log(userRole, "role");
   const [assignment, setAssignment] = useState({ ...assignmentDetails });
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false); // Loading state
+
+  // const [loading, setLoading] = useState(false); // Loading state
+
   //   console.log(assignmentDetails, "assign dets");
   //   console.log(assignment, "assign dets");
   //   console.log(assignment.deadline, "assign dets");
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const token = document.cookie
 
       .split("; ")
@@ -46,6 +51,8 @@ function UpdateAssignment() {
     } catch (err) {
       //   setError(err.response?.data?.message || "An error occurred during updating assignment.");
       toast.error(err.response?.data?.message || "Failed to update assignment.", { autoClose: 1500 });
+    } finally {
+      setLoading(false);
     }
 
 
@@ -173,8 +180,9 @@ function UpdateAssignment() {
             <button
               type="submit"
               className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition"
+              disabled={loading}
             >
-              Update Assignment
+             {loading ? "Updating..." : "Update Assignment"}
             </button>
           </div>
         </form>
