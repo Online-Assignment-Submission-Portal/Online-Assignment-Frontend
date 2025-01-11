@@ -46,7 +46,7 @@ function UpdateAssignment() {
         console.log("Assignment updated successfully");
         toast.success("Assignment updated successfully!", { autoClose: 1500 });
         setAssignment({ ...assignment, assignment: response.data })
-        setTimeout(()=>navigate(`/assignment/${assignmentId}`, { state: { assignment_details: assignment, assignment_id: assignmentId } }),1500);
+        navigate(`/assignment/${assignmentId}`, { state: { assignment_details: assignment, assignment_id: assignmentId } });
       }
     } catch (err) {
       //   setError(err.response?.data?.message || "An error occurred during updating assignment.");
