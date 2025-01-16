@@ -36,7 +36,12 @@ const Signin = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
+    <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white" style={{
+      backgroundImage: "url('https://images.shiksha.com/mediadata/images/1687787632phpNV53Hq.jpeg')",
+      backgroundSize: "cover",
+      backgroundPosition: "center"
+    }}
+    >
       <div className="bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold text-center mb-6">Sign In</h2>
         {error && (

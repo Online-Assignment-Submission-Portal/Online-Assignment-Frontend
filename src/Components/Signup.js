@@ -40,7 +40,12 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
+    <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white"
+    style={{
+      backgroundImage: "url('https://jharkhand.studyinfo.org.in/wp-content/uploads/2023/08/Screenshot-66-1024x469.png')",
+      backgroundSize: "cover",
+      backgroundPosition: "top"
+    }}>
       <div className="bg-gray-800 mt-3 mb-3 p-6 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold text-center mb-6">Sign Up</h2>
         {error && (
