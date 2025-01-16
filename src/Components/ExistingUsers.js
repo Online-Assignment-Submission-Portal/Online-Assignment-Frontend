@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import * as XLSX from "xlsx"; // Import XLSX library
 
 const ExistingUsers = () => {
   const [students, setStudents] = useState([]);
@@ -40,6 +41,35 @@ const ExistingUsers = () => {
     fetchUsers();
   }, [navigate]);
 
+  const handleDownloadStudentsExcel = () => {
+    const studentData = students.map((user) => ({
+      Type: "Student",
+      Name: user.name,
+      Email: user.email,
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(studentData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
+
+    XLSX.writeFile(workbook, "Students_List.xlsx");
+  };
+
+
+  const handleDownloadTeachersExcel = () => {
+    const teacherData = teachers.map((user) => ({
+      Type: "Teacher",
+      Name: user.name,
+      Email: user.email,
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(teacherData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Teachers");
+
+    XLSX.writeFile(workbook, "Teachers_List.xlsx");
+  };
+
   const handleDeleteUser = async (userId) => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this user? This action cannot be undone."
@@ -71,7 +101,6 @@ const ExistingUsers = () => {
         setTeachers(teachers.filter((user) => user._id !== userId));
         toast.success("User deleted successfully!");
       } else {
-        // setError("Failed to delete user.");
         toast.error("Failed to delete user.");
       }
     } catch (err) {
@@ -107,7 +136,6 @@ const ExistingUsers = () => {
         navigate("/admin-signin");
       }
     } catch (err) {
-      // setError("Unauthorized or session expired.");
       toast.error("Unauthorized or session expired.");
       navigate("/admin-signin");
     }
@@ -124,28 +152,26 @@ const ExistingUsers = () => {
           >
             Back to Dashboard
           </button>
-          <div></div>
           <button
             onClick={handleLogout}
-            className="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-500 transition"
+            className="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-rose-500 transition"
           >
             Logout
           </button>
         </div>
         <h2 className="text-3xl font-bold text-center mb-6">Existing Users</h2>
 
-
-        {error && (
-          <div className="bg-red-600 text-white py-2 px-4 rounded-md mb-4">
-            {error}
-          </div>
-        )}
-
-
-        <div className="flex justify-between  mb-8">
-
-          <div className="w-[45%]  justify-between items-center h-96 overflow-y-auto">
-            <div><h3 className="text-xl font-bold mb-4">Students</h3></div>
+        <div className="flex justify-between mb-8">
+          <div className="w-[45%] justify-between items-center h-96 overflow-y-auto">
+            <div className="flex justify-between">
+            <h3 className="text-xl font-bold mb-4">Students</h3>
+            <button
+          onClick={handleDownloadStudentsExcel}
+          className="mb-4 mr-3 bg-gray-300 text-gray-800 py-2 px-4 rounded-md hover:bg-green-500 hover:font-semibold transition "
+        >
+          Download Students List
+        </button>
+            </div>
             {students.length === 0 ? (
               <p className="text-center">No students found.</p>
             ) : (
@@ -180,8 +206,16 @@ const ExistingUsers = () => {
             )}
           </div>
 
-          <div className="w-[45%] h-96  justify-between items-center overflow-y-auto">
-            <div><h3 className="text-xl font-bold mb-4">Teachers</h3></div>
+          <div className="w-[45%] h-96 justify-between items-center overflow-y-auto">
+          <div className="flex justify-between">
+            <h3 className="text-xl font-bold mb-4">Teachers</h3>
+            <button
+          onClick={handleDownloadTeachersExcel}
+          className="mb-4 mr-3 bg-gray-300 text-gray-800 py-2 px-4 rounded-md hover:bg-green-500 hover:font-semibold transition "
+        >
+          Download Teachers List
+        </button>
+            </div>
             {teachers.length === 0 ? (
               <p className="text-center">No teachers found.</p>
             ) : (
@@ -217,6 +251,7 @@ const ExistingUsers = () => {
           </div>
         </div>
 
+        
       </div>
     </div>
   );
