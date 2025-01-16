@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';  // Import Toastify
 import 'react-toastify/dist/ReactToastify.css';  // Import styles for Toastify
+import * as XLSX from 'xlsx'; // Import XLSX for Excel export
 
 function SubjectDetails() {
   const location = useLocation();
@@ -50,6 +51,8 @@ function SubjectDetails() {
         setNotFoundEmails((prev) => [...prev, ...response.data.notFoundStudents]);
         setEmailInput('');
         setIsModalOpen(false);
+
+        console.log(response);
 
         if (emailInput.length !== 0) {
           toast.success('Students added successfully!'); // Success toast
@@ -101,6 +104,28 @@ function SubjectDetails() {
     setNotFoundEmails(notFoundEmails.filter((e) => e !== email));
     // toast.info('Email removed from list.'); Info toast
   };
+
+  const downloadStudentList = () => {
+    if (foundStudents.length === 0) {
+      toast.error('No students found to download!');
+      return;
+    }
+
+    const studentData = foundStudents.map((student, index) => ({
+      S_No: index + 1,
+      RollNo: student.rollNo,
+      Name: `${student.firstName} ${student.lastName}`,
+      Email: student.email,
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(studentData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Students');
+
+    XLSX.writeFile(workbook, `${subject.subject_name}_Students_List.xlsx`);
+    toast.success('Student list downloaded successfully!');
+  };
+
 
   if (!subject) {
     return (
@@ -196,6 +221,15 @@ function SubjectDetails() {
                 + Add Students
               </button>
             )}
+
+{userRole === 'teacher' && (
+          <button
+            onClick={downloadStudentList}
+            className="px-6 py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-500 transition "
+          >
+            Download Student List
+          </button>
+        )}
           </div>
         </div>
 
