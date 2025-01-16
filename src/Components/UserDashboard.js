@@ -27,7 +27,8 @@ const UserDashboard = () => {
         ?.split("=")[1];
 
       if (!token) {
-        return navigate("/signin");
+        toast.error('Please sign in.');
+        return navigate('/signin');
       }
 
       const response = await axios.get(
@@ -77,8 +78,8 @@ const UserDashboard = () => {
         ?.split("=")[1];
 
       if (!token) {
-        navigate("/signin");
-        return;
+        toast.error('Please sign in.');
+        return navigate('/signin');
       }
 
       const response = await axios.post(
@@ -112,6 +113,11 @@ const UserDashboard = () => {
         .split("; ")
         .find((row) => row.startsWith("token="))
         ?.split("=")[1];
+
+        if (!token) {
+          toast.error('Please sign in.');
+          return navigate('/signin');
+        }
 
       const response = await axios.post(
         `http://localhost:8000/user/join/${id}`,
@@ -149,6 +155,11 @@ const UserDashboard = () => {
         .find((row) => row.startsWith("token="))
         ?.split("=")[1];
 
+        if (!token) {
+          toast.error('Please sign in.');
+          return navigate('/signin');
+        }
+
       const response = await axios.get(
         `http://localhost:8000/user/getsubject/${subject.subjectId}`,
         {
@@ -184,7 +195,14 @@ const UserDashboard = () => {
         .split("; ")
         .find((row) => row.startsWith("token="))
         ?.split("=")[1];
-      console.log(userId);
+
+      if (!token) {
+        toast.error('Please sign in.');
+        return navigate('/signin');
+      }
+
+      
+      // console.log(userId);
 
       const response = await axios.get(
         `http://localhost:8000/user/profile/${userId}`,
@@ -196,7 +214,7 @@ const UserDashboard = () => {
       );
       console.log(response);
       if (response.data.success) {
-        navigate(`/profile/${userId}`, { state: { profile: response.data, userID: userId } });
+        navigate(`/profile/${userId}`, { state: { profile: response.data, userID: userId, userRole : user.role } });
       } else {
         toast.error("Failed to fetch profile data.");
       }
