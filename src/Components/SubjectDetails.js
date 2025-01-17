@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';  // Import Toastify
 import 'react-toastify/dist/ReactToastify.css';  // Import styles for Toastify
+import * as XLSX from 'xlsx'; // Import XLSX for Excel export
 
 function SubjectDetails() {
   const location = useLocation();
@@ -19,8 +20,17 @@ function SubjectDetails() {
   console.log(location.state, " there ");
 
   useEffect(() => {
+    const token = document.cookie
+    .split('; ')
+    .find((row) => row.startsWith('token='))
+    ?.split('=')[1];
+
+    if (!token) {
+      
+      return navigate('/signin');
+    }
     handleAddStudents();
-    setAssignments(subject.assignments);
+    if(subject?.assignments) setAssignments(subject.assignments);
   }, [navigate]);
 
   const handleAddStudents = async () => {
@@ -50,7 +60,10 @@ function SubjectDetails() {
         setNotFoundEmails((prev) => [...prev, ...response.data.notFoundStudents]);
         setEmailInput('');
         setIsModalOpen(false);
-        if(emailInput.length !== 0){
+
+        console.log(response);
+
+        if (emailInput.length !== 0) {
           toast.success('Students added successfully!'); // Success toast
         }
       } else {
@@ -101,6 +114,28 @@ function SubjectDetails() {
     // toast.info('Email removed from list.'); Info toast
   };
 
+  const downloadStudentList = () => {
+    if (foundStudents.length === 0) {
+      toast.error('No students found to download!');
+      return;
+    }
+
+    const studentData = foundStudents.map((student, index) => ({
+      S_No: index + 1,
+      RollNo: student.rollNo,
+      Name: `${student.firstName} ${student.lastName}`,
+      Email: student.email,
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(studentData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Students');
+
+    XLSX.writeFile(workbook, `${subject.subject_name}_Students_List.xlsx`);
+    toast.success('Student list downloaded successfully!');
+  };
+
+
   if (!subject) {
     return (
       <div className="flex items-center justify-center h-screen bg-gray-900">
@@ -116,11 +151,11 @@ function SubjectDetails() {
       </div>
     );
   }
-  
+
 
   return (
     <div className="min-h-screen bg-gray-900 py-8 flex flex-col">
-            <ToastContainer position="top-center" autoClose={1500}/>
+      <ToastContainer position="top-center" autoClose={1500} />
       <div className="container mx-auto bg-gray-800 p-8 rounded-lg shadow-lg">
         <div></div>
         <div className="flex justify-between items-center mb-4">
@@ -138,7 +173,7 @@ function SubjectDetails() {
           <p className="text-gray-300 mb-2">Number of Students: <span className="font-medium text-gray-100">{foundStudents.length}</span></p>
           <p className="text-gray-300">Subject Code: <span className="font-medium text-gray-100">{subject.subject_code}</span></p>
         </div>
-        
+
 
         {isModalOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50">
@@ -168,110 +203,119 @@ function SubjectDetails() {
             </div>
           </div>
         )}
-        
+
 
         <div className='mt-6 flex justify-between items-center'>
-        {/* <p className="text-2xl font-semibold text-gray-200">Assignments</p> */}
+          {/* <p className="text-2xl font-semibold text-gray-200">Assignments</p> */}
 
-        <div className='w-[40%] flex justify-between items-center overflow-auto'>
-          <div className="text-2xl font-semibold text-gray-200">Assignments</div>
-          {userRole === 'teacher' && (
-            <button
-            onClick={() => navigate('/new-assignment', { state: { subject , userID, userRole} })}
-            className="px-6 py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-500 transition"
-            >
-              
-            + New Assignment
-          </button>
-          )}
-          </div>
-        <div className='w-[50%] flex justify-between items-center overflow-auto'>
-          <div className="text-2xl font-semibold text-gray-200">Students</div>
-          {userRole === 'teacher' && (
-            <button
-            onClick={() => setIsModalOpen(true)}
-            className="px-6 py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-500 transition"
-            >
-            + Add Students
-          </button>
+          <div className='w-[40%] flex justify-between items-center overflow-auto'>
+            <div className="text-2xl font-semibold text-gray-200">Assignments</div>
+            {userRole === 'teacher' && (
+              <button
+                onClick={() => navigate('/new-assignment', { state: { subject, userID, userRole } })}
+                className="px-6 py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-500 transition"
+              >
+
+                + New Assignment
+              </button>
             )}
+          </div>
+          <div className='w-[50%] flex justify-between items-center overflow-auto'>
+            <div className="text-2xl font-semibold text-gray-200">Students</div>
+            {userRole === 'teacher' && (
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="px-6 py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-500 transition"
+              >
+                + Add Students
+              </button>
+            )}
+
+{userRole === 'teacher' && (
+          <button
+            onClick={downloadStudentList}
+            className="px-6 py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-500 transition "
+          >
+            Download Student List
+          </button>
+        )}
           </div>
         </div>
 
         <div className='flex justify-between max-h-96 '>
-            {/* <p className='text-gray-400 text-center mt-2'>Assignments will be shown here in tabular form</p> */}
-            {assignments.length > 0 ? (
-      <div className='w-2/5 max-h-96 overflow-y-auto mt-6'>
-        <table className="w-full  bg-gray-800 text-gray-200 rounded-lg">
-        <thead>
-          <tr className="bg-violet-800">
-            <th className="px-4 py-2 text-center ">Assignment Name</th>
-            <th className="px-4 py-2 text-center ">Assignment ID</th>
-          </tr>
-        </thead>
-        <tbody>
-          {assignments.map((assignment) => (
-            <tr key={assignment._id} className="hover:bg-gray-700 transition text-center"
-            onClick={() =>
-              navigate(`/assignment/${assignment._id}`, { state: { assignment_id: assignment._id, userRole, userID } })
-            }>
-              <td className="border-b border-gray-600 px-4 py-2 items-center">{assignment.title}</td>
-              <td className="border-b border-double border-gray-600 px-4 py-2 items-center">{assignment._id}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      </div>
-    ) : (
-      <p className="text-gray-400 text-center mt-2 m-auto">No assignments found.</p>
-    )}
-        {foundStudents.length > 0 ? (          
-          <div className='w-1/2 max-h-96 overflow-y-auto mt-6'>
-            <table className="w-full  bg-gray-800 text-gray-200 rounded-lg ">
-            <thead>
-              <tr className="bg-violet-800">
-                <th className="px-4 py-2 text-center ">Name</th>
-                <th className="px-4 py-2 text-center ">Email</th>
-                { userRole === 'teacher' &&(
-                  <th className="px-4 py-2 text-center ">Chat</th> 
-                )}
-                { userRole === 'teacher' &&(
-                  <th className="px-4 py-2 text-center ">Remove</th>
-                )}
-              </tr>
-            </thead>
-            <tbody>
-              {foundStudents.map((student) => (
-                <tr key={student._id} className="hover:bg-gray-700 transition text-center">
-                  <td className="border-b border-double border-gray-600 px-4 py-2 items-center">{student.firstName} {student.lastName}</td>
-                  <td className="border-b border-gray-600 px-4 py-2 items-center">{student.email}</td>
-                { userRole === 'teacher' &&(
-                  <td className="border-b border-gray-600 px-4 py-2 items-center">Chat</td>
-                )}
-                { userRole === 'teacher' &&(
-                  <td className="border-b border-gray-600 px-4 py-2 items-center">
-                  <button
-                  onClick={() => handleRemoveStudent(student._id, student.email)}
-                  className="text-red-500 hover:text-red-600"
-                  >
-                      ✕
-                    </button>
-                      </td>
-                  )}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          </div>
-        ) : (
+          {/* <p className='text-gray-400 text-center mt-2'>Assignments will be shown here in tabular form</p> */}
+          {assignments.length > 0 ? (
+            <div className='w-2/5 max-h-96 overflow-y-auto mt-6'>
+              <table className="w-full  bg-gray-800 text-gray-200 rounded-lg">
+                <thead>
+                  <tr className="bg-violet-800">
+                    <th className="px-4 py-2 text-center ">Assignment Name</th>
+                    <th className="px-4 py-2 text-center ">Assignment ID</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {assignments.map((assignment) => (
+                    <tr key={assignment._id} className="hover:bg-gray-700 transition text-center"
+                      onClick={() =>
+                        navigate(`/assignment/${assignment._id}`, { state: { assignment_id: assignment._id, userRole, userID } })
+                      }>
+                      <td className="border-b border-gray-600 px-4 py-2 items-center">{assignment.title}</td>
+                      <td className="border-b border-double border-gray-600 px-4 py-2 items-center">{assignment._id}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p className="text-gray-400 text-center mt-2 m-auto">No assignments found.</p>
+          )}
+          {foundStudents.length > 0 ? (
+            <div className='w-1/2 max-h-96 overflow-y-auto mt-6'>
+              <table className="w-full  bg-gray-800 text-gray-200 rounded-lg ">
+                <thead>
+                  <tr className="bg-violet-800">
+                    <th className="px-4 py-2 text-center ">Name</th>
+                    <th className="px-4 py-2 text-center ">Email</th>
+                    {userRole === 'teacher' && (
+                      <th className="px-4 py-2 text-center ">Chat</th>
+                    )}
+                    {userRole === 'teacher' && (
+                      <th className="px-4 py-2 text-center ">Remove</th>
+                    )}
+                  </tr>
+                </thead>
+                <tbody>
+                  {foundStudents.map((student) => (
+                    <tr key={student._id} className="hover:bg-gray-700 transition text-center">
+                      <td className="border-b border-double border-gray-600 px-4 py-2 items-center">{student.firstName} {student.lastName}</td>
+                      <td className="border-b border-gray-600 px-4 py-2 items-center">{student.email}</td>
+                      {userRole === 'teacher' && (
+                        <td className="border-b border-gray-600 px-4 py-2 items-center">Chat</td>
+                      )}
+                      {userRole === 'teacher' && (
+                        <td className="border-b border-gray-600 px-4 py-2 items-center">
+                          <button
+                            onClick={() => handleRemoveStudent(student._id, student.email)}
+                            className="text-red-500 hover:text-red-600"
+                          >
+                            ✕
+                          </button>
+                        </td>
+                      )}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
             <p className="text-gray-400 text-center mt-2 m-auto">No students found.</p>
-        )}
+          )}
         </div>
 
         {notFoundEmails.length > 0 && (
           <>
-        <p className="text-2xl font-semibold text-gray-200 mt-6">Emails Not Found</p>
-        <table className="mt-6 w-full border-collapse bg-gray-800 text-gray-200 rounded-lg overflow-hidden">
+            <p className="text-2xl font-semibold text-gray-200 mt-6">Emails Not Found</p>
+            <table className="mt-6 w-full border-collapse bg-gray-800 text-gray-200 rounded-lg overflow-hidden">
               <thead>
                 <tr className="bg-gray-700">
                   <th className="px-4 py-2 text-left">Email</th>
@@ -287,7 +331,6 @@ function SubjectDetails() {
                         onClick={() => () => removeNotFoundEmail(email)}
                         className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition"
                       >
-
                         ✕
                       </button>
                     </td>
@@ -295,13 +338,13 @@ function SubjectDetails() {
                 ))}
               </tbody>
             </table>
-          </>    
+          </>
         )}
 
       </div>
     </div>
   );
-  
+
 }
 
 export default SubjectDetails;

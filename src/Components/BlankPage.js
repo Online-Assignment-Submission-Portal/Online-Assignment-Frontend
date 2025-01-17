@@ -10,7 +10,7 @@ const BlankPage = () => {
   const navigate = useNavigate();
   const handleLogout = async () => {
     try {
-      const token = localStorage.getItem("token"); 
+      const token = localStorage.getItem("token");
       if (!token) {
         toast.error("No token available for logout.");
         navigate("/signin");
@@ -21,7 +21,7 @@ const BlankPage = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, 
+          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -30,7 +30,7 @@ const BlankPage = () => {
       if (response.ok) {
         toast.success(data.message || "Logged out successfully.");
         localStorage.clear();
-        navigate("/signin"); 
+        navigate("/signin");
       } else {
         toast.error(data.message || "Failed to log out.");
       }
@@ -42,7 +42,7 @@ const BlankPage = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-            <ToastContainer position="top-center" autoClose={1500} />
+      <ToastContainer position="top-center" autoClose={1500} />
       <h1 className="text-3xl font-bold text-gray-800 mb-6">
         Welcome to Your Dashboard
       </h1>

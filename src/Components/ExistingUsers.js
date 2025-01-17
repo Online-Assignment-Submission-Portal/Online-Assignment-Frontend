@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import * as XLSX from "xlsx"; // Import XLSX library
 
 const ExistingUsers = () => {
   const [students, setStudents] = useState([]);
@@ -40,6 +41,65 @@ const ExistingUsers = () => {
     fetchUsers();
   }, [navigate]);
 
+  const handleDownloadStudentsExcel = () => {
+    const studentData = students.map((user) => ({
+      Type: "Student",
+      Name: user.name,
+      Email: user.email,
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(studentData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
+
+    XLSX.writeFile(workbook, "Students_List.xlsx");
+  };
+
+
+  const handleDownloadTeachersExcel = () => {
+    const teacherData = teachers.map((user) => ({
+      Type: "Teacher",
+      Name: user.name,
+      Email: user.email,
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(teacherData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Teachers");
+
+    XLSX.writeFile(workbook, "Teachers_List.xlsx");
+  };
+
+  const handleViewUser = async (userId) => {
+    try {
+      const token = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("adminToken="))
+        ?.split("=")[1];
+        if (!token) {
+          toast.error("Unauthorized access. Please log in.");
+          return;
+        }
+
+        const response = await axios.get(
+          `http://localhost:8000/admin/user/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+      console.log(response);
+      if (response.data.success) {
+        navigate(`/profile/${userId}`, { state: { profile: response.data, userID: userId, userRole : 'admin' } });
+      } else {
+        toast.error("Failed to fetch profile data.");
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || "An error occurred during Profile view.");
+    }
+  };
   const handleDeleteUser = async (userId) => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this user? This action cannot be undone."
@@ -53,6 +113,7 @@ const ExistingUsers = () => {
 
     if (!token) {
       toast.error("Unauthorized access. Please log in.");
+      navigate("/admin-signin");
       return;
     }
 
@@ -71,7 +132,6 @@ const ExistingUsers = () => {
         setTeachers(teachers.filter((user) => user._id !== userId));
         toast.success("User deleted successfully!");
       } else {
-        // setError("Failed to delete user.");
         toast.error("Failed to delete user.");
       }
     } catch (err) {
@@ -87,6 +147,7 @@ const ExistingUsers = () => {
         ?.split("=")[1];
 
       if (!token) {
+        toast.error("Unauthorized access. Please log in.");
         navigate("/admin-signin");
         return;
       }
@@ -107,7 +168,6 @@ const ExistingUsers = () => {
         navigate("/admin-signin");
       }
     } catch (err) {
-      // setError("Unauthorized or session expired.");
       toast.error("Unauthorized or session expired.");
       navigate("/admin-signin");
     }
@@ -115,108 +175,133 @@ const ExistingUsers = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center py-10">
-            <ToastContainer position="top-center" autoClose={1500} />
-      <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full w-4/5">
-      <div className="flex justify-between">
+      <ToastContainer position="top-center" autoClose={1500} />
+      <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full">
+        <div className="flex justify-between">
           <button
             onClick={() => navigate("/admin-dashboard")}
             className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-500 transition"
           >
             Back to Dashboard
           </button>
-          <div></div>
           <button
             onClick={handleLogout}
-            className="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-500 transition"
+            className="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-rose-500 transition"
           >
             Logout
           </button>
         </div>
         <h2 className="text-3xl font-bold text-center mb-6">Existing Users</h2>
-        
 
-        {error && (
-          <div className="bg-red-600 text-white py-2 px-4 rounded-md mb-4">
-            {error}
+        <div className="flex justify-between mb-8">
+          <div className="w-[45%] justify-between items-center h-96 overflow-y-scroll scrollbar-none pt-2">
+            <div className="flex justify-between">
+            <h3 className="text-xl font-bold mb-4">Students</h3>
+            <button
+          onClick={handleDownloadStudentsExcel}
+          className="mb-4 mr-3 bg-gray-300 text-gray-800 py-2 px-4 rounded-md hover:bg-green-500 font-semibold hover:scale-[103%] transition-transform"
+        >
+          Download Students List
+        </button>
+            </div>
+            {students.length === 0 ? (
+              <p className="text-center">No students found.</p>
+            ) : (
+              <table className="table-auto w-full text-left text-sm bg-gray-700 rounded-lg overflow-hidden mb-6">
+                <thead className="bg-green-700">
+                  <tr>
+                    <th className="px-4 py-2 text-center">Name</th>
+                    <th className="px-4 py-2 text-center">Email</th>
+                    <th className="px-4 py-2 text-center">Profile</th>
+                    <th className="px-4 py-2 text-center">Delete User</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {students.map((user) => (
+                    <tr
+                      key={user._id}
+                      className="odd:bg-gray-600 even:bg-gray-700 items-center text-center"
+                    >
+                      <td className="px-4 py-2">{user.name}</td>
+                      <td className="px-4 py-2">{user.email}</td>
+                      <td className="px-4 py-2">
+                        <button
+                          onClick={() => handleViewUser(user._id)}
+                          className="bg-green-600 text-white py-1 px-4 rounded-md hover:bg-green-500 transition"
+                        >
+                          View
+                        </button>
+                      </td>
+                      <td className="px-4 py-2">
+                        <button
+                          onClick={() => handleDeleteUser(user._id)}
+                          className="bg-red-600 text-white py-1 px-4 rounded-md hover:bg-red-500 transition"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
           </div>
-        )}
-  
-      
-      <div className="flex justify-between  mb-8">
-      
-        <div className="w-[45%]  justify-between items-center h-96 overflow-y-auto">
-          <div><h3 className="text-xl font-bold mb-4">Students</h3></div>
-        {students.length === 0 ? (
-          <p className="text-center">No students found.</p>
-        ) : (
-          <table className="table-auto w-full text-left text-sm bg-gray-700 rounded-lg overflow-hidden mb-6">
-            <thead className="bg-green-700">
-              <tr>
-                <th className="px-4 py-2 text-center">Name</th>
-                <th className="px-4 py-2 text-center">Email</th>
-                <th className="px-4 py-2 text-center">Delete User</th>
-              </tr>
-            </thead>
-            <tbody>
-              {students.map((user) => (
-                <tr
-                  key={user._id}
-                  className="odd:bg-gray-600 even:bg-gray-700 items-center text-center"
-                >
-                  <td className="px-4 py-2">{user.name}</td>
-                  <td className="px-4 py-2">{user.email}</td>
-                  <td className="px-4 py-2">
-                    <button
-                      onClick={() => handleDeleteUser(user._id)}
-                      className="bg-red-600 text-white py-1 px-4 rounded-md hover:bg-red-500 transition"
+
+          <div className="w-[45%] justify-between items-center h-96 overflow-y-scroll scrollbar-none pt-2">
+          <div className="flex justify-between">
+            <h3 className="text-xl font-bold mb-4">Teachers</h3>
+            <button
+          onClick={handleDownloadTeachersExcel}
+          className="mb-4 mr-3 bg-gray-300 text-gray-800 py-2 px-4 rounded-md hover:bg-green-500 font-semibold hover:scale-[103%] transition-transform"
+        >
+          Download Teachers List
+        </button>
+            </div>
+            {teachers.length === 0 ? (
+              <p className="text-center">No teachers found.</p>
+            ) : (
+              <table className="table-auto w-full text-left text-sm bg-gray-700 rounded-lg overflow-hidden">
+                <thead className="bg-green-700">
+                  <tr>
+                    <th className="px-4 py-2 text-center">Name</th>
+                    <th className="px-4 py-2 text-center">Email</th>
+                    <th className="px-4 py-2 text-center">Profile</th>
+                    <th className="px-4 py-2 text-center">Delete User</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {teachers.map((user) => (
+                    <tr
+                      key={user._id}
+                      className="odd:bg-gray-600 even:bg-gray-700 items-center text-center"
                     >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
+                      <td className="px-4 py-2">{user.name}</td>
+                      <td className="px-4 py-2">{user.email}</td>
+                      <td className="px-4 py-2">
+                        <button
+                          onClick={() => handleViewUser(user._id)}
+                          className="bg-green-600 text-white py-1 px-4 rounded-md hover:bg-green-500 transition"
+                        >
+                          View
+                        </button>
+                      </td>
+                      <td className="px-4 py-2">
+                        <button
+                          onClick={() => handleDeleteUser(user._id)}
+                          className="bg-red-600 text-white py-1 px-4 rounded-md hover:bg-red-500 transition"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </div>
         </div>
 
-        <div className="w-[45%] h-96  justify-between items-center overflow-y-auto">
-        <div><h3 className="text-xl font-bold mb-4">Teachers</h3></div>
-        {teachers.length === 0 ? (
-          <p className="text-center">No teachers found.</p>
-        ) : (
-          <table className="table-auto w-full text-left text-sm bg-gray-700 rounded-lg overflow-hidden">
-            <thead className="bg-green-700">
-              <tr>
-                <th className="px-4 py-2 text-center">Name</th>
-                <th className="px-4 py-2 text-center">Email</th>
-                <th className="px-4 py-2 text-center">Delete User</th>
-              </tr>
-            </thead>
-            <tbody>
-              {teachers.map((user) => (
-                <tr
-                  key={user._id}
-                  className="odd:bg-gray-600 even:bg-gray-700 items-center text-center"
-                >
-                  <td className="px-4 py-2">{user.name}</td>
-                  <td className="px-4 py-2">{user.email}</td>
-                  <td className="px-4 py-2">
-                    <button
-                      onClick={() => handleDeleteUser(user._id)}
-                      className="bg-red-600 text-white py-1 px-4 rounded-md hover:bg-red-500 transition"
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-        </div>
-      </div>
-
+        
       </div>
     </div>
   );

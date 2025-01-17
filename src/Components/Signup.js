@@ -34,13 +34,18 @@ const Signup = () => {
         }
       }
     } catch (err) {
-      toast.error(err.response?.data?.message||"Signup failed. Please try again.");
+      toast.error(err.response?.data?.message || "Signup failed. Please try again.");
       console.error(err);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
+    <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white"
+    style={{
+      backgroundImage: "url('https://jharkhand.studyinfo.org.in/wp-content/uploads/2023/08/Screenshot-66-1024x469.png')",
+      backgroundSize: "cover",
+      backgroundPosition: "top"
+    }}>
       <div className="bg-gray-800 mt-3 mb-3 p-6 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold text-center mb-6">Sign Up</h2>
         {error && (
@@ -124,19 +129,19 @@ const Signup = () => {
               className="w-full p-2 bg-gray-700 rounded-md text-white outline-none focus:ring-2 focus:ring-green-500"
             />
           </div>
-          
+
           <button
             type="submit"
             className="w-full bg-green-600 hover:bg-green-500 text-white py-2 px-4 rounded-md font-bold transition"
           >
             Sign Up
           </button>
-        <button
-          onClick={() => navigate("/")}
-          className="w-full bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-md font-bold transition"
-        >
-          Go to Home
-        </button>
+          <button
+            onClick={() => navigate("/")}
+            className="w-full bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-md font-bold transition"
+          >
+            Go to Home
+          </button>
         </form>
 
         <p className="mt-4 text-center text-sm">
@@ -146,7 +151,7 @@ const Signup = () => {
           </a>
         </p>
       </div>
-     <ToastContainer position="top-center" autoClose={2500} />
+      <ToastContainer position="top-center" autoClose={2500} />
     </div>
   );
 };

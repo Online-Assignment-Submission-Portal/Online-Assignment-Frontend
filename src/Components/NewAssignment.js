@@ -17,6 +17,7 @@ function NewAssignment() {
   const [maxVal, setMaxVal] = useState('');
   const [deadline, setDeadline] = useState('');
   const [file, setFile] = useState(null);
+  const [loading, setLoading] = useState(false); // Add loading state
 
   const handleFileUpload = (e) => {
     const uploadedFile = e.target.files[0];
@@ -28,7 +29,7 @@ function NewAssignment() {
         setFile(uploadedFile);
       } else {
         toast.error('File size exceeds 5MB.');
-            }
+      }
     } else {
       toast.error('Unsupported file format. Allowed formats: pdf, doc, docx, txt, xls, xlsx, ppt, pptx.');
     }
@@ -36,6 +37,7 @@ function NewAssignment() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true)
 
     if (!file) {
       toast.error('Please upload a file.');
@@ -88,9 +90,9 @@ function NewAssignment() {
         console.log(response2, " resp2 ");
         if (response2.status === 200 && response2.data) {
           console.log(response2.data, " here ");
-          navigate(`/subject/${subject.subject_id}`, { state: { subject: response2.data, userID, userRole }});
+          navigate(`/subject/${subject.subject_id}`, { state: { subject: response2.data, userID, userRole } });
         }
-        else{
+        else {
           toast.error(response2.data.message);
         }
       } else {
@@ -99,12 +101,14 @@ function NewAssignment() {
     } catch (error) {
       console.error('Error creating assignment:', error);
       toast.error('An error occurred. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="min-h-screen bg-gray-900 py-12 flex items-center justify-center">
-            <ToastContainer position="top-center" autoClose={1500} hideProgressBar={false} />
+      <ToastContainer position="top-center" autoClose={1500} hideProgressBar={false} />
       <div className="bg-gray-800 p-10 rounded-lg shadow-xl w-full max-w-3xl">
         <h1 className="text-4xl font-extrabold text-gray-200 mb-8 text-center">Create New Assignment</h1>
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -187,8 +191,9 @@ function NewAssignment() {
             <button
               type="submit"
               className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition"
+              disabled={loading}
             >
-              Create Assignment
+              {loading ? "Creating..." : "Create Assignment"}
             </button>
           </div>
         </form>

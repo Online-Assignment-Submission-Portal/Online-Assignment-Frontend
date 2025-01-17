@@ -10,6 +10,7 @@ const Profile = () => {
   const [error, setError] = useState('');
   const profileData = location.state?.profile;
   const userId = location.state?.userID;
+  const userRole = location.state?.userRole;
   const [data, setData] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -18,7 +19,7 @@ const Profile = () => {
   // console.log(data);
 
   useEffect(() => {
-    setData({...data, data:profileData});
+    setData({ ...data, data: profileData });
   }, [userId, navigate, profileData]);
 
   const handleFileChange = (e) => {
@@ -78,17 +79,49 @@ const Profile = () => {
 
   const handleLogout = async () => {
     try {
+      if(userRole !== 'admin'){
+        const token = document.cookie
+          .split('; ')
+          .find((row) => row.startsWith('token='))?.split('=')[1];
+
+        if (!token) {
+          navigate('/signin');
+          return;
+        }
+
+        const response = await axios.post(
+          'http://localhost:8000/user/logout',
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
+          toast.success("Logout Successful");
+          setTimeout(() => navigate(`/signin`), 1500);
+        } else {
+          // setError(response.data.message || 'Logout failed.');
+          toast.error(response.data.message || 'Logout failed.');
+        }
+    }
+    else{
       const token = document.cookie
-        .split('; ')
-        .find((row) => row.startsWith('token='))?.split('=')[1];
+        .split("; ")
+        .find((row) => row.startsWith("adminToken="))
+        ?.split("=")[1];
 
       if (!token) {
-        navigate('/signin');
+        toast.error("Please sign in.");
+        setTimeout(() => navigate("/admin-signin"), 1500);
         return;
       }
 
       const response = await axios.post(
-        'http://localhost:8000/user/logout',
+        "http://localhost:8000/admin/logout",
         {},
         {
           headers: {
@@ -97,13 +130,12 @@ const Profile = () => {
         }
       );
 
-      if (response.status === 200) {
-        document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
-        navigate('/signin');
-      } else {
-        // setError(response.data.message || 'Logout failed.');
-        toast.error(response.data.message || 'Logout failed.');
+      if (response.data.success) {
+        document.cookie = "adminToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+        toast.success("Logout successful!");
+        setTimeout(() => navigate("/admin-signin"), 1500);
       }
+    }
     } catch (err) {
       toast.error(err.response?.data?.message || 'An error occurred during logout.');
     }
@@ -122,7 +154,7 @@ const Profile = () => {
       <div className="container mx-auto py-8 px-6">
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center space-x-6">
-            <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-gray-600">
+            <div className="w-36 h-36 rounded-full overflow-hidden border-4 border-gray-600">
               {profileData?.image ? (
                 <img src={profileData.image} alt="Profile" className="object-cover w-full h-full" />
               ) : (
@@ -132,9 +164,16 @@ const Profile = () => {
               )}
             </div>
             <div>
-              <h1 className="text-3xl font-semibold text-white">
-                Hello, {profileData.firstName} {profileData.lastName}
-              </h1>
+              {userRole !== 'admin' ? (
+                <h1 className="text-3xl font-semibold text-white">
+                  Hello, {profileData.firstName} {profileData.lastName}
+                </h1>
+
+              ):(
+                <h1 className="text-3xl font-semibold text-white">
+                  {profileData.firstName} {profileData.lastName}'s Profile
+                </h1>
+              )}
             </div>
           </div>
           <button
@@ -144,63 +183,77 @@ const Profile = () => {
             Logout
           </button>
         </div>
-
+        
         <div className="flex justify-between items-center mb-8">
-          <div className="space-x-4">
+          {userRole !== 'admin' ? (
+            <>
+            <div className="space-x-4">
+              <button
+                onClick={openModal}
+                className="bg-green-600 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-lg"
+                >
+                Change Photo
+              </button>
+              <button
+                className="bg-green-600 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-lg"
+                onClick={() =>
+                  navigate(`/update-profile/${userId}`, { state: { profile: data, userId } })
+                }
+                >
+                Edit Profile
+              </button>
+            </div>
             <button
-              onClick={openModal}
-              className="bg-green-600 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-lg"
-            >
-              Change Photo
-            </button>
-            <button
-              className="bg-green-600 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-lg"
+              className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg"
               onClick={() =>
-                navigate(`/update-profile/${userId}`, { state: { profile: data, userId } })
+                navigate(`/dashboard/${userId}`, { state: { profile: data, userId } })
               }
-            >
-              Edit Profile
+              >
+              Back to Dashboard
             </button>
-          </div>
-          <button
-            className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg"
-            onClick={() =>
-              navigate(`/dashboard/${userId}`, { state: { profile: data, userId } })
-            }
-          >
-            Back to Dashboard
-          </button>
+              </>
+
+          ) : (
+            <button
+              className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg ml-auto"
+              onClick={() =>
+                navigate(`/existing-users`)
+              }
+              >
+              Go Back
+            </button>
+          )}
         </div>
 
         {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50">
-          <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-[90%] md:w-[50%]">
-            <h2 className="text-xl font-semibold mb-4 text-white text-center">Upload Profile Picture</h2>
-            <input
-              type="file"
-              onChange={handleFileChange}
-              className="block w-full text-gray-400 file:py-2 file:px-4 file:mr-4 file:rounded file:border-0 file:bg-blue-600 file:text-white hover:file:bg-blue-500 transition"
-              accept=".jpg, .jpeg"
+          <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50">
+            <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-[90%] md:w-[50%]">
+              <h2 className="text-xl font-semibold mb-4 text-white text-center">Upload Profile Picture</h2>
+              <input
+                type="file"
+                onChange={handleFileChange}
+                className="block w-full text-gray-400 file:py-2 file:px-4 file:mr-4 file:rounded file:border-0 file:bg-blue-600 file:text-white hover:file:bg-blue-500 transition"
+                accept=".jpg, .jpeg"
               />
-            <div className="flex justify-end">
-              <button
-                onClick={closeModal}
-                className="mr-2 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handlePhotoUpload}
-                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500 transition"
-                disabled={isUploading}
-              >
-                {isUploading ? 'Uploading...' : 'Upload'}
-              </button>
+              <div className="flex justify-end">
+                <button
+                  onClick={closeModal}
+                  className="mr-2 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handlePhotoUpload}
+                  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500 transition"
+                  disabled={isUploading}
+                >
+                  {isUploading ? 'Uploading...' : 'Upload'}
+                </button>
+              </div>
+              {error && <p className="text-red-500 mt-4 text-center">{error}</p>}
             </div>
-            {error && <p className="text-red-500 mt-4 text-center">{error}</p>}
           </div>
-        </div>
-      )}
+        )}
         <div className="bg-gray-800 p-6 rounded-lg shadow-lg mb-8">
           <p>
             <span className="font-semibold text-indigo-400">Email:</span> {profileData.email}

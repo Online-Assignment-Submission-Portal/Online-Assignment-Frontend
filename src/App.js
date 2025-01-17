@@ -1,14 +1,14 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./Components/Header";
-import Signup from "./Components/Signup"; 
-import Signin from "./Components/Signin"; 
-import OTPVerification from "./Components/OTPVerification"; 
-import BlankPage from "./Components/BlankPage"; 
+import Signup from "./Components/Signup";
+import Signin from "./Components/Signin";
+import OTPVerification from "./Components/OTPVerification";
+import BlankPage from "./Components/BlankPage";
 import AdminSignin from "./Components/AdminSignin";
-import AdminDashboard from "./Components/AdminDashboard"; 
-import UserDashboard from "./Components/UserDashboard"; 
-import Home from "./Components/Home"; 
+import AdminDashboard from "./Components/AdminDashboard";
+import UserDashboard from "./Components/UserDashboard";
+import Home from "./Components/Home";
 import ForgotPassword from "./Components/ForgotPassEmail";
 import ResetPassword from "./Components/ResetPass";
 import AddSubject from "./Components/AddSubject";
@@ -42,8 +42,8 @@ const App = () => {
         <Route path="/profile/:id" element={<Profile />} />
         <Route path="/update-profile/:id" element={<UpdateProfile />} />
         <Route path="/assignment/:id" element={<AssignmentDetails />} />
-        <Route path="/view-submission/:id" element={<ViewSubmission/>}/>
-        <Route path="/updateassignment/:id" element={<UpdateAssignment/>}/>
+        <Route path="/view-submission/:id" element={<ViewSubmission />} />
+        <Route path="/updateassignment/:id" element={<UpdateAssignment />} />
       </Routes>
     </Router>
   );
