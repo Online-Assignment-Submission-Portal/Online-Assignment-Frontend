@@ -346,12 +346,12 @@ const UserDashboard = () => {
               </button>
             </div>
           )}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 ">
             {user.subjectDetails && user.subjectDetails.length > 0 ? (
               user.subjectDetails.map((subject, index) => (
                 <div
                   key={index}
-                  className="bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 cursor-pointer"
+                  className="bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 hover:bg-gray-600 transition-all duration-300 cursor-pointer"
                   onClick={() => handleSubject(subject)}
                 >
                   <p className="text-lg font-semibold text-blue-400 mb-2 overflow-auto scrollbar-none">
