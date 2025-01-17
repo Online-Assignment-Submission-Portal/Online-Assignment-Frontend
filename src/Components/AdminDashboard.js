@@ -48,7 +48,7 @@ const AdminDashboard = () => {
         ?.split("=")[1];
 
       if (!token) {
-        toast.error("Session expired. Please log in again.");
+        toast.error("Please sign in.");
         setTimeout(() => navigate("/admin-signin"), 1500);
         return;
       }
@@ -245,7 +245,7 @@ const AdminDashboard = () => {
 
           <button
             onClick={handleLogout}
-            className="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-500 transition"
+            className="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-rose-500 transition"
           >
             Logout
           </button>

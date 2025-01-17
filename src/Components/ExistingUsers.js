@@ -70,6 +70,36 @@ const ExistingUsers = () => {
     XLSX.writeFile(workbook, "Teachers_List.xlsx");
   };
 
+  const handleViewUser = async (userId) => {
+    try {
+      const token = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("adminToken="))
+        ?.split("=")[1];
+        if (!token) {
+          toast.error("Unauthorized access. Please log in.");
+          return;
+        }
+
+        const response = await axios.get(
+          `http://localhost:8000/admin/user/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+      console.log(response);
+      if (response.data.success) {
+        navigate(`/profile/${userId}`, { state: { profile: response.data, userID: userId, userRole : 'admin' } });
+      } else {
+        toast.error("Failed to fetch profile data.");
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || "An error occurred during Profile view.");
+    }
+  };
   const handleDeleteUser = async (userId) => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this user? This action cannot be undone."
@@ -83,6 +113,7 @@ const ExistingUsers = () => {
 
     if (!token) {
       toast.error("Unauthorized access. Please log in.");
+      navigate("/admin-signin");
       return;
     }
 
@@ -116,6 +147,7 @@ const ExistingUsers = () => {
         ?.split("=")[1];
 
       if (!token) {
+        toast.error("Unauthorized access. Please log in.");
         navigate("/admin-signin");
         return;
       }
@@ -162,12 +194,12 @@ const ExistingUsers = () => {
         <h2 className="text-3xl font-bold text-center mb-6">Existing Users</h2>
 
         <div className="flex justify-between mb-8">
-          <div className="w-[45%] justify-between items-center h-96 overflow-y-auto">
+          <div className="w-[45%] justify-between items-center h-96 overflow-y-scroll scrollbar-none pt-2">
             <div className="flex justify-between">
             <h3 className="text-xl font-bold mb-4">Students</h3>
             <button
           onClick={handleDownloadStudentsExcel}
-          className="mb-4 mr-3 bg-gray-300 text-gray-800 py-2 px-4 rounded-md hover:bg-green-500 hover:font-semibold transition "
+          className="mb-4 mr-3 bg-gray-300 text-gray-800 py-2 px-4 rounded-md hover:bg-green-500 font-semibold hover:scale-[103%] transition-transform"
         >
           Download Students List
         </button>
@@ -180,6 +212,7 @@ const ExistingUsers = () => {
                   <tr>
                     <th className="px-4 py-2 text-center">Name</th>
                     <th className="px-4 py-2 text-center">Email</th>
+                    <th className="px-4 py-2 text-center">Profile</th>
                     <th className="px-4 py-2 text-center">Delete User</th>
                   </tr>
                 </thead>
@@ -191,6 +224,14 @@ const ExistingUsers = () => {
                     >
                       <td className="px-4 py-2">{user.name}</td>
                       <td className="px-4 py-2">{user.email}</td>
+                      <td className="px-4 py-2">
+                        <button
+                          onClick={() => handleViewUser(user._id)}
+                          className="bg-green-600 text-white py-1 px-4 rounded-md hover:bg-green-500 transition"
+                        >
+                          View
+                        </button>
+                      </td>
                       <td className="px-4 py-2">
                         <button
                           onClick={() => handleDeleteUser(user._id)}
@@ -206,12 +247,12 @@ const ExistingUsers = () => {
             )}
           </div>
 
-          <div className="w-[45%] h-96 justify-between items-center overflow-y-auto">
+          <div className="w-[45%] justify-between items-center h-96 overflow-y-scroll scrollbar-none pt-2">
           <div className="flex justify-between">
             <h3 className="text-xl font-bold mb-4">Teachers</h3>
             <button
           onClick={handleDownloadTeachersExcel}
-          className="mb-4 mr-3 bg-gray-300 text-gray-800 py-2 px-4 rounded-md hover:bg-green-500 hover:font-semibold transition "
+          className="mb-4 mr-3 bg-gray-300 text-gray-800 py-2 px-4 rounded-md hover:bg-green-500 font-semibold hover:scale-[103%] transition-transform"
         >
           Download Teachers List
         </button>
@@ -224,6 +265,7 @@ const ExistingUsers = () => {
                   <tr>
                     <th className="px-4 py-2 text-center">Name</th>
                     <th className="px-4 py-2 text-center">Email</th>
+                    <th className="px-4 py-2 text-center">Profile</th>
                     <th className="px-4 py-2 text-center">Delete User</th>
                   </tr>
                 </thead>
@@ -235,6 +277,14 @@ const ExistingUsers = () => {
                     >
                       <td className="px-4 py-2">{user.name}</td>
                       <td className="px-4 py-2">{user.email}</td>
+                      <td className="px-4 py-2">
+                        <button
+                          onClick={() => handleViewUser(user._id)}
+                          className="bg-green-600 text-white py-1 px-4 rounded-md hover:bg-green-500 transition"
+                        >
+                          View
+                        </button>
+                      </td>
                       <td className="px-4 py-2">
                         <button
                           onClick={() => handleDeleteUser(user._id)}

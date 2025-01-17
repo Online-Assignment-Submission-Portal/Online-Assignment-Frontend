@@ -20,8 +20,17 @@ function SubjectDetails() {
   console.log(location.state, " there ");
 
   useEffect(() => {
+    const token = document.cookie
+    .split('; ')
+    .find((row) => row.startsWith('token='))
+    ?.split('=')[1];
+
+    if (!token) {
+      
+      return navigate('/signin');
+    }
     handleAddStudents();
-    setAssignments(subject.assignments);
+    if(subject?.assignments) setAssignments(subject.assignments);
   }, [navigate]);
 
   const handleAddStudents = async () => {
