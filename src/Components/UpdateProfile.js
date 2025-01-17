@@ -9,6 +9,7 @@ const UpdateProfile = () => {
     const location = useLocation();
     const profile = location.state?.profile.data;
     const userId = location.state?.userId;
+    const userRole = location.state?.userRole;
     const [error, setError] = useState("");
     const [profileInput, setProfileInput] = useState({ ...profile });
     const [loading, setLoading] = useState(false); // Loading state
@@ -37,7 +38,7 @@ const UpdateProfile = () => {
                 console.log("Profile updated successfully");
                 toast.success("Profile updated successfully!");
                 setProfileInput({ ...profileInput, profileInput: response.data })
-                setTimeout(()=>navigate(`/profile/${userId}`, { state: { profile: profileInput, userID: userId } }),1500);
+                setTimeout(()=>navigate(`/profile/${userId}`, { state: { profile: profileInput, userID: userId, userRole } }),1500);
             }
         } catch (err) {
             // setError(err.response?.data?.message || "An error occurred during updating profile.");

@@ -156,7 +156,7 @@ const Profile = () => {
           <div className="flex items-center space-x-6">
             <div className="w-36 h-36 rounded-full overflow-hidden border-4 border-gray-600">
               {profileData?.image ? (
-                <img src={profileData.image} alt="Profile" className="object-cover w-full h-full" />
+                <img src={profileData?.image} alt="Profile" className="object-cover w-full h-full" />
               ) : (
                 <div className="flex items-center justify-center h-full bg-gray-700 text-gray-400">
                   No Image
@@ -166,12 +166,12 @@ const Profile = () => {
             <div>
               {userRole !== 'admin' ? (
                 <h1 className="text-3xl font-semibold text-white">
-                  Hello, {profileData.firstName} {profileData.lastName}
+                  Hello, {profileData?.firstName} {profileData?.lastName}
                 </h1>
 
               ):(
                 <h1 className="text-3xl font-semibold text-white">
-                  {profileData.firstName} {profileData.lastName}'s Profile
+                  {profileData?.firstName} {profileData?.lastName}'s Profile
                 </h1>
               )}
             </div>
@@ -197,7 +197,7 @@ const Profile = () => {
               <button
                 className="bg-green-600 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-lg"
                 onClick={() =>
-                  navigate(`/update-profile/${userId}`, { state: { profile: data, userId } })
+                  navigate(`/update-profile/${userId}`, { state: { profile: data, userId, userRole } })
                 }
                 >
                 Edit Profile
@@ -256,38 +256,38 @@ const Profile = () => {
         )}
         <div className="bg-gray-800 p-6 rounded-lg shadow-lg mb-8">
           <p>
-            <span className="font-semibold text-indigo-400">Email:</span> {profileData.email}
+            <span className="font-semibold text-indigo-400">Email:</span> {profileData?.email}
           </p>
           <p>
-            <span className="font-semibold text-indigo-400">Role:</span> {profileData.role.charAt(0).toUpperCase() + profileData.role.slice(1).toLowerCase()}
+            <span className="font-semibold text-indigo-400">Role:</span> {profileData?.role.charAt(0).toUpperCase() + profileData?.role.slice(1).toLowerCase()}
           </p>
-          {profileData.role === 'student' ? (
+          {profileData?.role === 'student' ? (
             <>
               <p>
-                <span className="font-semibold text-indigo-400">Roll No:</span> {profileData.rollNo}
+                <span className="font-semibold text-indigo-400">Roll No:</span> {profileData?.rollNo}
               </p>
               <p>
-                <span className="font-semibold text-indigo-400">Branch:</span> {profileData.branch}
+                <span className="font-semibold text-indigo-400">Branch:</span> {profileData?.branch}
               </p>
               <p>
-                <span className="font-semibold text-indigo-400">Semester:</span> {profileData.semester}
+                <span className="font-semibold text-indigo-400">Semester:</span> {profileData?.semester}
               </p>
               <p>
-                <span className="font-semibold text-indigo-400">Section:</span> {profileData.section}
+                <span className="font-semibold text-indigo-400">Section:</span> {profileData?.section}
               </p>
             </>
           ) : (
             <>
               <p>
-                <span className="font-semibold text-indigo-400">Employee ID:</span> {profileData.employeeId}
+                <span className="font-semibold text-indigo-400">Employee ID:</span> {profileData?.employeeId}
               </p>
               <p>
-                <span className="font-semibold text-indigo-400">Experience:</span> {profileData.exprerience} years
+                <span className="font-semibold text-indigo-400">Experience:</span> {profileData?.exprerience} years
               </p>
             </>
           )}
           <p>
-            <span className="font-semibold text-indigo-400">Contact:</span> {profileData.contact}
+            <span className="font-semibold text-indigo-400">Contact:</span> {profileData?.contact}
           </p>
         </div>
       </div>

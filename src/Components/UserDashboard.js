@@ -39,15 +39,17 @@ const UserDashboard = () => {
           },
         }
       );
-
+      console.log(response.data);
       if (response.data.success) {
         setUser(response.data.user);
         userData = response.data.user;
       } else {
         toast.error("Failed to fetch user data.");
+        setError("Failed to fetch user data.");
       }
     } catch (err) {
-      if (err.response && err.response.status === 401) {
+      if (err.response && err.response.status === 500) {
+        toast.error(err.response?.data?.message || "An error occurred.");
         navigate("/signin");
       } else {
         toast.error(err.response?.data?.message || "An error occurred.");
