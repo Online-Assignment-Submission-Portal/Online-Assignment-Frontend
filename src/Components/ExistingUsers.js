@@ -9,6 +9,8 @@ const ExistingUsers = () => {
   const [students, setStudents] = useState([]);
   const [teachers, setTeachers] = useState([]);
   const [error, setError] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -40,6 +42,31 @@ const ExistingUsers = () => {
 
     fetchUsers();
   }, [navigate]);
+
+  const handleSearchInputChange = (e) => {
+    const query = e.target.value.toLowerCase();
+    setSearchQuery(query);
+
+    if (query) {
+      const filteredUsers = [...students, ...teachers].filter(user =>
+        user.email.toLowerCase().includes(query)
+      );
+      setSuggestions(filteredUsers);
+    } else {
+      setSuggestions([]);
+    }
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    const user = suggestions.find(user => user.email.toLowerCase() === searchQuery);
+
+    if (user) {
+      handleViewUser(user._id);
+    } else {
+      toast.error("User not found.");
+    }
+  };
 
   const handleDownloadStudentsExcel = () => {
     const studentData = students.map((user) => ({
@@ -191,6 +218,34 @@ const ExistingUsers = () => {
             Logout
           </button>
         </div>
+
+       {/* Search bar */}
+      <div className="mb-6 w-full max-w-md mx-auto relative">
+        <form onSubmit={handleSearchSubmit} className="relative">
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={handleSearchInputChange}
+            className="w-full p-2 rounded-md bg-gray-700 text-white focus:outline-none focus:ring focus:border-blue-300"
+            placeholder="Search by email..."
+          />
+          {suggestions.length > 0 && (
+            <ul className="absolute top-12 left-0 w-full bg-white text-black rounded-md shadow-lg z-10">
+              {suggestions.map(user => (
+                <li
+                  key={user._id}
+                  className="px-4 py-2 hover:bg-gray-300 cursor-pointer"
+                  onClick={() => handleViewUser(user._id)}
+                >
+                  {user.email}
+                </li>
+              ))}
+            </ul>
+          )}
+        </form>
+      </div>
+
+
         <h2 className="text-3xl font-bold text-center mb-6">Existing Users</h2>
 
         <div className="flex justify-between mb-8">
