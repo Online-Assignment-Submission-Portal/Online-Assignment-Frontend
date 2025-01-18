@@ -5,7 +5,7 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className="bg-gradient-to-r from-blue-600 to-blue-800 text-white shadow-md">
+    <header className="bg-gradient-to-r from-blue-600 to-blue-800 text-white shadow-md relative z-50">
       <div className="container mx-auto px-6 flex items-center justify-between py-4">
         <h1 className="text-2xl font-bold tracking-wide">
           Online File Submission Portal
@@ -42,7 +42,7 @@ const Header = () => {
         </button>
       </div>
       <nav
-        className={`transition-all duration-300 bg-gradient-to-r from-blue-600 to-blue-800 ${isMenuOpen ? "block" : "hidden"
+        className={`absolute top-full left-0 w-full bg-gradient-to-r from-blue-600 to-blue-800 ${isMenuOpen ? "block" : "hidden"
           }`}
       >
         <ul className="flex flex-col items-center space-y-4 py-4">

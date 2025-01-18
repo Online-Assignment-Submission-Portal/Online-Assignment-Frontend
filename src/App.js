@@ -20,6 +20,7 @@ import UpdateProfile from "./Components/UpdateProfile";
 import AssignmentDetails from './Components/AssignmentDetails';
 import ViewSubmission from './Components/ViewSubmission';
 import UpdateAssignment from "./Components/UpdateAssignment";
+import PageNotFound from "./Components/PageNotFound";
 
 const App = () => {
   return (
@@ -44,6 +45,7 @@ const App = () => {
         <Route path="/assignment/:id" element={<AssignmentDetails />} />
         <Route path="/view-submission/:id" element={<ViewSubmission />} />
         <Route path="/updateassignment/:id" element={<UpdateAssignment />} />
+        <Route path="/*" element={<PageNotFound />} />
       </Routes>
     </Router>
   );
