@@ -13,6 +13,7 @@ function UpdateAssignment() {
   const assignmentDetails = location.state?.assignment_details;
   const userRole = location.state?.userRole;
   const userID = location.state?.userID;
+  const subjectID = location.state?.subjectID;
   console.log(userRole, "role");
   const [assignment, setAssignment] = useState({ ...assignmentDetails });
   const [error, setError] = useState(null);
@@ -46,7 +47,7 @@ function UpdateAssignment() {
         console.log("Assignment updated successfully");
         toast.success("Assignment updated successfully!", { autoClose: 1500 });
         setAssignment({ ...assignment, assignment: response.data })
-        navigate(`/assignment/${assignmentId}`, { state: { assignment_details: assignment, assignment_id: assignmentId } });
+        navigate(`/assignment/${assignmentId}`, { state: { assignment_details: assignment, assignment_id: assignmentId, userRole, userID, subjectID } });
       }
     } catch (err) {
       //   setError(err.response?.data?.message || "An error occurred during updating assignment.");
@@ -56,24 +57,24 @@ function UpdateAssignment() {
     }
 
 
-    try {
-      const response = await axios.put(
-        `http://localhost:8000/assignment/updateassignment/${assignmentId}`,
-        { assignment },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+    // try {
+    //   const response = await axios.put(
+    //     `http://localhost:8000/assignment/updateassignment/${assignmentId}`,
+    //     { assignment },
+    //     {
+    //       headers: {
+    //         Authorization: `Bearer ${token}`,
+    //       },
+    //     }
+    //   );
 
-      if (response.data.success) {
-        console.log('Assignment updated successfully:', response.data);
-        navigate(`/assignment/${assignmentId}`, { state: { assignment_details: assignment, assignment_id: assignmentId, userRole, userID } });
-      }
-    } catch (err) {
-      setError(err.response?.data?.message || 'An error occurred during updating the assignment.');
-    }
+    //   if (response.data.success) {
+    //     console.log('Assignment updated successfully:', response.data);
+    //     navigate(`/assignment/${assignmentId}`, { state: { assignment_details: assignment, assignment_id: assignmentId, userRole, userID } });
+    //   }
+    // } catch (err) {
+    //   setError(err.response?.data?.message || 'An error occurred during updating the assignment.');
+    // }
   };
 
   function extractFileName(fileLink) {
@@ -171,7 +172,7 @@ function UpdateAssignment() {
           <div className="flex justify-between items-center">
             <button
               type="button"
-              onClick={() => navigate(`/assignment/${assignmentId}`, { state: { assignment_details: assignment, assignment_id: assignmentId, userRole, userID } })}
+              onClick={() => navigate(`/assignment/${assignmentId}`, { state: { assignment_details: assignment, assignment_id: assignmentId, userRole, userID, subjectID } })}
               className="px-6 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition"
             >
               Cancel

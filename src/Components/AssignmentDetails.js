@@ -10,9 +10,10 @@ function AssignmentDetails() {
   const assignmentId = location.state?.assignment_id;
   const userRole = location.state?.userRole;
   const userID = location.state?.userID;
+  const subjectID = location.state?.subjectID;
   // console.log(userID, "role2")
   const assignment = location.state?.assignment_details;
-  // console.log('kya be assignment:', assignment); 
+  console.log('kya be assignment:', assignment); 
   const [assignmentDetails, setAssignmentDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -24,7 +25,41 @@ function AssignmentDetails() {
   const [isSubmissionModalOpen, setIsSubmissionModalOpen] = useState(false);
   const [submit , setSubmit] = useState(false);
 
+  const handleBack = async () => {
+    try {
+      const token = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("token="))
+        ?.split("=")[1];
 
+        if (!token) {
+          toast.error('Please sign in.');
+          return navigate('/signin');
+        }
+
+      const response = await axios.get(
+        `http://localhost:8000/user/getsubject/${subjectID}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 200 && response.data) {
+        console.log(response);
+        navigate(`/subject/${subjectID}`, {
+          state: { subject: response.data, userID, userRole}
+        });
+      }
+    } catch (err) {
+      if (err.response && err.response.status === 404) {
+        toast.error("Subject details not found.");
+      } else {
+        toast.error("An error occurred while fetching subject details.");
+      }
+    }
+  };
 
   const fetchMySubmission = async () => {
     try {
@@ -255,7 +290,7 @@ function AssignmentDetails() {
                   onClick={() => navigate(`/updateassignment/${assignmentId}`, {
                     state: {
                       assignment_id: assignmentId,
-                      assignment_details: assignmentDetails, userRole, userID
+                      assignment_details: assignmentDetails, userRole, userID ,subjectID
                     }
                   })}
                 >
@@ -264,7 +299,7 @@ function AssignmentDetails() {
               </>
             ) : <></>}
             <button
-              onClick={() => navigate(`/dashboard/${userID}`)} // to be changed
+              onClick={() => handleBack()}
               className="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition"
             >
               Back

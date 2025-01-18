@@ -11,6 +11,7 @@ function SubjectDetails() {
   const subject = location.state?.subject;
   const userID = location.state?.userID;
   const userRole = location.state?.userRole;
+  const subjectID = location.state.subject.subject_id;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [emailInput, setEmailInput] = useState('');
   const [foundStudents, setFoundStudents] = useState([]);
@@ -212,7 +213,7 @@ function SubjectDetails() {
             <div className="text-2xl font-semibold text-gray-200">Assignments</div>
             {userRole === 'teacher' && (
               <button
-                onClick={() => navigate('/new-assignment', { state: { subject, userID, userRole } })}
+                onClick={() => navigate('/new-assignment', { state: { subject, userID, userRole, subjectID } })}
                 className="px-6 py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-500 transition"
               >
 
@@ -257,7 +258,7 @@ function SubjectDetails() {
                   {assignments.map((assignment) => (
                     <tr key={assignment._id} className="hover:bg-gray-700 transition text-center"
                       onClick={() =>
-                        navigate(`/assignment/${assignment._id}`, { state: { assignment_id: assignment._id, userRole, userID } })
+                        navigate(`/assignment/${assignment._id}`, { state: { assignment_id: assignment._id, userRole, userID, subjectID } })
                       }>
                       <td className="border-b border-gray-600 px-4 py-2 items-center">{assignment.title}</td>
                       <td className="border-b border-double border-gray-600 px-4 py-2 items-center">{assignment._id}</td>
