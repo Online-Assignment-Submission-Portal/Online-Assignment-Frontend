@@ -152,6 +152,36 @@ function AssignmentDetails() {
     }
   }
 
+  const handleConnection = async () => {
+    try{
+      const token = document.cookie
+      .split('; ')
+      .find((row) => row.startsWith('token='))
+      ?.split('=')[1];
+      
+      const response = await axios.post(`http://localhost:8000/assignment/checkplagiarism/${assignmentId}`, 
+       {},
+       {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if(response.data.success){
+        console.log(response.data);
+        // const plagiarismResponse = await axios.post(`http://localhost:8501/checkplagiarism/${assignmentId}`, 
+        // {data: response.data.fileDetails}, 
+        // {
+        //   headers:{ 
+        //     'Content-Type': 'application/json', // Ensure Content-Type is set
+        //   }
+        //   })
+        // console.log(plagiarismResponse);
+      }
+    }catch(err){
+      toast.error('An error occurred while checking Plagiarism.');
+    }
+  }
+
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => {
     setIsModalOpen(false);
@@ -178,13 +208,6 @@ function AssignmentDetails() {
     const fileExtension = fileNameWithExtension.substring(lastDotIndex + 1);
     return fileExtension;
   }
-  // const extractFileName = async (fileLink) => {
-  //   const fileNameWithExtension = fileLink.split('/').pop(); 
-  //   const lastDotIndex = fileNameWithExtension.lastIndexOf('.');
-  //   const fileName = fileNameWithExtension.substring(0, lastDotIndex);
-  //   const fileExtension = fileNameWithExtension.substring(lastDotIndex + 1);
-  //   return { fileName, fileExtension };
-  // };
 
   // const handleDownload = async (fileLink, fileName) => {
   //   const fileUrl = fileLink;
@@ -441,7 +464,7 @@ function AssignmentDetails() {
                 </div>
                 <div className="mt-8 text-right">
                   <button
-                    onClick={() => alert('Check for Plagiarism feature is under construction!')}
+                    onClick={() => handleConnection()}
                     className="px-6 py-2 bg-purple-600 hover:bg-purple-500 text-white font-bold 
                   rounded-lg transition"
                   >
