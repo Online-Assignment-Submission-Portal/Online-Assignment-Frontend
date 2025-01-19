@@ -18,7 +18,7 @@ function SubjectDetails() {
   const [notFoundEmails, setNotFoundEmails] = useState([]);
   const [assignments, setAssignments] = useState([]);
 
-  console.log(location.state, " there ");
+  // console.log(location.state, " there ");
 
   useEffect(() => {
     const token = document.cookie
