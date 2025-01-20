@@ -4,6 +4,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import io from "socket.io-client";
+import Footer from './Footer';
+
 const UserDashboard = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -250,6 +252,7 @@ const UserDashboard = () => {
   }
 
   return (
+    <div className="min-h-screen flex flex-col">
     <div className="min-h-screen bg-gray-900 text-gray-200">
       <ToastContainer position="top-center" autoClose={1500} />
       <div className="container mx-auto py-8 px-6">
@@ -370,6 +373,8 @@ const UserDashboard = () => {
           </div>
         </div>
       </div>
+    </div>
+    <Footer/>
     </div>
   );
 };

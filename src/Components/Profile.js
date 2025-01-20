@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Footer from './Footer';
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -149,6 +150,7 @@ const Profile = () => {
   };
 
   return (
+    <div className="min-h-screen flex flex-col">
     <div className="min-h-screen bg-gray-900 text-gray-200">
       <ToastContainer position="top-center" autoClose={1500} />
       <div className="container mx-auto py-8 px-6">
@@ -291,6 +293,8 @@ const Profile = () => {
           </p>
         </div>
       </div>
+    </div>
+    <Footer/>
     </div>
   );
 };

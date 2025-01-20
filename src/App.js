@@ -22,6 +22,7 @@ import ViewSubmission from './Components/ViewSubmission';
 import UpdateAssignment from "./Components/UpdateAssignment";
 import PageNotFound from "./Components/PageNotFound";
 import CheckPlagiarism from "./Components/CheckPlagiarism";
+import AboutUs from './Components/AboutUs.js';
 
 const App = () => {
   return (
@@ -47,6 +48,7 @@ const App = () => {
         <Route path="/view-submission/:id" element={<ViewSubmission />} />
         <Route path="/updateassignment/:id" element={<UpdateAssignment />} />
         <Route path="/check-plagiarism" element={<CheckPlagiarism />} />
+        <Route path="/about" element={<AboutUs />} />
         <Route path="/*" element={<PageNotFound />} />
       </Routes>
     </Router>
