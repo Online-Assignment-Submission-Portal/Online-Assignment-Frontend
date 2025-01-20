@@ -101,12 +101,26 @@ function CheckPlagiarism() {
                       index % 2 === 0 ? "bg-gray-800" : "bg-gray-700"
                     } hover:bg-gray-600`}
                   >
-                    <td className="px-4 py-2 border border-gray-600">
+                  <td className="px-4 py-2 border border-gray-600">
+                    <a
+                      href={`https://docs.google.com/gview?url=${encodeURIComponent(entry.studentFileURL1)}&embedded=true`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-400 hover:text-blue-300 underline"
+                    >
                       {entry.studentId1}
-                    </td>
-                    <td className="px-4 py-2 border border-gray-600">
+                    </a>
+                  </td>
+                  <td className="px-4 py-2 border border-gray-600">
+                    <a
+                      href={`https://docs.google.com/gview?url=${encodeURIComponent(entry.studentFileURL2)}&embedded=true`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-400 hover:text-blue-300 underline"
+                    >
                       {entry.studentId2}
-                    </td>
+                    </a>
+                  </td>
                     <td className="px-4 py-2 border border-gray-600">
                       {entry.SemanticSimilarity}%
                     </td>
