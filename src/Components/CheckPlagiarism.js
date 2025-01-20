@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import Loding from "../partials/Loding";
 import "react-toastify/dist/ReactToastify.css";
 
 function CheckPlagiarism() {
@@ -55,9 +56,7 @@ function CheckPlagiarism() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen bg-gray-900 text-white">
-        Loading...
-      </div>
+      <Loding />
     );
   }
 

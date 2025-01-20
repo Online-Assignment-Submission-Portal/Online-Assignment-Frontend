@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Loding from "../partials/Loding";
 
 function AssignmentDetails() {
   const location = useLocation();
@@ -261,9 +262,7 @@ function AssignmentDetails() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen bg-gray-900 text-white">
-        Loading...
-      </div>
+      <Loding />
     );
   }
 
