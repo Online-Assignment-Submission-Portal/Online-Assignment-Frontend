@@ -10,7 +10,8 @@ function NewAssignment() {
   const subject = location.state?.subject;
   const userID = location.state?.userID;
   const userRole = location.state?.userRole;
-  console.log(userID);
+  // const subjectID = location.state?.subject.subject_id
+  // console.log(subjectID);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [minVal, setMinVal] = useState('0');
@@ -183,7 +184,7 @@ function NewAssignment() {
           <div className="flex justify-between items-center">
             <button
               type="button"
-              onClick={() => navigate(`/subject/${userID}`)}
+              onClick={() => navigate(-1)}
               className="px-6 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition"
             >
               Cancel
