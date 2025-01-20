@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Footer from './Footer';
 
 const Signup = () => {
   const [firstName, setFirstName] = useState("");
@@ -40,6 +41,7 @@ const Signup = () => {
   };
 
   return (
+    <div className="min-h-screen flex flex-col">
     <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white"
     style={{
       backgroundImage: "url('https://jharkhand.studyinfo.org.in/wp-content/uploads/2023/08/Screenshot-66-1024x469.png')",
@@ -152,6 +154,8 @@ const Signup = () => {
         </p>
       </div>
       <ToastContainer position="top-center" autoClose={2500} />
+    </div>
+    <Footer/>
     </div>
   );
 };
