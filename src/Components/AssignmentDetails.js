@@ -499,7 +499,8 @@ function AssignmentDetails() {
                 </div>
                 <div className="mt-8 text-right">
                   <button
-                    onClick={() => handleConnection()}
+                    // onClick={() => handleConnection()}
+                    onClick={() => navigate("/check-plagiarism", { state: { assignment_id: assignmentId } })}
                     className="px-6 py-2 bg-purple-600 hover:bg-purple-500 text-white font-bold 
                   rounded-lg transition"
                   >
