@@ -36,9 +36,9 @@ function CheckPlagiarism() {
           }
         );
         console.log(response.data);
-
+        console.log(response.data.mlResponse.results);
         if (response.data.success) {
-        //   setPlagiarismData(response.data.plagiarismDetails);
+          setPlagiarismData(response.data.mlResponse.results);
           toast.success("Plagiarism data fetched successfully.");
         } else {
           toast.error("Failed to fetch plagiarism data.");
@@ -88,9 +88,9 @@ function CheckPlagiarism() {
               <tr className="bg-gray-700 text-gray-200">
                 <th className="px-4 py-2 border border-gray-600">Student 1</th>
                 <th className="px-4 py-2 border border-gray-600">Student 2</th>
-                <th className="px-4 py-2 border border-gray-600">Type A (%)</th>
-                <th className="px-4 py-2 border border-gray-600">Type B (%)</th>
-                <th className="px-4 py-2 border border-gray-600">Type C (%)</th>
+                <th className="px-4 py-2 border border-gray-600">Semantic Similarity (%)</th>
+                <th className="px-4 py-2 border border-gray-600">Fingerprint Similarity (%)</th>
+                <th className="px-4 py-2 border border-gray-600">Combined Similarity (%)</th>
               </tr>
             </thead>
             <tbody>
@@ -103,19 +103,19 @@ function CheckPlagiarism() {
                     } hover:bg-gray-600`}
                   >
                     <td className="px-4 py-2 border border-gray-600">
-                      {entry.studentOne}
+                      {entry.studentId1}
                     </td>
                     <td className="px-4 py-2 border border-gray-600">
-                      {entry.studentTwo}
+                      {entry.studentId2}
                     </td>
                     <td className="px-4 py-2 border border-gray-600">
-                      {entry.typeA}%
+                      {entry.SemanticSimilarity}%
                     </td>
                     <td className="px-4 py-2 border border-gray-600">
-                      {entry.typeB}%
+                      {entry.FingerprintSimilarity}%
                     </td>
                     <td className="px-4 py-2 border border-gray-600">
-                      {entry.typeC}%
+                      {entry.CombinedSimilarity}%
                     </td>
                   </tr>
                 ))
