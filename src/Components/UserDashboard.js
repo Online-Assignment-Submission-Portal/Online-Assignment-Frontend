@@ -87,7 +87,7 @@ const UserDashboard = () => {
       }
 
       const response = await axios.post(
-        `http://localhost:8000/user/logout/${id}`,
+        `http://localhost:8000/user/logout`,
         {},
         {
           headers: {
