@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -8,12 +9,19 @@ import "react-toastify/dist/ReactToastify.css";
 function CheckPlagiarism() {
   const location = useLocation();
   const navigate = useNavigate();
-  const assignmentId = location.state?.assignment_id; 
-    console.log("FD FD");
+  const assignmentId = location.state?.assignment_id;
+  
   const [plagiarismData, setPlagiarismData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  
+  // State for column visibility
+  const [columns, setColumns] = useState({
+    semantic: true,
+    fingerprint: true,
+    combined: true,
+  });
+  
   useEffect(() => {
     const fetchPlagiarismData = async () => {
       try {
@@ -21,12 +29,12 @@ function CheckPlagiarism() {
           .split("; ")
           .find((row) => row.startsWith("token="))
           ?.split("=")[1];
-
+  
         if (!token) {
           toast.error("Please sign in.");
           return navigate("/signin");
         }
-
+  
         const response = await axios.post(
           `http://localhost:8000/assignment/checkplagiarism/${assignmentId}`,
           {},
@@ -50,14 +58,80 @@ function CheckPlagiarism() {
         setLoading(false);
       }
     };
-
+  
     fetchPlagiarismData();
   }, [assignmentId, navigate]);
 
+  // hardcoded data for testing
+  // useEffect(() => {
+  //   const fetchPlagiarismData = async () => {
+  //     try {
+  //       const token = document.cookie
+  //         .split("; ")
+  //         .find((row) => row.startsWith("token="))
+  //         ?.split("=")[1];
+
+  //       if (!token) {
+  //         toast.error("Please sign in.");
+  //         return navigate("/signin");
+  //       }
+
+  //       const testData = [
+  //         {
+  //           studentId1: {
+  //             name: "Student A",
+  //             fileUrl: "http://example.com/fileA.pdf",
+  //           },
+  //           studentId2: {
+  //             name: "Student B",
+  //             fileUrl: "http://example.com/fileB.pdf",
+  //           },
+  //           SemanticSimilarity: 85,
+  //           FingerprintSimilarity: 75,
+  //           CombinedSimilarity: 80,
+  //         },
+  //         {
+  //           studentId1: {
+  //             name: "Student C",
+  //             fileUrl: "http://example.com/fileC.pdf",
+  //           },
+  //           studentId2: {
+  //             name: "Student D",
+  //             fileUrl: "http://example.com/fileD.pdf",
+  //           },
+  //           SemanticSimilarity: 65,
+  //           FingerprintSimilarity: 70,
+  //           CombinedSimilarity: 68,
+  //         },
+  //         {
+  //           studentId1: {
+  //             name: "Student E",
+  //             fileUrl: "http://example.com/fileE.pdf",
+  //           },
+  //           studentId2: {
+  //             name: "Student F",
+  //             fileUrl: "http://example.com/fileF.pdf",
+  //           },
+  //           SemanticSimilarity: 90,
+  //           FingerprintSimilarity: 85,
+  //           CombinedSimilarity: 88,
+  //         },
+  //       ];
+
+  //       setPlagiarismData(testData);
+  //       toast.success("Test plagiarism data loaded successfully.");
+  //     } catch (err) {
+  //       setError("An error occurred while loading test data.");
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchPlagiarismData();
+  // }, [navigate]);
+
   if (loading) {
-    return (
-      <Loding />
-    );
+    return <Loding />;
   }
 
   if (error) {
@@ -67,6 +141,13 @@ function CheckPlagiarism() {
       </div>
     );
   }
+
+  const handleColumnToggle = (column) => {
+    setColumns((prevColumns) => ({
+      ...prevColumns,
+      [column]: !prevColumns[column],
+    }));
+  };
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-200 py-8">
@@ -81,15 +162,68 @@ function CheckPlagiarism() {
             Back
           </button>
         </div>
+
+        {/* Column toggle controls */}
+        <div className="mb-4">
+          <label className="inline-flex items-center mr-4">
+            <input
+              type="checkbox"
+              checked={columns.semantic}
+              onChange={() => handleColumnToggle("semantic")}
+              className="mr-2"
+            />
+            Semantic Similarity
+          </label>
+          <label className="inline-flex items-center mr-4">
+            <input
+              type="checkbox"
+              checked={columns.fingerprint}
+              onChange={() => handleColumnToggle("fingerprint")}
+              className="mr-2"
+            />
+            Fingerprint Similarity
+          </label>
+          <label className="inline-flex items-center">
+            <input
+              type="checkbox"
+              checked={columns.combined}
+              onChange={() => handleColumnToggle("combined")}
+              className="mr-2"
+            />
+            Combined Similarity
+          </label>
+        </div>
+
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse border border-gray-700">
             <thead>
               <tr className="bg-gray-700 text-gray-200">
                 <th className="px-4 py-2 border border-gray-600">Student 1</th>
                 <th className="px-4 py-2 border border-gray-600">Student 2</th>
-                <th className="px-4 py-2 border border-gray-600">Semantic Similarity (%)</th>
-                <th className="px-4 py-2 border border-gray-600">Fingerprint Similarity (%)</th>
-                <th className="px-4 py-2 border border-gray-600">Combined Similarity (%)</th>
+                {columns.semantic && (
+                  <th
+                    className="px-4 py-2 border border-gray-600"
+                    title="Measures the similarity in meaning or context between the assignments."
+                  >
+                    Semantic Similarity (%)
+                  </th>
+                )}
+                {columns.fingerprint && (
+                  <th
+                    className="px-4 py-2 border border-gray-600"
+                    title="Measures the similarity in structural or fingerprint aspects between the assignments."
+                  >
+                    Fingerprint Similarity (%)
+                  </th>
+                )}
+                {columns.combined && (
+                  <th
+                    className="px-4 py-2 border border-gray-600"
+                    title="A weighted combination of semantic and fingerprint similarities."
+                  >
+                    Combined Similarity (%)
+                  </th>
+                )}
               </tr>
             </thead>
             <tbody>
@@ -101,35 +235,45 @@ function CheckPlagiarism() {
                       index % 2 === 0 ? "bg-gray-800" : "bg-gray-700"
                     } hover:bg-gray-600`}
                   >
-                  <td className="px-4 py-2 border border-gray-600">
-                    <a
-                      href={`https://docs.google.com/gview?url=${encodeURIComponent(entry.studentId1.fileUrl)}&embedded=true`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-400 hover:text-blue-300 underline"
-                    >
-                      {entry.studentId1.name}
-                    </a>
-                  </td>
-                  <td className="px-4 py-2 border border-gray-600">
-                    <a
-                      href={`https://docs.google.com/gview?url=${encodeURIComponent(entry.studentId2.fileUrl)}&embedded=true`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-400 hover:text-blue-300 underline"
-                    >
-                      {entry.studentId2.name}
-                    </a>
-                  </td>
                     <td className="px-4 py-2 border border-gray-600">
-                      {entry.SemanticSimilarity}%
+                      <a
+                        href={`https://docs.google.com/gview?url=${encodeURIComponent(
+                          entry.studentId1.fileUrl
+                        )}&embedded=true`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-400 hover:text-blue-300 underline"
+                      >
+                        {entry.studentId1.name}
+                      </a>
                     </td>
                     <td className="px-4 py-2 border border-gray-600">
-                      {entry.FingerprintSimilarity}%
+                      <a
+                        href={`https://docs.google.com/gview?url=${encodeURIComponent(
+                          entry.studentId2.fileUrl
+                        )}&embedded=true`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-400 hover:text-blue-300 underline"
+                      >
+                        {entry.studentId2.name}
+                      </a>
                     </td>
-                    <td className="px-4 py-2 border border-gray-600">
-                      {entry.CombinedSimilarity}%
-                    </td>
+                    {columns.semantic && (
+                      <td className="px-4 py-2 border border-gray-600">
+                        {entry.SemanticSimilarity}%
+                      </td>
+                    )}
+                    {columns.fingerprint && (
+                      <td className="px-4 py-2 border border-gray-600">
+                        {entry.FingerprintSimilarity}%
+                      </td>
+                    )}
+                    {columns.combined && (
+                      <td className="px-4 py-2 border border-gray-600">
+                        {entry.CombinedSimilarity}%
+                      </td>
+                    )}
                   </tr>
                 ))
               ) : (
@@ -151,3 +295,4 @@ function CheckPlagiarism() {
 }
 
 export default CheckPlagiarism;
+

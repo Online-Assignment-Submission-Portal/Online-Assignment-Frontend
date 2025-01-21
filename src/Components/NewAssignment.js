@@ -22,16 +22,18 @@ function NewAssignment() {
   const handleFileUpload = (e) => {
     const uploadedFile = e.target.files[0];
     const allowedFormats = ['pdf', 'doc', 'docx', 'txt', 'xls', 'xlsx', 'ppt', 'pptx'];
-    const maxSize = 5 * 1024 * 1024;
+    const maxSize = 250 * 1024;
 
     if (uploadedFile && allowedFormats.includes(uploadedFile.name.split('.').pop().toLowerCase())) {
       if (uploadedFile.size <= maxSize) {
         setFile(uploadedFile);
       } else {
-        toast.error('File size exceeds 5MB.');
+        toast.error('File size exceeds 250 KB.');
+        e.target.value = null;
       }
     } else {
       toast.error('Unsupported file format. Allowed formats: pdf, doc, docx, txt, xls, xlsx, ppt, pptx.');
+      e.target.value = null;
     }
   };
 
