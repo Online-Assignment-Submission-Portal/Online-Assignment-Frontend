@@ -23,6 +23,8 @@ import UpdateAssignment from "./Components/UpdateAssignment";
 import PageNotFound from "./Components/PageNotFound";
 import CheckPlagiarism from "./Components/CheckPlagiarism";
 import AboutUs from './Components/AboutUs.js';
+import Services from './Components/Services.js';
+import ContactUs from "./Components/ContactUs.js";
 
 const App = () => {
   return (
@@ -49,6 +51,8 @@ const App = () => {
         <Route path="/updateassignment/:id" element={<UpdateAssignment />} />
         <Route path="/check-plagiarism" element={<CheckPlagiarism />} />
         <Route path="/about" element={<AboutUs />} />
+        <Route path="/services" element={<Services />} />
+        <Route path="/contact" element={<ContactUs />} />
         <Route path="/*" element={<PageNotFound />} />
       </Routes>
     </Router>

@@ -14,7 +14,6 @@ function AssignmentDetails() {
   const subjectID = location.state?.subjectID;
   // console.log(userID, "role2")
   const assignment = location.state?.assignment_details;
-  console.log('kya be assignment:', assignment); 
   const [assignmentDetails, setAssignmentDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -48,7 +47,6 @@ function AssignmentDetails() {
       );
 
       if (response.status === 200 && response.data) {
-        console.log(response);
         navigate(`/subject/${subjectID}`, {
           state: { subject: response.data, userID, userRole}
         });

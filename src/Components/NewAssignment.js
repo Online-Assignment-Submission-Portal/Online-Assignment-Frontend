@@ -11,7 +11,6 @@ function NewAssignment() {
   const userID = location.state?.userID;
   const userRole = location.state?.userRole;
   // const subjectID = location.state?.subject.subject_id
-  // console.log(subjectID);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [minVal, setMinVal] = useState('0');
@@ -64,7 +63,6 @@ function NewAssignment() {
       formData.append('deadline', deadline);
       formData.append('file', file);
       // const subjectId = subject._id.toString();
-      console.log(subject);
 
       const response = await axios.post(
         `http://localhost:8000/assignment/new/${subject.subject_id}`,
@@ -79,7 +77,6 @@ function NewAssignment() {
 
       if (response.data.success) {
         toast.success('Assignment created successfully!');
-        // console.log(subject);
         const response2 = await axios.get(
           `http://localhost:8000/user/getsubject/${subject.subject_id}`,
           {
@@ -90,7 +87,6 @@ function NewAssignment() {
         );
         console.log(response2, " resp2 ");
         if (response2.status === 200 && response2.data) {
-          console.log(response2.data, " here ");
           navigate(`/subject/${subject.subject_id}`, { state: { subject: response2.data, userID, userRole } });
         }
         else {
@@ -100,7 +96,7 @@ function NewAssignment() {
         toast.error(response.data.message);
       }
     } catch (error) {
-      console.error('Error creating assignment:', error);
+      // console.error('Error creating assignment:', error);
       toast.error('An error occurred. Please try again.');
     } finally {
       setLoading(false);

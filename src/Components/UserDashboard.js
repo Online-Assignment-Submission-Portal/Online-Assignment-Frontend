@@ -41,7 +41,6 @@ const UserDashboard = () => {
           },
         }
       );
-      console.log(response.data);
       if (response.data.success) {
         setUser(response.data.user);
         userData = response.data.user;
@@ -63,7 +62,6 @@ const UserDashboard = () => {
   }, [id, navigate]);
 
   useEffect(() => {
-    console.log("hello");
     socket.on('notification', (notification) => {
       console.log(notification.message); // Handle the notification (e.g., show an alert or update UI)
     });
@@ -174,7 +172,6 @@ const UserDashboard = () => {
       );
 
       if (response.status === 200 && response.data) {
-        console.log(response);
 
         socket.emit('New Subject', {
           message: 'New subject has been fetched successfully!',
@@ -206,7 +203,6 @@ const UserDashboard = () => {
       }
 
       
-      // console.log(userId);
 
       const response = await axios.get(
         `http://localhost:8000/user/profile/${userId}`,
@@ -216,7 +212,6 @@ const UserDashboard = () => {
           },
         }
       );
-      console.log(response);
       if (response.data.success) {
         navigate(`/profile/${userId}`, { state: { profile: response.data, userID: userId, userRole : user.role } });
       } else {

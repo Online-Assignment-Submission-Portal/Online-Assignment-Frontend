@@ -117,7 +117,6 @@ const ExistingUsers = () => {
           }
         );
 
-      console.log(response);
       if (response.data.success) {
         navigate(`/profile/${userId}`, { state: { profile: response.data, userID: userId, userRole : 'admin' } });
       } else {
