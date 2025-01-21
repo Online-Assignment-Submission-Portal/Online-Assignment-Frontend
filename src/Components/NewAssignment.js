@@ -29,9 +29,11 @@ function NewAssignment() {
         setFile(uploadedFile);
       } else {
         toast.error('File size exceeds 5MB.');
+        e.target.value = null;
       }
     } else {
       toast.error('Unsupported file format. Allowed formats: pdf, doc, docx, txt, xls, xlsx, ppt, pptx.');
+      e.target.value = null;
     }
   };
 

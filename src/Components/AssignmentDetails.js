@@ -137,25 +137,27 @@ function AssignmentDetails() {
         setSelectedFile(uploadedFile);
       } else {
         toast.error('File size exceeds 5MB.');
+        e.target.value = null; 
       }
     } else {
       toast.error('Unsupported file format. Allowed formats: pdf, doc, docx, txt, xls, xlsx, ppt, pptx.');
+      e.target.value = null;
     }
   };
 
   const handleSubmitAssignment = async () => {
-    setIsUploading(true);
     const token = document.cookie
-      .split('; ')
-      .find((row) => row.startsWith('token='))
-      ?.split('=')[1];
-
+    .split('; ')
+    .find((row) => row.startsWith('token='))
+    ?.split('=')[1];
+    
     if (!selectedFile) {
       // setError('Please select a file to upload.');
       toast.error('Please select a file to upload.');
       return;
     }
-
+    
+    setIsUploading(true);
     const formData = new FormData();
     formData.append('fileupload', selectedFile);
     console.log('hello file:', selectedFile);
