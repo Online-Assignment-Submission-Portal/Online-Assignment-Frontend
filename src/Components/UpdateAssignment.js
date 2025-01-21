@@ -14,16 +14,13 @@ function UpdateAssignment() {
   const userRole = location.state?.userRole;
   const userID = location.state?.userID;
   const subjectID = location.state?.subjectID;
-  console.log(userRole, "role");
   const [assignment, setAssignment] = useState({ ...assignmentDetails });
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false); // Loading state
 
   // const [loading, setLoading] = useState(false); // Loading state
 
-  //   console.log(assignmentDetails, "assign dets");
-  //   console.log(assignment, "assign dets");
-  //   console.log(assignment.deadline, "assign dets");
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -32,7 +29,6 @@ function UpdateAssignment() {
       .split("; ")
       .find((row) => row.startsWith("token="))
       ?.split("=")[1];
-    console.log('hello', assignment);
     try {
       const response = await axios.put(`http://localhost:8000/assignment/updateassignment/${assignmentId}`,
         { assignment },
@@ -43,8 +39,6 @@ function UpdateAssignment() {
         });
 
       if (response.data.success) {
-        console.log(response.data);
-        console.log("Assignment updated successfully");
         toast.success("Assignment updated successfully!", { autoClose: 1500 });
         setAssignment({ ...assignment, assignment: response.data })
         navigate(`/assignment/${assignmentId}`, { state: { assignment_details: assignment, assignment_id: assignmentId, userRole, userID, subjectID } });

@@ -61,8 +61,6 @@ function SubjectDetails() {
         setEmailInput('');
         setIsModalOpen(false);
 
-        console.log(response);
-
         if (emailInput.length !== 0) {
           toast.success('Students added successfully!'); // Success toast
         }
@@ -70,7 +68,7 @@ function SubjectDetails() {
         toast.error(response.data.message);
       }
     } catch (error) {
-      console.error('Error adding students:', error);
+      // console.error('Error adding students:', error);
       toast.error('Error adding students.'); // Error toast
     }
   };
@@ -96,7 +94,6 @@ function SubjectDetails() {
           },
         }
       );
-      console.log(response);
       if (response.data.success) {
         setFoundStudents((prev) => prev.filter((student) => student._id !== studentId));
         toast.success('Student removed successfully!'); // Success toast
@@ -104,13 +101,12 @@ function SubjectDetails() {
         toast.error(response.data.message);
       }
     } catch (error) {
-      console.error('Error removing student:', error);
+      // console.error('Error removing student:', error);
       toast.error('Error removing student.'); // Error toast
     }
   };
 
   const removeNotFoundEmail = (email) => {
-    console.log("sds ");
     setNotFoundEmails(notFoundEmails.filter((e) => e !== email));
     // toast.info('Email removed from list.'); Info toast
   };

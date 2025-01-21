@@ -21,18 +21,15 @@ const Signin = () => {
         email,
         password,
       });
-      console.log("SIGNIN ");
-      console.log(response);
       if (response.data.success) {
         const { token, user } = response.data;
-        console.log(token, user._id)
         document.cookie = `token=${token}; path=/`;
         toast.success("Signin successful!");
         setTimeout(() => navigate(`/dashboard/${user._id}`), 1500); // Redirect after 2 seconds
       }
     } catch (err) {
       toast.error(err.response?.data?.message || "Invalid credentials. Please try again.");
-      console.error("Signin error:", err);
+      // console.error("Signin error:", err);
     }
   };
 

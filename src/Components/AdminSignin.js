@@ -35,6 +35,7 @@ const AdminSignin = () => {
   };
 
   return (
+    <div className="min-h-screen flex flex-col">
     <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white" 
     style={{
       backgroundImage: "url('https://media.licdn.com/dms/image/v2/C511BAQHoPIk0tnbfaQ/company-background_10000/company-background_10000/0/1583941043537/training_and_placement_division_bit_mesra_cover?e=2147483647&v=beta&t=PhznJQB4Zk_YWU-z95Pds5orGyAgG21Vz20konwsZCA')",
@@ -94,6 +95,8 @@ const AdminSignin = () => {
           </button>
         </form>
       </div>
+    </div>
+    <Footer/>
     </div>
   );
 };

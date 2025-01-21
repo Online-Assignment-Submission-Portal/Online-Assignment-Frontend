@@ -16,13 +16,13 @@ const OTPVerification = () => {
     try {
       const response = await axios.post("http://localhost:8000/user/verifyotp", { email: state.email, otp });
       if (response.status === 200) {
-        console.log("OTP Verified!");
+        // console.log("OTP Verified!");
         toast.success("OTP verified. Pending admin approval.");
         navigate("/");
       }
     } catch (err) {
       toast.error("Invalid OTP. Please try again.");
-      console.error(err);
+      // console.error(err);
     }
   };
 

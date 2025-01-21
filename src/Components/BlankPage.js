@@ -36,7 +36,7 @@ const BlankPage = () => {
       }
     } catch (error) {
       toast.error("An error occurred during logout.");
-      console.error("Error during logout:", error);
+      // console.error("Error during logout:", error);
     }
   };
 

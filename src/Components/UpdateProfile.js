@@ -14,8 +14,7 @@ const UpdateProfile = () => {
     const [profileInput, setProfileInput] = useState({ ...profile });
     const [loading, setLoading] = useState(false); // Loading state
 
-    // console.log(profile);
-    // console.log(userId);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -23,7 +22,6 @@ const UpdateProfile = () => {
             .split("; ")
             .find((row) => row.startsWith("token="))
             ?.split("=")[1];
-        console.log('hello', profileInput);
         try {
             const response = await axios.put(`http://localhost:8000/user/updateprofile/${userId}`,
                 { profileInput },
@@ -34,8 +32,6 @@ const UpdateProfile = () => {
                 });
 
             if (response.data.success) {
-                console.log(response.data);
-                console.log("Profile updated successfully");
                 toast.success("Profile updated successfully!");
                 setProfileInput({ ...profileInput, profileInput: response.data })
                 setTimeout(()=>navigate(`/profile/${userId}`, { state: { profile: profileInput, userID: userId, userRole } }),1500);

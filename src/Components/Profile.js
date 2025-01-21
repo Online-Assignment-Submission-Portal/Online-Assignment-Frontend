@@ -17,7 +17,6 @@ const Profile = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // console.log(data);
 
   useEffect(() => {
     setData({ ...data, data: profileData });
@@ -45,7 +44,6 @@ const Profile = () => {
 
     const formData = new FormData();
     formData.append('displayPicture', selectedFile);
-    console.log('hello photo:', selectedFile);
     try {
       setIsUploading(true);
       const token = document.cookie
@@ -65,7 +63,6 @@ const Profile = () => {
 
       if (response.data.success) {
         toast.success('Profile picture updated successfully!');
-        console.log(response.data, " updated ");
         profileData.image = response.data.data.image;
         closeModal();
       } else {
