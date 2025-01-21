@@ -1,27 +1,30 @@
-
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import { Bar } from "react-chartjs-2"; // Importing Bar chart
 import Loding from "../partials/Loding";
 import "react-toastify/dist/ReactToastify.css";
+import { Chart as ChartJS } from "chart.js/auto";
+
 
 function CheckPlagiarism() {
   const location = useLocation();
   const navigate = useNavigate();
   const assignmentId = location.state?.assignment_id;
-  
+
   const [plagiarismData, setPlagiarismData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
+
   // State for column visibility
   const [columns, setColumns] = useState({
     semantic: true,
     fingerprint: true,
     combined: true,
   });
-  
+
+  // hardcoded data for testing
   useEffect(() => {
     const fetchPlagiarismData = async () => {
       try {
@@ -29,40 +32,66 @@ function CheckPlagiarism() {
           .split("; ")
           .find((row) => row.startsWith("token="))
           ?.split("=")[1];
-  
+
         if (!token) {
           toast.error("Please sign in.");
           return navigate("/signin");
         }
-  
-        const response = await axios.post(
-          `http://localhost:8000/assignment/checkplagiarism/${assignmentId}`,
-          {},
+
+        const testData = [
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
+            studentId1: {
+              name: "Student A",
+              fileUrl: "http://example.com/fileA.pdf",
             },
-          }
-        );
-        console.log('hello every', response.data);
-        console.log(response.data.mlResponse.results);
-        if (response.data.success) {
-          setPlagiarismData(response.data.mlResponse.results);
-          toast.success("Plagiarism data fetched successfully.");
-        } else {
-          toast.error("Failed to fetch plagiarism data.");
-        }
+            studentId2: {
+              name: "Student B",
+              fileUrl: "http://example.com/fileB.pdf",
+            },
+            SemanticSimilarity: 85,
+            FingerprintSimilarity: 75,
+            CombinedSimilarity: 80,
+          },
+          {
+            studentId1: {
+              name: "Student C",
+              fileUrl: "http://example.com/fileC.pdf",
+            },
+            studentId2: {
+              name: "Student D",
+              fileUrl: "http://example.com/fileD.pdf",
+            },
+            SemanticSimilarity: 65,
+            FingerprintSimilarity: 70,
+            CombinedSimilarity: 68,
+          },
+          {
+            studentId1: {
+              name: "Student E",
+              fileUrl: "http://example.com/fileE.pdf",
+            },
+            studentId2: {
+              name: "Student F",
+              fileUrl: "http://example.com/fileF.pdf",
+            },
+            SemanticSimilarity: 90,
+            FingerprintSimilarity: 85,
+            CombinedSimilarity: 88,
+          },
+        ];
+
+        setPlagiarismData(testData);
+        toast.success("Test plagiarism data loaded successfully.");
       } catch (err) {
-        setError(err?.response?.data?.message || "An error occurred.");
+        setError("An error occurred while loading test data.");
       } finally {
         setLoading(false);
       }
     };
-  
-    fetchPlagiarismData();
-  }, [assignmentId, navigate]);
 
-  // hardcoded data for testing
+    fetchPlagiarismData();
+  }, [navigate]);
+
   // useEffect(() => {
   //   const fetchPlagiarismData = async () => {
   //     try {
@@ -76,59 +105,31 @@ function CheckPlagiarism() {
   //         return navigate("/signin");
   //       }
 
-  //       const testData = [
+  //       const response = await axios.post(
+  //         `http://localhost:8000/assignment/checkplagiarism/${assignmentId}`,
+  //         {},
   //         {
-  //           studentId1: {
-  //             name: "Student A",
-  //             fileUrl: "http://example.com/fileA.pdf",
+  //           headers: {
+  //             Authorization: `Bearer ${token}`,
   //           },
-  //           studentId2: {
-  //             name: "Student B",
-  //             fileUrl: "http://example.com/fileB.pdf",
-  //           },
-  //           SemanticSimilarity: 85,
-  //           FingerprintSimilarity: 75,
-  //           CombinedSimilarity: 80,
-  //         },
-  //         {
-  //           studentId1: {
-  //             name: "Student C",
-  //             fileUrl: "http://example.com/fileC.pdf",
-  //           },
-  //           studentId2: {
-  //             name: "Student D",
-  //             fileUrl: "http://example.com/fileD.pdf",
-  //           },
-  //           SemanticSimilarity: 65,
-  //           FingerprintSimilarity: 70,
-  //           CombinedSimilarity: 68,
-  //         },
-  //         {
-  //           studentId1: {
-  //             name: "Student E",
-  //             fileUrl: "http://example.com/fileE.pdf",
-  //           },
-  //           studentId2: {
-  //             name: "Student F",
-  //             fileUrl: "http://example.com/fileF.pdf",
-  //           },
-  //           SemanticSimilarity: 90,
-  //           FingerprintSimilarity: 85,
-  //           CombinedSimilarity: 88,
-  //         },
-  //       ];
+  //         }
+  //       );
 
-  //       setPlagiarismData(testData);
-  //       toast.success("Test plagiarism data loaded successfully.");
+  //       if (response.data.success) {
+  //         setPlagiarismData(response.data.mlResponse.results);
+  //         toast.success("Plagiarism data fetched successfully.");
+  //       } else {
+  //         toast.error("Failed to fetch plagiarism data.");
+  //       }
   //     } catch (err) {
-  //       setError("An error occurred while loading test data.");
+  //       setError(err?.response?.data?.message || "An error occurred.");
   //     } finally {
   //       setLoading(false);
   //     }
   //   };
 
   //   fetchPlagiarismData();
-  // }, [navigate]);
+  // }, [assignmentId, navigate]);
 
   if (loading) {
     return <Loding />;
@@ -149,9 +150,59 @@ function CheckPlagiarism() {
     }));
   };
 
+  // Prepare data for the chart
+  const chartData = {
+    labels: plagiarismData.map(
+      (entry) => `${entry.studentId1.name} & ${entry.studentId2.name}`
+    ),
+    datasets: [
+      {
+        label: "Semantic Similarity (%)",
+        data: plagiarismData.map((entry) => entry.SemanticSimilarity),
+        backgroundColor: "rgba(75, 192, 192, 0.6)",
+        borderColor: "rgba(75, 192, 192, 1)",
+        borderWidth: 1,
+      },
+      {
+        label: "Fingerprint Similarity (%)",
+        data: plagiarismData.map((entry) => entry.FingerprintSimilarity),
+        backgroundColor: "rgba(153, 102, 255, 0.6)",
+        borderColor: "rgba(153, 102, 255, 1)",
+        borderWidth: 1,
+      },
+      {
+        label: "Combined Similarity (%)",
+        data: plagiarismData.map((entry) => entry.CombinedSimilarity),
+        backgroundColor: "rgba(255, 159, 64, 0.6)",
+        borderColor: "rgba(255, 159, 64, 1)",
+        borderWidth: 1,
+      },
+    ],
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 text-gray-200 py-8">
       <ToastContainer position="top-center" autoClose={1500} />
+
+      {/* Chart */}
+      <div className="container mx-auto mb-8">
+        <Bar
+          data={chartData}
+          options={{
+            responsive: true,
+            plugins: {
+              legend: {
+                position: "top",
+              },
+              title: {
+                display: true,
+                text: "Plagiarism Similarity Overview",
+              },
+            },
+          }}
+        />
+      </div>
+
       <div className="container mx-auto bg-gray-800 p-8 rounded-lg shadow-lg max-w-6xl">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold">Plagiarism Check</h1>
@@ -201,26 +252,17 @@ function CheckPlagiarism() {
                 <th className="px-4 py-2 border border-gray-600">Student 1</th>
                 <th className="px-4 py-2 border border-gray-600">Student 2</th>
                 {columns.semantic && (
-                  <th
-                    className="px-4 py-2 border border-gray-600"
-                    title="Measures the similarity in meaning or context between the assignments."
-                  >
+                  <th className="px-4 py-2 border border-gray-600">
                     Semantic Similarity (%)
                   </th>
                 )}
                 {columns.fingerprint && (
-                  <th
-                    className="px-4 py-2 border border-gray-600"
-                    title="Measures the similarity in structural or fingerprint aspects between the assignments."
-                  >
+                  <th className="px-4 py-2 border border-gray-600">
                     Fingerprint Similarity (%)
                   </th>
                 )}
                 {columns.combined && (
-                  <th
-                    className="px-4 py-2 border border-gray-600"
-                    title="A weighted combination of semantic and fingerprint similarities."
-                  >
+                  <th className="px-4 py-2 border border-gray-600">
                     Combined Similarity (%)
                   </th>
                 )}
@@ -295,4 +337,3 @@ function CheckPlagiarism() {
 }
 
 export default CheckPlagiarism;
-
