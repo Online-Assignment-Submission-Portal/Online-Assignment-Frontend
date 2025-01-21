@@ -5,6 +5,8 @@ import { ToastContainer, toast } from "react-toastify";
 import { Bar } from "react-chartjs-2"; // Importing Bar chart
 import Loding from "../partials/Loding";
 import "react-toastify/dist/ReactToastify.css";
+import { Chart as ChartJS } from "chart.js/auto";
+
 
 function CheckPlagiarism() {
   const location = useLocation();
@@ -22,6 +24,7 @@ function CheckPlagiarism() {
     combined: true,
   });
 
+  // hardcoded data for testing
   useEffect(() => {
     const fetchPlagiarismData = async () => {
       try {
@@ -35,31 +38,98 @@ function CheckPlagiarism() {
           return navigate("/signin");
         }
 
-        const response = await axios.post(
-          `http://localhost:8000/assignment/checkplagiarism/${assignmentId}`,
-          {},
+        const testData = [
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
+            studentId1: {
+              name: "Student A",
+              fileUrl: "http://example.com/fileA.pdf",
             },
-          }
-        );
+            studentId2: {
+              name: "Student B",
+              fileUrl: "http://example.com/fileB.pdf",
+            },
+            SemanticSimilarity: 85,
+            FingerprintSimilarity: 75,
+            CombinedSimilarity: 80,
+          },
+          {
+            studentId1: {
+              name: "Student C",
+              fileUrl: "http://example.com/fileC.pdf",
+            },
+            studentId2: {
+              name: "Student D",
+              fileUrl: "http://example.com/fileD.pdf",
+            },
+            SemanticSimilarity: 65,
+            FingerprintSimilarity: 70,
+            CombinedSimilarity: 68,
+          },
+          {
+            studentId1: {
+              name: "Student E",
+              fileUrl: "http://example.com/fileE.pdf",
+            },
+            studentId2: {
+              name: "Student F",
+              fileUrl: "http://example.com/fileF.pdf",
+            },
+            SemanticSimilarity: 90,
+            FingerprintSimilarity: 85,
+            CombinedSimilarity: 88,
+          },
+        ];
 
-        if (response.data.success) {
-          setPlagiarismData(response.data.mlResponse.results);
-          toast.success("Plagiarism data fetched successfully.");
-        } else {
-          toast.error("Failed to fetch plagiarism data.");
-        }
+        setPlagiarismData(testData);
+        toast.success("Test plagiarism data loaded successfully.");
       } catch (err) {
-        setError(err?.response?.data?.message || "An error occurred.");
+        setError("An error occurred while loading test data.");
       } finally {
         setLoading(false);
       }
     };
 
     fetchPlagiarismData();
-  }, [assignmentId, navigate]);
+  }, [navigate]);
+
+  // useEffect(() => {
+  //   const fetchPlagiarismData = async () => {
+  //     try {
+  //       const token = document.cookie
+  //         .split("; ")
+  //         .find((row) => row.startsWith("token="))
+  //         ?.split("=")[1];
+
+  //       if (!token) {
+  //         toast.error("Please sign in.");
+  //         return navigate("/signin");
+  //       }
+
+  //       const response = await axios.post(
+  //         `http://localhost:8000/assignment/checkplagiarism/${assignmentId}`,
+  //         {},
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${token}`,
+  //           },
+  //         }
+  //       );
+
+  //       if (response.data.success) {
+  //         setPlagiarismData(response.data.mlResponse.results);
+  //         toast.success("Plagiarism data fetched successfully.");
+  //       } else {
+  //         toast.error("Failed to fetch plagiarism data.");
+  //       }
+  //     } catch (err) {
+  //       setError(err?.response?.data?.message || "An error occurred.");
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchPlagiarismData();
+  // }, [assignmentId, navigate]);
 
   if (loading) {
     return <Loding />;
