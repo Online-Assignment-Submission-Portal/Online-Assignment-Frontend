@@ -10,6 +10,7 @@ const Signin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
   const navigate = useNavigate();
 
   const handleSignin = async (e) => {
@@ -17,7 +18,7 @@ const Signin = () => {
     setError("");
 
     try {
-      const response = await axios.post("http://localhost:8000/user/signin", {
+      const response = await axios.post(`${apiUrl}/user/signin`, {
         email,
         password,
       });

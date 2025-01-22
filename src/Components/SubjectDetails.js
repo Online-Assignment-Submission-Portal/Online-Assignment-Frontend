@@ -7,6 +7,7 @@ import * as XLSX from 'xlsx'; // Import XLSX for Excel export
 
 function SubjectDetails() {
   const location = useLocation();
+  const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
   const navigate = useNavigate();
   const subject = location.state?.subject;
   const userID = location.state?.userID;
@@ -45,7 +46,7 @@ function SubjectDetails() {
       }
 
       const response = await axios.post(
-        `http://localhost:8000/user/addstudent/${subject.subject_id}`,
+        `${apiUrl}/user/addstudent/${subject.subject_id}`,
         { email: emailInput },
         {
           headers: {
@@ -85,7 +86,7 @@ function SubjectDetails() {
       }
 
       const response = await axios.post(
-        `http://localhost:8000/user/removestudent/${subject.subject_id}`,
+        `${apiUrl}/user/removestudent/${subject.subject_id}`,
         { studentId, studentEmail },
         {
           headers: {

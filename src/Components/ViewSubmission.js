@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Loding from "../partials/Loding";
 
 function ViewSubmission() {
+  const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
   const navigate = useNavigate();
   const location = useLocation();
   const assignmentId = location.state?.assignment_id;
@@ -27,7 +28,7 @@ function ViewSubmission() {
           return navigate('/signin');
         }
 
-        const response = await axios.get(`http://localhost:8000/assignment/submission/${assignmentId}`, {
+        const response = await axios.get(`${apiUrl}/assignment/submission/${assignmentId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

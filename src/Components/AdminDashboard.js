@@ -9,6 +9,7 @@ const AdminDashboard = () => {
   const [pendingUsers, setPendingUsers] = useState([]);
   const [error, setError] = useState("");
   const [selectedRoles, setSelectedRoles] = useState({});
+  const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,7 +26,7 @@ const AdminDashboard = () => {
           return;
         }
 
-        const response = await axios.get("http://localhost:8000/admin/check", {
+        const response = await axios.get(`${apiUrl}/admin/check`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -55,7 +56,7 @@ const AdminDashboard = () => {
       }
 
       const response = await axios.post(
-        "http://localhost:8000/admin/logout",
+        `${apiUrl}/admin/logout`,
         {},
         {
           headers: {
@@ -94,7 +95,7 @@ const AdminDashboard = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/admin/approve",
+        `${apiUrl}/admin/approve`,
         { userId, role },
         {
           headers: {
@@ -130,7 +131,7 @@ const AdminDashboard = () => {
 
     try {
       const response = await axios.delete(
-        `http://localhost:8000/admin/deletependinguser/${userId}`,
+        `${apiUrl}/admin/deletependinguser/${userId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

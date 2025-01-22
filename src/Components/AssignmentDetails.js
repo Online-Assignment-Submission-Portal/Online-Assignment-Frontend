@@ -21,6 +21,7 @@ function AssignmentDetails() {
   const [isUploading, setIsUploading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [file, setFile] = useState(null);
+  const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
   const [submission, setSubmission] = useState(null);
   const [isSubmissionModalOpen, setIsSubmissionModalOpen] = useState(false);
   const [submit , setSubmit] = useState(false);
@@ -38,7 +39,7 @@ function AssignmentDetails() {
         }
 
       const response = await axios.get(
-        `http://localhost:8000/user/getsubject/${subjectID}`,
+        `${apiUrl}/user/getsubject/${subjectID}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -71,7 +72,7 @@ function AssignmentDetails() {
         return navigate('/signin');
       }
 
-      const response = await axios.get(`http://localhost:8000/assignment/${assignmentId}/${userID}`, {
+      const response = await axios.get(`${apiUrl}/assignment/${assignmentId}/${userID}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -102,7 +103,7 @@ function AssignmentDetails() {
           return navigate('/signin');
         }
 
-        const response = await axios.get(`http://localhost:8000/assignment/${assignmentId}`, {
+        const response = await axios.get(`${apiUrl}/assignment/${assignmentId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -163,7 +164,7 @@ function AssignmentDetails() {
     console.log('hello file:', selectedFile);
     try {
 
-      const response = await axios.post(`http://localhost:8000/assignment/submitassignment/${assignmentId}`,
+      const response = await axios.post(`${apiUrl}/assignment/submitassignment/${assignmentId}`,
         formData,
         {
           headers: {
@@ -195,7 +196,7 @@ function AssignmentDetails() {
       .find((row) => row.startsWith('token='))
       ?.split('=')[1];
       
-      const response = await axios.post(`http://localhost:8000/assignment/checkplagiarism/${assignmentId}`, 
+      const response = await axios.post(`${apiUrl}/assignment/checkplagiarism/${assignmentId}`, 
        {},
        {
         headers: {
