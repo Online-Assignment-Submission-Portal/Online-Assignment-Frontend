@@ -48,7 +48,7 @@ function CheckPlagiarism() {
               name: "Student B",
               fileUrl: "http://example.com/fileB.pdf",
             },
-            SemanticSimilarity: 85,
+            SemanticSimilarity: 45,
             FingerprintSimilarity: 75,
             CombinedSimilarity: 80,
           },
@@ -150,30 +150,41 @@ function CheckPlagiarism() {
     }));
   };
 
-  // Prepare data for the chart
+  // Aggregate data into ranges
+  const ranges = [0, 20, 40, 60, 80, 100];
+  const aggregateCounts = (key) => {
+    return ranges.slice(0, -1).map((rangeStart, index) => {
+      const rangeEnd = ranges[index + 1];
+      return plagiarismData.filter(
+        (entry) => entry[key] >= rangeStart && entry[key] < rangeEnd
+      ).length;
+    });
+  };
+
+  // Prepare chart data
   const chartData = {
-    labels: plagiarismData.map(
-      (entry) => `${entry.studentId1.name} & ${entry.studentId2.name}`
+    labels: ranges.slice(0, -1).map(
+      (rangeStart, index) => `${rangeStart}-${ranges[index + 1] - 1}%`
     ),
     datasets: [
       {
-        label: "Semantic Similarity (%)",
-        data: plagiarismData.map((entry) => entry.SemanticSimilarity),
-        backgroundColor: "rgba(75, 192, 192, 0.6)",
+        label: "Semantic Similarity",
+        data: aggregateCounts("SemanticSimilarity"),
+        backgroundColor: "rgba(255, 0, 0, 0.6)",
         borderColor: "rgba(75, 192, 192, 1)",
         borderWidth: 1,
       },
       {
-        label: "Fingerprint Similarity (%)",
-        data: plagiarismData.map((entry) => entry.FingerprintSimilarity),
-        backgroundColor: "rgba(153, 102, 255, 0.6)",
+        label: "Fingerprint Similarity",
+        data: aggregateCounts("FingerprintSimilarity"),
+        backgroundColor: "rgba(255, 255, 0, 0.6)",
         borderColor: "rgba(153, 102, 255, 1)",
         borderWidth: 1,
       },
       {
-        label: "Combined Similarity (%)",
-        data: plagiarismData.map((entry) => entry.CombinedSimilarity),
-        backgroundColor: "rgba(255, 159, 64, 0.6)",
+        label: "Combined Similarity",
+        data: aggregateCounts("CombinedSimilarity"),
+        backgroundColor: "rgba(0, 0, 0, 0.6)",
         borderColor: "rgba(255, 159, 64, 1)",
         borderWidth: 1,
       },
@@ -184,24 +195,7 @@ function CheckPlagiarism() {
     <div className="min-h-screen bg-gray-900 text-gray-200 py-8">
       <ToastContainer position="top-center" autoClose={1500} />
 
-      {/* Chart */}
-      <div className="container mx-auto mb-8">
-        <Bar
-          data={chartData}
-          options={{
-            responsive: true,
-            plugins: {
-              legend: {
-                position: "top",
-              },
-              title: {
-                display: true,
-                text: "Plagiarism Similarity Overview",
-              },
-            },
-          }}
-        />
-      </div>
+      
 
       <div className="container mx-auto bg-gray-800 p-8 rounded-lg shadow-lg max-w-6xl">
         <div className="flex justify-between items-center mb-8">
@@ -213,6 +207,20 @@ function CheckPlagiarism() {
             Back
           </button>
         </div>
+
+        {/* Chart */}
+      <div className="container h-fit w-fit rounded-md mx-auto mb-8 bg-gray-300">
+        <Bar
+          data={chartData}
+          options={{
+            responsive: true,
+            plugins: {
+              legend: { position: "top" },
+              title: { display: true, text: "Plagiarism Similarity Distribution" },
+            },
+          }}
+        />
+      </div>
 
         {/* Column toggle controls */}
         <div className="mb-4">
