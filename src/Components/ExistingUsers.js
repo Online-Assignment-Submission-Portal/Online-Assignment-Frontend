@@ -110,7 +110,7 @@ const ExistingUsers = () => {
         }
 
         const response = await axios.get(
-          `${apiUrl}/admin/user${userId}`,
+          `${apiUrl}/admin/user/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
