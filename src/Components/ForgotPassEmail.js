@@ -9,6 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
+  const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
   const navigate = useNavigate();
 
   const handleEmailSubmit = async (e) => {
@@ -16,7 +17,7 @@ const ForgotPassword = () => {
     setError("");
 
     try {
-      const response = await axios.post("http://localhost:8000/user/sendresetotp", { email });
+      const response = await axios.post(`${apiUrl}/user/sendresetotp`, { email });
       if (response.data.success) {
         toast.success("OTP sent successfully! Check your email.");
         navigate("/reset-password", { state: { email } });

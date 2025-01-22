@@ -8,6 +8,7 @@ import AssignmentDetails from './AssignmentDetails';
 
 function UpdateAssignment() {
   const navigate = useNavigate();
+  const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
   const location = useLocation();
   const assignmentId = location.state?.assignment_id;
   const assignmentDetails = location.state?.assignment_details;
@@ -30,7 +31,7 @@ function UpdateAssignment() {
       .find((row) => row.startsWith("token="))
       ?.split("=")[1];
     try {
-      const response = await axios.put(`http://localhost:8000/assignment/updateassignment/${assignmentId}`,
+      const response = await axios.put(`${apiUrl}/assignment/updateassignment/${assignmentId}`,
         { assignment },
         {
           headers: {
@@ -53,7 +54,7 @@ function UpdateAssignment() {
 
     // try {
     //   const response = await axios.put(
-    //     `http://localhost:8000/assignment/updateassignment/${assignmentId}`,
+    //     `${apiUrl}/assignment/updateassignment/${assignmentId}`,
     //     { assignment },
     //     {
     //       headers: {

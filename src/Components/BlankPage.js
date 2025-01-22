@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const BlankPage = () => {
   const navigate = useNavigate();
+  const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
   const handleLogout = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -17,7 +18,7 @@ const BlankPage = () => {
         return;
       }
 
-      const response = await fetch("http://localhost:8000/user/logout", {
+      const response = await fetch(`${apiUrl}/user/logout`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

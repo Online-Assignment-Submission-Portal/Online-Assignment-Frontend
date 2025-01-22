@@ -10,6 +10,7 @@ function NewAssignment() {
   const subject = location.state?.subject;
   const userID = location.state?.userID;
   const userRole = location.state?.userRole;
+  const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
   // const subjectID = location.state?.subject.subject_id
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -67,7 +68,7 @@ function NewAssignment() {
       // const subjectId = subject._id.toString();
 
       const response = await axios.post(
-        `http://localhost:8000/assignment/new/${subject.subject_id}`,
+        `${apiUrl}/assignment/new/${subject.subject_id}`,
         formData,
         {
           headers: {
@@ -80,7 +81,7 @@ function NewAssignment() {
       if (response.data.success) {
         toast.success('Assignment created successfully!');
         const response2 = await axios.get(
-          `http://localhost:8000/user/getsubject/${subject.subject_id}`,
+          `${apiUrl}/user/getsubject/${subject.subject_id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

@@ -8,10 +8,11 @@ import Footer from './Footer';
 
 const UserDashboard = () => {
   const { id } = useParams();
+  const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
   const navigate = useNavigate();
-  const socket = io("http://localhost:8000", {
-    transports: ['websocket'],
-  });
+  // const socket = io("${apiUrl}", {
+  //   transports: ['websocket'],
+  // });
   const [user, setUser] = useState(null);
   const [error, setError] = useState("");
   const [subjectCode, setSubjectCode] = useState("");
@@ -34,7 +35,7 @@ const UserDashboard = () => {
       }
 
       const response = await axios.get(
-        `http://localhost:8000/user/dashboard/${id}`,
+        `${apiUrl}/user/dashboard/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -61,15 +62,15 @@ const UserDashboard = () => {
     fetchUserData(id);
   }, [id, navigate]);
 
-  useEffect(() => {
-    socket.on('notification', (notification) => {
-      console.log(notification.message); // Handle the notification (e.g., show an alert or update UI)
-    });
+  // useEffect(() => {
+  //   socket.on('notification', (notification) => {
+  //     console.log(notification.message); // Handle the notification (e.g., show an alert or update UI)
+  //   });
 
-    return () => {
-      socket.off('notification'); // Clean up socket listeners
-    };
-  }, []);
+  //   return () => {
+  //     socket.off('notification'); // Clean up socket listeners
+  //   };
+  // }, []);
 
 
   const handleLogout = async () => {
@@ -85,7 +86,7 @@ const UserDashboard = () => {
       }
 
       const response = await axios.post(
-        `http://localhost:8000/user/logout`,
+        `${apiUrl}/user/logout`,
         {},
         {
           headers: {
@@ -122,7 +123,7 @@ const UserDashboard = () => {
         }
 
       const response = await axios.post(
-        `http://localhost:8000/user/join/${id}`,
+        `${apiUrl}/user/join/${id}`,
         { subject_code: subjectCode },
         {
           headers: {
@@ -163,7 +164,7 @@ const UserDashboard = () => {
         }
 
       const response = await axios.get(
-        `http://localhost:8000/user/getsubject/${subject.subjectId}`,
+        `${apiUrl}/user/getsubject/${subject.subjectId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -173,10 +174,10 @@ const UserDashboard = () => {
 
       if (response.status === 200 && response.data) {
 
-        socket.emit('New Subject', {
-          message: 'New subject has been fetched successfully!',
-          subjectId: subject.subjectId
-        });
+        // socket.emit('New Subject', {
+        //   message: 'New subject has been fetched successfully!',
+        //   subjectId: subject.subjectId
+        // });
         navigate(`/subject/${subject.subjectId}`, {
           state: { subject: response.data, userID: id, userRole: user.role },
         });
@@ -205,7 +206,7 @@ const UserDashboard = () => {
       
 
       const response = await axios.get(
-        `http://localhost:8000/user/profile/${userId}`,
+        `${apiUrl}/user/profile/${userId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
