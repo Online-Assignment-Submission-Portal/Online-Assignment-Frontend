@@ -8,13 +8,14 @@ const OTPVerification = () => {
   const [otp, setOtp] = useState("");
   const [error, setError] = useState("");
   const { state } = useLocation();
+  const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
   const navigate = useNavigate();
 
   const handleOTPSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:8000/user/verifyotp", { email: state.email, otp });
+      const response = await axios.post(`${apiUrl}/user/verifyotp`, { email: state.email, otp });
       if (response.status === 200) {
         // console.log("OTP Verified!");
         toast.success("OTP verified. Pending admin approval.");

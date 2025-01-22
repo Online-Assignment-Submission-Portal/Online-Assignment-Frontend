@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const UpdateProfile = () => {
     const navigate = useNavigate();
+    const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
     const location = useLocation();
     const profile = location.state?.profile.data;
     const userId = location.state?.userId;
@@ -23,7 +24,7 @@ const UpdateProfile = () => {
             .find((row) => row.startsWith("token="))
             ?.split("=")[1];
         try {
-            const response = await axios.put(`http://localhost:8000/user/updateprofile/${userId}`,
+            const response = await axios.put(`${apiUrl}/user/updateprofile/${userId}`,
                 { profileInput },
                 {
                     headers: {

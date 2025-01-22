@@ -11,6 +11,7 @@ const ResetPassword = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const { state } = useLocation();
+  const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
   const navigate = useNavigate();
 
   const handleResetSubmit = async (e) => {
@@ -23,7 +24,7 @@ const ResetPassword = () => {
     }
 
     try {
-      const response = await axios.post("http://localhost:8000/user/resetpassword", {
+      const response = await axios.post("${apiUrl}/user/resetpassword", {
         email: state.email,
         otp,
         password: newPassword,

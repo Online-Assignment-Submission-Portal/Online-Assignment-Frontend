@@ -13,6 +13,7 @@ const Signup = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [role, setRole] = useState("student");
+  const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
   const navigate = useNavigate();
 
   const handleSignup = async (e) => {
@@ -27,9 +28,9 @@ const Signup = () => {
     const userEmail = { email };
 
     try {
-      const response = await axios.post("http://localhost:8000/user/signup", userDetails);
+      const response = await axios.post(`${apiUrl}/user/signup`, userDetails);
       if (response.status === 201) {
-        const result = await axios.post("http://localhost:8000/user/sendotp", userEmail);
+        const result = await axios.post(`${apiUrl}/user/sendotp`, userEmail);
         if (result.status === 200) {
           navigate("/otp-verification", { state: { email } });
         }

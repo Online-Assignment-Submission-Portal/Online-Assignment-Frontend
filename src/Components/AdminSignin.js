@@ -9,13 +9,14 @@ const AdminSignin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
   const navigate = useNavigate();
 
   const handleSignin = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:8000/admin/signin", {
+      const response = await axios.post(`${apiUrl}/admin/signin`, {
         email,
         password,
       });

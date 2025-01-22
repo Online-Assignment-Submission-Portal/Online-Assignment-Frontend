@@ -8,7 +8,7 @@ const AddSubject = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const teacherId = location.state?.teacherId || null; // Retrieve the teacherId from state
-
+  const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
   const [subjectName, setSubjectName] = useState("");
   const [error, setError] = useState("");
 
@@ -34,7 +34,7 @@ const AddSubject = () => {
         return;
       }
       const response = await axios.post(
-        `http://localhost:8000/user/addsubject/${teacherId}`,
+        `${apiUrl}/user/addsubject/${teacherId}`,
         { subject_name: subjectName }, // Include teacherId in the payload
         {
           headers: {

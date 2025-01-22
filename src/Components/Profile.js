@@ -12,6 +12,7 @@ const Profile = () => {
   const profileData = location.state?.profile;
   const userId = location.state?.userID;
   const userRole = location.state?.userRole;
+  const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
   const [data, setData] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -51,7 +52,7 @@ const Profile = () => {
         .find((row) => row.startsWith('token='))?.split('=')[1];
 
       const response = await axios.put(
-        `http://localhost:8000/user/updatedisplaypicture/${userId}`,
+        `${apiUrl}/user/updatedisplaypicture/${userId}`,
         formData,
         {
           headers: {
@@ -88,7 +89,7 @@ const Profile = () => {
         }
 
         const response = await axios.post(
-          'http://localhost:8000/user/logout',
+          `${apiUrl}/user/logout`,
           {},
           {
             headers: {
@@ -119,7 +120,7 @@ const Profile = () => {
       }
 
       const response = await axios.post(
-        "http://localhost:8000/admin/logout",
+        `${apiUrl}/admin/logout`,
         {},
         {
           headers: {

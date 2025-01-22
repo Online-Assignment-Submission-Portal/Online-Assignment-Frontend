@@ -9,6 +9,7 @@ const ExistingUsers = () => {
   const [students, setStudents] = useState([]);
   const [teachers, setTeachers] = useState([]);
   const [error, setError] = useState("");
+  const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const navigate = useNavigate();
@@ -26,7 +27,7 @@ const ExistingUsers = () => {
           return;
         }
 
-        const response = await axios.get("http://localhost:8000/admin/user", {
+        const response = await axios.get(`${apiUrl}/admin/user`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -109,7 +110,7 @@ const ExistingUsers = () => {
         }
 
         const response = await axios.get(
-          `http://localhost:8000/admin/user/${userId}`,
+          `${apiUrl}/admin/user/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -145,7 +146,7 @@ const ExistingUsers = () => {
 
     try {
       const response = await axios.delete(
-        `http://localhost:8000/admin/user/${userId}`,
+        `${apiUrl}/admin/user${userId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -179,7 +180,7 @@ const ExistingUsers = () => {
       }
 
       const response = await axios.post(
-        "http://localhost:8000/admin/logout",
+        `${apiUrl}/admin/logout`,
         {},
         {
           headers: {
