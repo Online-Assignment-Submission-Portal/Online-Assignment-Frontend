@@ -78,7 +78,99 @@ function CheckPlagiarism() {
             FingerprintSimilarity: 85,
             CombinedSimilarity: 88,
           },
+          {
+            studentId1: {
+              name: "Student A",
+              fileUrl: "http://example.com/fileA.pdf",
+            },
+            studentId2: {
+              name: "Student C",
+              fileUrl: "http://example.com/fileC.pdf",
+            },
+            SemanticSimilarity: 50,
+            FingerprintSimilarity: 60,
+            CombinedSimilarity: 58,
+          },
+          {
+            studentId1: {
+              name: "Student B",
+              fileUrl: "http://example.com/fileB.pdf",
+            },
+            studentId2: {
+              name: "Student D",
+              fileUrl: "http://example.com/fileD.pdf",
+            },
+            SemanticSimilarity: 55,
+            FingerprintSimilarity: 65,
+            CombinedSimilarity: 63,
+          },
+          {
+            studentId1: {
+              name: "Student E",
+              fileUrl: "http://example.com/fileE.pdf",
+            },
+            studentId2: {
+              name: "Student A",
+              fileUrl: "http://example.com/fileA.pdf",
+            },
+            SemanticSimilarity: 75,
+            FingerprintSimilarity: 80,
+            CombinedSimilarity: 78,
+          },
+          {
+            studentId1: {
+              name: "Student F",
+              fileUrl: "http://example.com/fileF.pdf",
+            },
+            studentId2: {
+              name: "Student B",
+              fileUrl: "http://example.com/fileB.pdf",
+            },
+            SemanticSimilarity: 40,
+            FingerprintSimilarity: 55,
+            CombinedSimilarity: 50,
+          },
+          {
+            studentId1: {
+              name: "Student C",
+              fileUrl: "http://example.com/fileC.pdf",
+            },
+            studentId2: {
+              name: "Student E",
+              fileUrl: "http://example.com/fileE.pdf",
+            },
+            SemanticSimilarity: 60,
+            FingerprintSimilarity: 75,
+            CombinedSimilarity: 70,
+          },
+          {
+            studentId1: {
+              name: "Student D",
+              fileUrl: "http://example.com/fileD.pdf",
+            },
+            studentId2: {
+              name: "Student F",
+              fileUrl: "http://example.com/fileF.pdf",
+            },
+            SemanticSimilarity: 85,
+            FingerprintSimilarity: 90,
+            CombinedSimilarity: 88,
+          },
+          {
+            studentId1: {
+              name: "Student A",
+              fileUrl: "http://example.com/fileA.pdf",
+            },
+            studentId2: {
+              name: "Student D",
+              fileUrl: "http://example.com/fileD.pdf",
+            },
+            SemanticSimilarity: 70,
+            FingerprintSimilarity: 65,
+            CombinedSimilarity: 68,
+          },
         ];
+        
 
         setPlagiarismData(testData);
         toast.success("Test plagiarism data loaded successfully.");
@@ -209,17 +301,38 @@ function CheckPlagiarism() {
         </div>
 
         {/* Chart */}
-      <div className="container h-fit w-fit rounded-md mx-auto mb-8 bg-gray-300">
-        <Bar
-          data={chartData}
-          options={{
-            responsive: true,
-            plugins: {
-              legend: { position: "top" },
-              title: { display: true, text: "Plagiarism Similarity Distribution" },
-            },
-          }}
-        />
+      <div className="container h-auto w-3/5 rounded-md mx-auto mb-8 bg-gray-300">
+      <Bar
+  data={chartData}
+  options={{
+    responsive: true,
+    plugins: {
+      legend: { position: "top" },
+      title: { display: true, text: "Plagiarism Similarity Distribution" },
+    },
+    scales: {
+      x: {
+        title: {
+          display: true,
+          text: "Similarity Percentage",
+          font: {
+            size: 14,
+          },
+        },
+      },
+      y: {
+        title: {
+          display: true,
+          text: "Number of Students",
+          font: {
+            size: 14,
+          },
+        },
+      },
+    },
+  }}
+/>
+
       </div>
 
         {/* Column toggle controls */}
