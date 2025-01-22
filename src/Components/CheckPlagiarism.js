@@ -373,17 +373,17 @@ function CheckPlagiarism() {
                 <th className="px-4 py-2 border border-gray-600">Student 1</th>
                 <th className="px-4 py-2 border border-gray-600">Student 2</th>
                 {columns.semantic && (
-                  <th className="px-4 py-2 border border-gray-600">
+                  <th className="px-4 py-2 border border-gray-600" title="Measures the similarity in meaning or context between the assignments.">
                     Semantic Similarity (%)
                   </th>
                 )}
                 {columns.fingerprint && (
-                  <th className="px-4 py-2 border border-gray-600">
+                  <th className="px-4 py-2 border border-gray-600" title="Measures the similarity in structural or fingerprint aspects between the assignments.">
                     Fingerprint Similarity (%)
                   </th>
                 )}
                 {columns.combined && (
-                  <th className="px-4 py-2 border border-gray-600">
+                  <th className="px-4 py-2 border border-gray-600" title="A weighted combination of semantic and fingerprint similarities.">
                     Combined Similarity (%)
                   </th>
                 )}
