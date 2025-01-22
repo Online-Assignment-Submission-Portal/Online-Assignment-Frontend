@@ -41,10 +41,12 @@ function CheckPlagiarism() {
         const testData = [
           {
             studentId1: {
+              id: "S001",
               name: "Student A",
               fileUrl: "http://example.com/fileA.pdf",
             },
             studentId2: {
+              id: "S002",
               name: "Student B",
               fileUrl: "http://example.com/fileB.pdf",
             },
@@ -54,10 +56,12 @@ function CheckPlagiarism() {
           },
           {
             studentId1: {
+              id: "S003",
               name: "Student C",
               fileUrl: "http://example.com/fileC.pdf",
             },
             studentId2: {
+              id: "S004",
               name: "Student D",
               fileUrl: "http://example.com/fileD.pdf",
             },
@@ -67,10 +71,12 @@ function CheckPlagiarism() {
           },
           {
             studentId1: {
+              id: "S005",
               name: "Student E",
               fileUrl: "http://example.com/fileE.pdf",
             },
             studentId2: {
+              id: "S006",
               name: "Student F",
               fileUrl: "http://example.com/fileF.pdf",
             },
@@ -80,10 +86,12 @@ function CheckPlagiarism() {
           },
           {
             studentId1: {
+              id: "S001",
               name: "Student A",
               fileUrl: "http://example.com/fileA.pdf",
             },
             studentId2: {
+              id: "S003",
               name: "Student C",
               fileUrl: "http://example.com/fileC.pdf",
             },
@@ -93,10 +101,12 @@ function CheckPlagiarism() {
           },
           {
             studentId1: {
+              id: "S002",
               name: "Student B",
               fileUrl: "http://example.com/fileB.pdf",
             },
             studentId2: {
+              id: "S004",
               name: "Student D",
               fileUrl: "http://example.com/fileD.pdf",
             },
@@ -106,10 +116,12 @@ function CheckPlagiarism() {
           },
           {
             studentId1: {
+              id: "S005",
               name: "Student E",
               fileUrl: "http://example.com/fileE.pdf",
             },
             studentId2: {
+              id: "S001",
               name: "Student A",
               fileUrl: "http://example.com/fileA.pdf",
             },
@@ -119,10 +131,12 @@ function CheckPlagiarism() {
           },
           {
             studentId1: {
+              id: "S006",
               name: "Student F",
               fileUrl: "http://example.com/fileF.pdf",
             },
             studentId2: {
+              id: "S002",
               name: "Student B",
               fileUrl: "http://example.com/fileB.pdf",
             },
@@ -132,10 +146,12 @@ function CheckPlagiarism() {
           },
           {
             studentId1: {
+              id: "S003",
               name: "Student C",
               fileUrl: "http://example.com/fileC.pdf",
             },
             studentId2: {
+              id: "S005",
               name: "Student E",
               fileUrl: "http://example.com/fileE.pdf",
             },
@@ -145,10 +161,12 @@ function CheckPlagiarism() {
           },
           {
             studentId1: {
+              id: "S004",
               name: "Student D",
               fileUrl: "http://example.com/fileD.pdf",
             },
             studentId2: {
+              id: "S006",
               name: "Student F",
               fileUrl: "http://example.com/fileF.pdf",
             },
@@ -158,10 +176,12 @@ function CheckPlagiarism() {
           },
           {
             studentId1: {
+              id: "S001",
               name: "Student A",
               fileUrl: "http://example.com/fileA.pdf",
             },
             studentId2: {
+              id: "S004",
               name: "Student D",
               fileUrl: "http://example.com/fileD.pdf",
             },
@@ -169,7 +189,38 @@ function CheckPlagiarism() {
             FingerprintSimilarity: 65,
             CombinedSimilarity: 68,
           },
+          {
+            studentId1: {
+              id: "S003",
+              name: "Student C",
+              fileUrl: "http://example.com/fileC.pdf",
+            },
+            studentId2: {
+              id: "S006",
+              name: "Student F",
+              fileUrl: "http://example.com/fileF.pdf",
+            },
+            SemanticSimilarity: 55,
+            FingerprintSimilarity: 50,
+            CombinedSimilarity: 53,
+          },
+          {
+            studentId1: {
+              id: "S002",
+              name: "Student B",
+              fileUrl: "http://example.com/fileB.pdf",
+            },
+            studentId2: {
+              id: "S005",
+              name: "Student E",
+              fileUrl: "http://example.com/fileE.pdf",
+            },
+            SemanticSimilarity: 72,
+            FingerprintSimilarity: 78,
+            CombinedSimilarity: 75,
+          },
         ];
+        
         
 
         setPlagiarismData(testData);
@@ -243,7 +294,7 @@ function CheckPlagiarism() {
   };
 
   // Aggregate data into ranges
-  const ranges = [0, 20, 40, 60, 80, 100];
+  const ranges = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
   const aggregateCounts = (key) => {
     return ranges.slice(0, -1).map((rangeStart, index) => {
       const rangeEnd = ranges[index + 1];
@@ -262,23 +313,23 @@ function CheckPlagiarism() {
       {
         label: "Semantic Similarity",
         data: aggregateCounts("SemanticSimilarity"),
-        backgroundColor: "rgba(255, 0, 0, 0.6)",
-        borderColor: "rgba(75, 192, 192, 1)",
-        borderWidth: 1,
+        backgroundColor: "rgba(255, 0, 0, 1)",
+        borderColor: "rgba(255, 0, 0)",
+        borderWidth: 5,
       },
       {
         label: "Fingerprint Similarity",
         data: aggregateCounts("FingerprintSimilarity"),
-        backgroundColor: "rgba(255, 255, 0, 0.6)",
-        borderColor: "rgba(153, 102, 255, 1)",
-        borderWidth: 1,
+        backgroundColor: "rgba(110, 44, 242, 1)",
+        borderColor: "rgb(110, 44, 242)",
+        borderWidth: 5,
       },
       {
         label: "Combined Similarity",
         data: aggregateCounts("CombinedSimilarity"),
-        backgroundColor: "rgba(0, 0, 0, 0.6)",
-        borderColor: "rgba(255, 159, 64, 1)",
-        borderWidth: 1,
+        backgroundColor: "rgba(46, 243, 56, 1)",
+        borderColor: "rgb(46, 243, 56)",
+        borderWidth: 5,
       },
     ],
   };
@@ -301,7 +352,7 @@ function CheckPlagiarism() {
         </div>
 
         {/* Chart */}
-      <div className="container h-auto w-3/5 rounded-md mx-auto mb-8 bg-gray-300">
+      <div className="container h-auto w-9/10 rounded-md mx-auto mb-8 bg-gray-300 w-6xl">
       <Bar
   data={chartData}
   options={{
