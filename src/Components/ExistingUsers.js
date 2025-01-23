@@ -203,11 +203,11 @@ const ExistingUsers = () => {
   return (
     <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center py-10">
       <ToastContainer position="top-center" autoClose={1500} />
-      <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full">
-        <div className="flex justify-between">
+      <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-4xl mx-auto">
+        <div className="flex flex-col sm:flex-row justify-between mb-4">
           <button
             onClick={() => navigate("/admin-dashboard")}
-            className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-500 transition"
+            className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-500 transition mb-2 sm:mb-0"
           >
             Back to Dashboard
           </button>
@@ -218,6 +218,7 @@ const ExistingUsers = () => {
             Logout
           </button>
         </div>
+        
 
        {/* Search bar */}
       <div className="mb-6 w-full max-w-md mx-auto relative">

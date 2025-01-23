@@ -352,7 +352,7 @@ function CheckPlagiarism() {
         </div>
 
         {/* Chart */}
-      <div className="container h-auto w-9/10 rounded-md mx-auto mb-8 bg-gray-300 w-6xl">
+      <div className="container h-full w-full rounded-md mx-auto mb-8 bg-gray-300 w-6xl">
       <Bar
   data={chartData}
   options={{

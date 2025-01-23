@@ -240,7 +240,7 @@ function SubjectDetails() {
           </div>
         </div>
 
-        <div className='flex justify-between max-h-96 '>
+        <div className='flex justify-between max-h-96 sm:noflex md:noflex '>
           {/* <p className='text-gray-400 text-center mt-2'>Assignments will be shown here in tabular form</p> */}
           {assignments.length > 0 ? (
             <div className='w-2/5 max-h-96 overflow-y-auto mt-6'>
