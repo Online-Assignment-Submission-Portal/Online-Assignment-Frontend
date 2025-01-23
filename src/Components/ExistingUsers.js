@@ -201,9 +201,9 @@ const ExistingUsers = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center py-10">
+    <div className="sm:w-full min-h-screen bg-gray-900 text-white lg:flex lg:flex-col lg:items-center py-10">
       <ToastContainer position="top-center" autoClose={1500} />
-      <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-4xl mx-auto">
+      <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full w-4/5 mx-auto">
         <div className="flex flex-col sm:flex-row justify-between mb-4">
           <button
             onClick={() => navigate("/admin-dashboard")}
@@ -249,8 +249,8 @@ const ExistingUsers = () => {
 
         <h2 className="text-3xl font-bold text-center mb-6">Existing Users</h2>
 
-        <div className="flex justify-between mb-8">
-          <div className="w-[45%] justify-between items-center h-96 overflow-y-scroll scrollbar-none pt-2">
+        <div className="sm:w-full lg:flex lg:justify-between mb-8">
+          <div className="sm:mt-4 md:mt-4 lg:w-[45%] justify-between items-center h-96 overflow-y-scroll scrollbar-none lg:pt-2">
             <div className="flex justify-between">
             <h3 className="text-xl font-bold mb-4">Students</h3>
             <button
@@ -303,7 +303,7 @@ const ExistingUsers = () => {
             )}
           </div>
 
-          <div className="w-[45%] justify-between items-center h-96 overflow-y-scroll scrollbar-none pt-2">
+          <div className="sm:mt-4 md:mt-4 lg:w-[45%] justify-between items-center h-96 overflow-y-scroll scrollbar-none lg:pt-2">
           <div className="flex justify-between">
             <h3 className="text-xl font-bold mb-4">Teachers</h3>
             <button
