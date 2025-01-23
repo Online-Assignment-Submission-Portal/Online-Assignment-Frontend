@@ -9,39 +9,48 @@ const AboutUs = () => {
   };
 
   return (
-    <div className="bg-black text-white min-h-screen py-12">
-      <div className="container mx-auto px-4">
-        <h1 className="text-4xl font-bold text-center mb-8 text-yellow-400">About Us</h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div>
+    <div className="bg-gray-900  flex flex-col text-white min-h-screen py-12">
+      {/* Back Button at the bottom */}
+      <div className="mx-4 mt-4 flex justify-between">
+        <button
+          onClick={handleBack}
+          className="bg-yellow-400 text-black py-1 px-3 rounded-lg shadow-xl hover:bg-rose-500 transition duration-300 transform hover:scale-105 hover:font-semibold"
+        >
+          Back
+        </button>
+
+      </div>
+      <div className="container w-4/5 lg:w-3/5 mx-auto bg-gray-800 p-8 rounded-lg shadow-lg">
+      
+      
+        <h1 className="text-4xl font-bold text-center mb-6  text-yellow-400">About Us</h1>
+        <div className="">
+          
             <p className="text-lg leading-relaxed mb-6">
-              Welcome to <span className="font-semibold text-yellow-400">[Company Name]</span>! We are dedicated to providing the best services to our customers. Our mission is to deliver high-quality products and services that meet your needs.
+              Welcome to <span className="font-semibold text-yellow-400">Online Assignment Submission Portal</span>! a platform crafted with care by a passionate team of six innovative minds.
             </p>
             <p className="text-lg leading-relaxed mb-6">
-              Our team is passionate, experienced, and committed to excellence. We value customer satisfaction and strive to exceed expectations in everything we do.
+              We believe in revolutionizing the way assignments are managed, submitted, and evaluated. Our portal is designed to simplify academic workflows for both students and teachers by providing a centralized, secure, and user-friendly solution.
             </p>
-            <p className="text-lg leading-relaxed">
-              Thank you for choosing <span className="font-semibold text-yellow-400">[Company Name]</span>. We look forward to serving you and building a lasting relationship.
+            <p className="text-3xl font-bold mb-3">Our Mission</p>
+            <p className="text-lg leading-relaxed mb-6">
+            To empower educators and learners with a seamless, efficient, and transparent assignment management system, enhancing productivity and academic excellence.
             </p>
-          </div>
-          <div>
-            <img 
-              src="https://via.placeholder.com/500" 
-              alt="Company" 
-              className="rounded-lg shadow-lg"
-            />
-          </div>
+            <p className="text-3xl font-bold mb-3">Who We Are</p>
+            <p className="text-lg leading-relaxed mb-6">
+            We are a diverse team of tech enthusiasts, combining our expertise in software development, user experience design, and cutting-edge technology to create a tool that meets the evolving needs of modern education.            </p>
+            <p className="text-3xl font-bold mb-3">What We Do</p>
+            <p className="text-lg leading-relaxed mb-3">
+            From intuitive assignment submissions to real-time feedback and advanced analytics, our platform ensures every detail is taken care of. By integrating features like plagiarism detection, gamification, and role-based access control, we aim to set a new standard for academic tools.            </p>
+            <p className="text-lg leading-relaxed">Join us on our journey to make education smarter, simpler, and more effective.
+
+</p>
+          
+          
         </div>
 
-        {/* Back Button at the bottom */}
-        <div className="flex justify-center mt-12">
-          <button
-            onClick={handleBack}
-            className="bg-yellow-400 text-black py-3 px-6 rounded-lg shadow-xl hover:bg-yellow-500 transition duration-300 transform hover:scale-105"
-          >
-            Back
-          </button>
-        </div>
+
+      
       </div>
     </div>
   );
