@@ -146,7 +146,7 @@ const ExistingUsers = () => {
 
     try {
       const response = await axios.delete(
-        `${apiUrl}/admin/user${userId}`,
+        `${apiUrl}/admin/user/${userId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
