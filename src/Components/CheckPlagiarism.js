@@ -340,7 +340,7 @@ function CheckPlagiarism() {
 
       
 
-      <div className="container mx-auto bg-gray-800 p-8 rounded-lg shadow-lg max-w-6xl">
+      <div className="container mx-auto bg-gray-800 p-8 rounded-lg shadow-lg md:max-w-6xl">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold">Plagiarism Check</h1>
           <button
@@ -388,7 +388,7 @@ function CheckPlagiarism() {
 
         {/* Column toggle controls */}
         <div className="mb-4">
-          <label className="inline-flex items-center mr-4">
+          <label className="inline-flex items-center md:mr-4">
             <input
               type="checkbox"
               checked={columns.semantic}
