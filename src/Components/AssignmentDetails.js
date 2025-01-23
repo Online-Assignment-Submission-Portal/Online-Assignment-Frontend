@@ -280,13 +280,12 @@ function AssignmentDetails() {
       <ToastContainer position="top-center" autoClose={1500} />
       <div className="container mx-auto bg-gray-800 p-8 rounded-lg shadow-lg max-w-4xl">
         {/* Header */}
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold">Assignment Details</h1>
-          <div className='space-x-4'>
+        <div className="md:flex md:justify-between md:items-center mb-8 sm:gap-5">
+        <div className='space-x-4 '>
             {userRole === 'teacher' ? (
               <>
                 <button
-                  className="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition"
+                  className="px-6 sm:mt-5 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition"
                   onClick={() => navigate(`/updateassignment/${assignmentId}`, {
                     state: {
                       assignment_id: assignmentId,
@@ -306,6 +305,8 @@ function AssignmentDetails() {
             </button>
 
           </div>
+          <div className=''><h1 className="text-3xl font-bold">Assignment Details</h1></div>
+          
         </div>
 
         <div className="space-y-6">
@@ -361,7 +362,7 @@ function AssignmentDetails() {
                     : 'Not submitted yet'}
                 </p>
               </div>
-              <div className="mt-8 text-right space-x-4">
+              <div className="mt-8 md:text-right space-x-4">
                 {submission ? (
                   <button
                     onClick={() => (setIsSubmissionModalOpen(true))}
@@ -488,8 +489,8 @@ function AssignmentDetails() {
               <div>
 
               </div>
-              <div className='flex justify-between items-center mb-8'>
-                <div className="mt-8 text-left">
+              <div className='md:flex md:justify-between md:items-center mb-8'>
+                <div className="mt-8 md:text-left">
                   <button
                     onClick={() => navigate(`/view-submission/${assignmentId}`, { state: { assignment_id: assignmentId } })}
                     className="px-6 py-2 bg-purple-600 hover:bg-purple-500 text-white font-bold 
@@ -497,7 +498,7 @@ function AssignmentDetails() {
                     View Submissions
                   </button>
                 </div>
-                <div className="mt-8 text-right">
+                <div className="mt-8 md:text-right">
                   <button
                     // onClick={() => handleConnection()}
                     onClick={() => navigate("/check-plagiarism", { state: { assignment_id: assignmentId } })}
