@@ -27,7 +27,7 @@ const ContactUs = () => {
               We'd love to hear from you! Whether you have a question about our services, need assistance, or just want to give feedback, we're here to help.
             </p>
             <p className="text-lg leading-relaxed mb-6">
-              You can reach us via email at <span className="font-semibold text-yellow-400">support@companyname.com</span> or call us at <span className="font-semibold text-yellow-400">(+XX) XXXXX-XXXXX</span>.
+              You can reach us via email at <span className="font-semibold text-yellow-400">assignmentportal2024@gmail.com</span> or call us at <span className="font-semibold text-yellow-400">(+XX) XXXXX-XXXXX</span>.
             </p>
             <p className="text-lg leading-relaxed">
               Our office hours are from Monday to Friday, 9:00 AM to 5:00 PM. We look forward to assisting you!
