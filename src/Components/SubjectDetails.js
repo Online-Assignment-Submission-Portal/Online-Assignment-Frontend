@@ -161,7 +161,7 @@ function SubjectDetails() {
           </h1>
           <button
             onClick={() => navigate(`/dashboard/${userID}`)}
-            className="px-4 py-2 sm:px-6 sm:py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition text-sm sm:text-base w-full sm:w-auto mt-4 sm:mt-0"
+            className="px-4 py-2 sm:px-6 sm:py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition text-sm sm:text-base w-full sm:w-auto sm:mt-0"
           >
             Back to Dashboard
           </button>
@@ -216,24 +216,26 @@ function SubjectDetails() {
         )}
         <div className="mt-6">
           <div className="flex flex-col lg:flex-row lg:gap-6 ">
-            <div className="lg:w-1/2">
-              <div className="flex justify-between items-center mb-4 ">
+            <div className="lg:w-1/2 mt-6 lg:mt-0">
+              <div className="flex justify-between items-center mb-4 gap-2">
                 <h2 className="text-2xl font-semibold text-gray-200">Assignments</h2>
+                <div className="flex gap-2">
                 {userRole === "teacher" && (
                   <button
-                    onClick={() =>
-                      navigate("/new-assignment", {
-                        state: { subject, userID, userRole, subjectID },
-                      })
-                    }
-                    className="px-4 py-2 text-sm md:px-6 md:py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-500 transition"
+                  onClick={() =>
+                    navigate("/new-assignment", {
+                      state: { subject, userID, userRole, subjectID },
+                    })
+                  }
+                  className="px-4 py-2 text-sm md:px-6 md:py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-500 transition"
                   >
                     + New Assignment
                   </button>
                 )}
+                </div>
               </div>
               {assignments.length > 0 ? (
-                <div className="max-h-96 overflow-y-auto scrollbar-none">
+                <div className="max-h-96 overflow-auto scrollbar-none">
                   <table className="table-auto min-w-full bg-gray-800 text-gray-200 rounded-lg">
                     <thead>
                       <tr className="bg-violet-800">
@@ -263,7 +265,7 @@ function SubjectDetails() {
                 <p className="text-gray-400 text-center">No assignments found.</p>
               )}
             </div>
-            <div className="lg:w-1/2 mt-6 lg:mt-0">
+            <div className="lg:w-1/2 mt-8 lg:mt-0">
               <div className="flex justify-between items-center mb-4 gap-2">
                 <h2 className="text-2xl font-semibold text-gray-200">Students</h2>
                 <div className="flex gap-2">
@@ -286,7 +288,7 @@ function SubjectDetails() {
                 </div>
               </div>
               {foundStudents.length > 0 ? (
-                <div className="max-h-96 overflow-y-auto scrollbar-none">
+                <div className="max-h-96 overflow-auto scrollbar-none">
                   <table className="table-auto min-w-full bg-gray-800 text-gray-200 rounded-lg">
                     <thead>
                       <tr className="bg-violet-800">
@@ -333,21 +335,21 @@ function SubjectDetails() {
         </div>
 
         {notFoundEmails.length > 0 && (
-          <div className="mt-6">
+          <div className="mt-8">
             <h2 className="text-2xl font-semibold text-gray-200">Emails Not Found</h2>
-            <div className="max-h-96 overflow-y-auto mt-4">
+            <div className="max-h-96 overflow-auto mt-4 scrollbar-none ">
               <table className="table-auto min-w-full bg-gray-800 text-gray-200 rounded-lg">
                 <thead>
                   <tr className="bg-gray-700">
-                    <th className="px-4 py-2 text-left">Email</th>
-                    <th className="px-4 py-2 text-left">Action</th>
+                    <th className="px-4 py-2 text-center">Email</th>
+                    <th className="px-4 py-2 text-center">Action</th>
                   </tr>
                 </thead>
                 <tbody>
                   {notFoundEmails.map((email, index) => (
-                    <tr key={index} className="hover:bg-gray-700 transition">
-                      <td className="border-b border-gray-600 px-4 py-2">{email}</td>
-                      <td className="border-b border-gray-600 px-4 py-2">
+                    <tr key={index} className="hover:bg-gray-700 transition text-center">
+                      <td className="border-b border-gray-600 px-4 py-2 overflow-auto scrollbar-none">{email}</td>
+                      <td className="border-b border-gray-600 px-4 py-2 overflow-auto scrollbar-none">
                         <button
                           onClick={() => removeNotFoundEmail(email)}
                           className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition"

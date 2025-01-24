@@ -220,8 +220,8 @@ function CheckPlagiarism() {
             CombinedSimilarity: 75,
           },
         ];
-        
-        
+
+
 
         setPlagiarismData(testData);
         toast.success("Test plagiarism data loaded successfully.");
@@ -335,60 +335,59 @@ function CheckPlagiarism() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-200 py-8">
+
+    <div className="min-h-screen bg-gray-900 text-gray-200 py-4 sm:py-8">
       <ToastContainer position="top-center" autoClose={1500} />
 
-      
-
-      <div className="container mx-auto bg-gray-800 p-8 rounded-lg shadow-lg md:max-w-6xl">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold">Plagiarism Check</h1>
+      <div className="container mx-auto bg-gray-800 p-4 sm:p-8 rounded-lg shadow-lg md:max-w-6xl">
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-4 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-0">
+            Plagiarism Check
+          </h1>
           <button
             onClick={() => navigate(-1)}
-            className="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition"
+            className="w-full sm:w-auto px-4 sm:px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition"
           >
             Back
           </button>
         </div>
 
         {/* Chart */}
-      <div className="container h-full w-full rounded-md mx-auto mb-8 bg-gray-300 w-6xl">
-      <Bar
-  data={chartData}
-  options={{
-    responsive: true,
-    plugins: {
-      legend: { position: "top" },
-      title: { display: true, text: "Plagiarism Similarity Distribution" },
-    },
-    scales: {
-      x: {
-        title: {
-          display: true,
-          text: "Similarity Percentage",
-          font: {
-            size: 14,
-          },
-        },
-      },
-      y: {
-        title: {
-          display: true,
-          text: "Number of Students",
-          font: {
-            size: 14,
-          },
-        },
-      },
-    },
-  }}
-/>
-
-      </div>
+        <div className="container mx-auto mb-4 sm:mb-8 bg-gray-300 rounded-md overflow-hidden">
+          <div className=" h-[250px] sm:h-[300px] md:h-[400px] lg:h-[500px] w-full">
+            <Bar
+              data={chartData}
+              options={{
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: { position: "top" },
+                  title: { display: true, text: "Plagiarism Similarity Distribution" },
+                },
+                scales: {
+                  x: {
+                    title: {
+                      display: true,
+                      text: "Similarity Percentage",
+                      font: { size: 14 },
+                    },
+                  },
+                  y: {
+                    title: {
+                      display: true,
+                      text: "Number of Students",
+                      font: { size: 14 },
+                    },
+                  },
+                },
+              }}
+            />
+          </div>
+        </div>
 
         {/* Column toggle controls */}
-        <div className="mb-4">
-          <label className="inline-flex items-center md:mr-4">
+        <div className="mb-4 flex flex-wrap gap-2">
+          <label className="inline-flex items-center">
             <input
               type="checkbox"
               checked={columns.semantic}
@@ -397,7 +396,7 @@ function CheckPlagiarism() {
             />
             Semantic Similarity
           </label>
-          <label className="inline-flex items-center mr-4">
+          <label className="inline-flex items-center">
             <input
               type="checkbox"
               checked={columns.fingerprint}
@@ -421,21 +420,31 @@ function CheckPlagiarism() {
           <table className="w-full text-left border-collapse border border-gray-700">
             <thead>
               <tr className="bg-gray-700 text-gray-200">
-                <th className="px-4 py-2 border border-gray-600">Student 1</th>
-                <th className="px-4 py-2 border border-gray-600">Student 2</th>
+                <th className="px-2 sm:px-4 py-2 border border-gray-600">Student 1</th>
+                <th className="px-2 sm:px-4 py-2 border border-gray-600">Student 2</th>
                 {columns.semantic && (
-                  <th className="px-4 py-2 border border-gray-600" title="Measures the similarity in meaning or context between the assignments.">
+                  <th className="px-2 sm:px-4 py-2 border border-gray-600" title="Measures the similarity in meaning or context between the assignments.">
                     Semantic Similarity (%)
+                    <span className="inline-block ml-1 text-gray-400 cursor-pointer" title="Measures the similarity in meaning or context between the assignments.">
+                      ⓘ
+                    </span>
                   </th>
+
                 )}
                 {columns.fingerprint && (
-                  <th className="px-4 py-2 border border-gray-600" title="Measures the similarity in structural or fingerprint aspects between the assignments.">
+                  <th className="px-2 sm:px-4 py-2 border border-gray-600" title="Measures the similarity in structural or fingerprint aspects between the assignments.">
                     Fingerprint Similarity (%)
+                    <span className="inline-block ml-1 text-gray-400 cursor-pointer" title="Measures the similarity in structural or fingerprint aspects between the assignments.">
+                      ⓘ
+                    </span>
                   </th>
                 )}
                 {columns.combined && (
-                  <th className="px-4 py-2 border border-gray-600" title="A weighted combination of semantic and fingerprint similarities.">
+                  <th className="px-2 sm:px-4 py-2 border border-gray-600" title="A weighted combination of semantic and fingerprint similarities.">
                     Combined Similarity (%)
+                    <span className="inline-block ml-1 text-gray-400 cursor-pointer" title="A weighted combination of semantic and fingerprint similarities.">
+                      ⓘ
+                    </span>
                   </th>
                 )}
               </tr>
@@ -445,11 +454,10 @@ function CheckPlagiarism() {
                 plagiarismData.map((entry, index) => (
                   <tr
                     key={index}
-                    className={`${
-                      index % 2 === 0 ? "bg-gray-800" : "bg-gray-700"
-                    } hover:bg-gray-600`}
+                    className={`${index % 2 === 0 ? "bg-gray-800" : "bg-gray-700"
+                      } hover:bg-gray-600`}
                   >
-                    <td className="px-4 py-2 border border-gray-600">
+                    <td className="px-2 sm:px-4 py-2 border border-gray-600">
                       <a
                         href={`https://docs.google.com/gview?url=${encodeURIComponent(
                           entry.studentId1.fileUrl
@@ -461,7 +469,7 @@ function CheckPlagiarism() {
                         {entry.studentId1.name}
                       </a>
                     </td>
-                    <td className="px-4 py-2 border border-gray-600">
+                    <td className="px-2 sm:px-4 py-2 border border-gray-600">
                       <a
                         href={`https://docs.google.com/gview?url=${encodeURIComponent(
                           entry.studentId2.fileUrl
@@ -474,17 +482,17 @@ function CheckPlagiarism() {
                       </a>
                     </td>
                     {columns.semantic && (
-                      <td className="px-4 py-2 border border-gray-600">
+                      <td className="px-2 sm:px-4 py-2 border border-gray-600">
                         {entry.SemanticSimilarity}%
                       </td>
                     )}
                     {columns.fingerprint && (
-                      <td className="px-4 py-2 border border-gray-600">
+                      <td className="px-2 sm:px-4 py-2 border border-gray-600">
                         {entry.FingerprintSimilarity}%
                       </td>
                     )}
                     {columns.combined && (
-                      <td className="px-4 py-2 border border-gray-600">
+                      <td className="px-2 sm:px-4 py-2 border border-gray-600">
                         {entry.CombinedSimilarity}%
                       </td>
                     )}
@@ -505,6 +513,7 @@ function CheckPlagiarism() {
         </div>
       </div>
     </div>
+
   );
 }
 
