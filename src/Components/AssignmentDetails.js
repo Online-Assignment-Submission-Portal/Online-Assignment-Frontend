@@ -4,6 +4,7 @@ import axios from 'axios';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loding from "../partials/Loding";
+import { Line } from 'react-chartjs-2';
 
 function AssignmentDetails() {
   const location = useLocation();
@@ -24,7 +25,7 @@ function AssignmentDetails() {
   const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
   const [submission, setSubmission] = useState(null);
   const [isSubmissionModalOpen, setIsSubmissionModalOpen] = useState(false);
-  const [submit , setSubmit] = useState(false);
+  const [submit, setSubmit] = useState(false);
 
   const handleBack = async () => {
     try {
@@ -33,10 +34,10 @@ function AssignmentDetails() {
         .find((row) => row.startsWith("token="))
         ?.split("=")[1];
 
-        if (!token) {
-          toast.error('Please sign in.');
-          return navigate('/signin');
-        }
+      if (!token) {
+        toast.error('Please sign in.');
+        return navigate('/signin');
+      }
 
       const response = await axios.get(
         `${apiUrl}/user/getsubject/${subjectID}`,
@@ -49,7 +50,7 @@ function AssignmentDetails() {
 
       if (response.status === 200 && response.data) {
         navigate(`/subject/${subjectID}`, {
-          state: { subject: response.data, userID, userRole}
+          state: { subject: response.data, userID, userRole }
         });
       }
     } catch (err) {
@@ -138,7 +139,7 @@ function AssignmentDetails() {
         setSelectedFile(uploadedFile);
       } else {
         toast.error('File size exceeds 250 KB.');
-        e.target.value = null; 
+        e.target.value = null;
       }
     } else {
       toast.error('Unsupported file format. Allowed formats: pdf, doc, docx, txt, xls, xlsx, ppt, pptx.');
@@ -148,16 +149,16 @@ function AssignmentDetails() {
 
   const handleSubmitAssignment = async () => {
     const token = document.cookie
-    .split('; ')
-    .find((row) => row.startsWith('token='))
-    ?.split('=')[1];
-    
+      .split('; ')
+      .find((row) => row.startsWith('token='))
+      ?.split('=')[1];
+
     if (!selectedFile) {
       // setError('Please select a file to upload.');
       toast.error('Please select a file to upload.');
       return;
     }
-    
+
     setIsUploading(true);
     const formData = new FormData();
     formData.append('fileupload', selectedFile);
@@ -190,20 +191,20 @@ function AssignmentDetails() {
   }
 
   const handleConnection = async () => {
-    try{
+    try {
       const token = document.cookie
-      .split('; ')
-      .find((row) => row.startsWith('token='))
-      ?.split('=')[1];
-      
-      const response = await axios.post(`${apiUrl}/assignment/checkplagiarism/${assignmentId}`, 
-       {},
-       {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if(response.data.success){
+        .split('; ')
+        .find((row) => row.startsWith('token='))
+        ?.split('=')[1];
+
+      const response = await axios.post(`${apiUrl}/assignment/checkplagiarism/${assignmentId}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      if (response.data.success) {
         console.log(response.data);
         // const plagiarismResponse = await axios.post(`http://localhost:8501/checkplagiarism/${assignmentId}`, 
         // {data: response.data.fileDetails}, 
@@ -214,7 +215,7 @@ function AssignmentDetails() {
         //   })
         // console.log(plagiarismResponse);
       }
-    }catch(err){
+    } catch (err) {
       toast.error('An error occurred while checking Plagiarism.');
     }
   }
@@ -280,33 +281,39 @@ function AssignmentDetails() {
       <ToastContainer position="top-center" autoClose={1500} />
       <div className="container mx-auto bg-gray-800 p-8 rounded-lg shadow-lg max-w-4xl">
         {/* Header */}
-        <div className="md:flex md:justify-between md:items-center mb-8 sm:gap-5">
-        <div className='space-x-4 '>
-            {userRole === 'teacher' ? (
-              <>
-                <button
-                  className="px-6 sm:mt-5 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition"
-                  onClick={() => navigate(`/updateassignment/${assignmentId}`, {
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+          {/* Title */}
+          <h1 className="text-2xl sm:text-3xl font-bold text-center sm:text-left">
+            Assignment Details
+          </h1>
+
+          {/* Action Buttons */}
+          <div className="flex flex-wrap justify-center sm:justify-end gap-4">
+            {userRole === 'teacher' && (
+              <button
+                className="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition"
+                onClick={() =>
+                  navigate(`/updateassignment/${assignmentId}`, {
                     state: {
                       assignment_id: assignmentId,
-                      assignment_details: assignmentDetails, userRole, userID ,subjectID
-                    }
-                  })}
-                >
-                  Update Details
-                </button>
-              </>
-            ) : <></>}
+                      assignment_details: assignmentDetails,
+                      userRole,
+                      userID,
+                      subjectID,
+                    },
+                  })
+                }
+              >
+                Update Details
+              </button>
+            )}
             <button
-              onClick={() => handleBack()}
+              onClick={handleBack}
               className="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition"
             >
               Back
             </button>
-
           </div>
-          <div className=''><h1 className="text-3xl font-bold">Assignment Details</h1></div>
-          
         </div>
 
         <div className="space-y-6">
@@ -339,7 +346,7 @@ function AssignmentDetails() {
 
           {userRole === 'student' ? (
             <>
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
                   <p className="text-gray-400 font-medium">Marks Obtained:</p>
                   <p>
@@ -350,11 +357,16 @@ function AssignmentDetails() {
                 </div>
                 <div>
                   <p className="text-gray-400 font-medium">Max Marks:</p>
-                  <p>{assignmentDetails.maxVal !== undefined ? assignmentDetails.maxVal : 'Not available'}</p>
+                  <p>
+                    {assignmentDetails.maxVal !== undefined
+                      ? assignmentDetails.maxVal
+                      : 'Not available'}
+                  </p>
                 </div>
               </div>
 
-              <div>
+              {/* Submission Information */}
+              <div className="mt-6">
                 <p className="text-gray-400 font-medium">Submitted At:</p>
                 <p>
                   {assignmentDetails.submittedAt
@@ -362,37 +374,35 @@ function AssignmentDetails() {
                     : 'Not submitted yet'}
                 </p>
               </div>
-              <div className="mt-8 md:text-right space-x-4">
+
+              {/* Action Buttons */}
+              <div className="mt-8 flex flex-wrap justify-center md:justify-end gap-4">
                 {submission ? (
                   <button
-                    onClick={() => (setIsSubmissionModalOpen(true))}
+                    onClick={() => setIsSubmissionModalOpen(true)}
                     className="px-6 py-2 bg-yellow-600 hover:bg-yellow-500 text-white font-bold rounded-lg transition"
                   >
                     View My Submission
                   </button>
-
                 ) : (
                   <button
-                    // onClick={() => handleSubmitAssignment(assignmentDetails)}
                     onClick={openModal}
                     className="px-6 py-2 bg-green-600 hover:bg-green-500 text-white font-bold rounded-lg transition"
                   >
-                   {submit ? "Submitting..." : "Submit Assignment"}
+                    {submit ? 'Submitting...' : 'Submit Assignment'}
                   </button>
-
                 )}
-
               </div>
               {isSubmissionModalOpen && submission && (
                 <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50 overflow-auto">
                   <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-[90%] md:w-[50%] max-h-[90%] overflow-y-auto">
                     <div className="flex flex-col items-center">
-                      <h2 className="text-xl font-semibold text-white text-center mb-4">Your Submission</h2>
+                      <h2 className="text-xl font-semibold text-white text-center mb-2">Your Submission</h2>
                       <div className="w-full bg-gray-800 py-2 rounded-lg overflow-x-auto scrollbar-none font-medium text-gray-200 text-center whitespace-nowrap">
                         {extractFileName(submission)}.{extractFileExtension(submission)}
                       </div>
 
-                      <div className="flex space-x-7 mb-6">
+                      <div className="flex space-x-7">
                         <a
                           href={`https://docs.google.com/gview?url=${encodeURIComponent(submission)}&embedded=true`}
                           target="_blank"
@@ -410,36 +420,41 @@ function AssignmentDetails() {
                         </a>
                       </div>
 
-                      <p className="text-gray-300 text-xs text-center mb-6">
-                        Your previous submission is shown above. If you'd like to submit a new file, you can upload it here.
-                        <strong> Reuploading will replace your current submission.</strong>
-                      </p>
-                      <input
-                        type="file"
-                        onChange={handleFileUpload}
-                        className="block w-full text-gray-400 file:py-2 file:px-4 file:mr-4 file:rounded file:border-0 file:bg-blue-600 file:text-white hover:file:bg-blue-500 transition"
-                        accept=".pdf,.doc,.docx,.txt,.xls,.xlsx,.ppt,.pptx"
-                        required
-                      />
+                      <hr className="my-6 border-gray-600 w-full" />
 
-                      <div className="flex justify-between w-full mt-4">
-                        <button
-                          onClick={closeViewModal}
-                          className="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded transition"
-                        >
-                          Cancel
-                        </button>
-                        <button
-                          onClick={() => handleSubmitAssignment()}
-                          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500 transition"
-                          disabled={isUploading}
-                        >
-                          {isUploading ? 'Uploading...' : 'Reupload'}
-                        </button>
+                      <div className="w-full bg-gray-700 p-6 rounded-lg">
+                        <p className="text-gray-300 text-xs text-center mb-4">
+                          Your previous submission is shown above. If you'd like to submit a new file, you can upload it here.
+                          <strong> Reuploading will replace your current submission.</strong>
+                        </p>
+                        <input
+                          type="file"
+                          onChange={handleFileUpload}
+                          className="block w-full text-gray-400 file:py-2 file:px-4 file:mr-4 file:rounded file:border-0 file:bg-blue-600 file:text-white hover:file:bg-blue-500 transition"
+                          accept=".pdf,.doc,.docx,.txt,.xls,.xlsx,.ppt,.pptx"
+                          required
+                        />
+
+                        <div className="flex justify-between w-full mt-4">
+                          <button
+                            onClick={closeViewModal}
+                            className="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded transition"
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            onClick={() => handleSubmitAssignment()}
+                            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500 transition"
+                            disabled={isUploading}
+                          >
+                            {isUploading ? 'Uploading...' : 'Reupload'}
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
+
               )}
               {isModalOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50">
@@ -452,7 +467,7 @@ function AssignmentDetails() {
                       accept=".pdf,.doc,.docx,.txt,.xls,.xlsx,.ppt,.pptx"
                       required
                     />
-                    <div className="flex justify-end">
+                    <div className="flex justify-between mt-4">
                       <button
                         onClick={closeModal}
                         className="mr-2 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition"
@@ -473,43 +488,56 @@ function AssignmentDetails() {
               )}
             </>
           ) : userRole === 'teacher' ? (
-            <div>
-              <div className="grid grid-cols-2 gap-6">
+            <div className="space-y-6">
+              {/* Marks Information */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
                   <p className="text-gray-400 font-medium">Min Marks:</p>
                   <p>
-                    {assignmentDetails.minVal !== undefined ? assignmentDetails.minVal : 'Not graded yet'}
+                    {assignmentDetails.minVal !== undefined
+                      ? assignmentDetails.minVal
+                      : 'Not graded yet'}
                   </p>
                 </div>
                 <div>
                   <p className="text-gray-400 font-medium">Max Marks:</p>
-                  <p>{assignmentDetails.maxVal !== undefined ? assignmentDetails.maxVal : 'Not available'}</p>
+                  <p>
+                    {assignmentDetails.maxVal !== undefined
+                      ? assignmentDetails.maxVal
+                      : 'Not available'}
+                  </p>
                 </div>
               </div>
-              <div>
 
-              </div>
-              <div className='md:flex md:justify-between md:items-center mb-8'>
-                <div className="mt-8 md:text-left">
+              {/* Action Buttons */}
+              <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-6">
+                <div className="flex justify-center md:justify-start">
                   <button
-                    onClick={() => navigate(`/view-submission/${assignmentId}`, { state: { assignment_id: assignmentId } })}
-                    className="px-6 py-2 bg-purple-600 hover:bg-purple-500 text-white font-bold 
-                rounded-lg transition">
+                    onClick={() =>
+                      navigate(`/view-submission/${assignmentId}`, {
+                        state: { assignment_id: assignmentId },
+                      })
+                    }
+                    className="px-6 py-2 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-lg transition"
+                  >
                     View Submissions
                   </button>
                 </div>
-                <div className="mt-8 md:text-right">
+                <div className="flex justify-center md:justify-end">
                   <button
-                    // onClick={() => handleConnection()}
-                    onClick={() => navigate("/check-plagiarism", { state: { assignment_id: assignmentId } })}
-                    className="px-6 py-2 bg-purple-600 hover:bg-purple-500 text-white font-bold 
-                  rounded-lg transition"
+                    onClick={() =>
+                      navigate('/check-plagiarism', {
+                        state: { assignment_id: assignmentId },
+                      })
+                    }
+                    className="px-6 py-2 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-lg transition"
                   >
                     Check for Plagiarism
                   </button>
                 </div>
               </div>
             </div>
+
           ) : null}
 
         </div>
