@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 import { io } from "socket.io-client";
 const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
-const BASE_URL= apiUrl
 
 // Define the store
 export const useStore = create((set,get) => ({
@@ -12,7 +11,7 @@ export const useStore = create((set,get) => ({
   setUserId: (id) => set({ userId: id }), // Action to update the state
   connectSocket: () => {
     if(get().socket?.connected) return;
-    const socket = io(BASE_URL,{
+    const socket = io(apiUrl,{
       query:{
         userId: get().userId,
       },
