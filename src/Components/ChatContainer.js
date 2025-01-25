@@ -84,7 +84,7 @@ function ChatContainer() {
     if (receiverId) {
       fetchReceiverProfile();
     }
-  }, [receiverId]);
+  }, [senderId, receiverId]);
 
   const handleSendMessage = async () => {
     if (newMessage.trim() === '') return;
