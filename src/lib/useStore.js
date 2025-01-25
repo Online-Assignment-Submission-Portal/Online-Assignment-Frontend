@@ -11,11 +11,12 @@ export const useStore = create((set,get) => ({
   setUserId: (id) => set({ userId: id }), // Action to update the state
   connectSocket: () => {
     if(get().socket?.connected) return;
-    const socket = io(apiUrl,{
+    const socket = io(`${apiUrl}`,{
       query:{
         userId: get().userId,
       },
     })
+    // console.log('socket', socket);
     socket.connect()
     set({ socket:socket });
     socket.on("getOnlineUsers", (userIds) => {
@@ -26,5 +27,4 @@ export const useStore = create((set,get) => ({
     if(get().socket?.connected) get().socket.disconnect();
   },
 }));
-
 export default useStore;

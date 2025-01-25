@@ -17,6 +17,7 @@ function ChatContainer() {
   const senderId = location.state?.senderId;
   const receiverId = location.state?.receiverId;
   const userRole = location.state?.userRole;
+  
   console.log("Location State:", location.state);
   const [receiverProfile, setReceiverProfile] = useState({
     name: 'John Doe', // Default placeholder name
@@ -29,7 +30,7 @@ function ChatContainer() {
       const token = document.cookie
         .split('; ')
         .find((row) => row.startsWith('token='))?.split('=')[1]; // Extract the token from cookies
-  
+
       try {
         const response = await axios.get(
           `${apiUrl}/message/get/${receiverId}`,
@@ -39,7 +40,7 @@ function ChatContainer() {
             },
           }
         );
-  
+        console.log('kya bhai:', response);
         setMessages(response.data); // Update the messages state with fetched messages
       } catch (error) {
         console.error('Error fetching messages:', error);
@@ -161,8 +162,11 @@ function ChatContainer() {
     if (!socket) return; // Ensure the socket is available
 
     const handleNewMessage = (newMessage) => {
+      
       // Only update the state if the new message is from the current receiver
       if (newMessage.senderId === receiverId) {
+        console.log('kya be sender:', senderId);
+        console.log('haa tumhi to ho message:', newMessage);
         setMessages((prevMessages) => [...prevMessages, newMessage]);
       }
     };
@@ -209,7 +213,7 @@ function ChatContainer() {
       <div className="flex-grow overflow-y-auto p-4 space-y-4">
         {messages.map((msg) => (
           <div
-            key={msg.id}
+            key={msg._id}
             className={`flex ${
               msg.senderId === senderId ? 'justify-end' : 'justify-start'
             }`}
