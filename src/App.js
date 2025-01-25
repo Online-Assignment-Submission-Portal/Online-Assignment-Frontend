@@ -25,6 +25,7 @@ import CheckPlagiarism from "./Components/CheckPlagiarism";
 import AboutUs from './Components/AboutUs.js';
 import Services from './Components/Services.js';
 import ContactUs from "./Components/ContactUs.js";
+import ChatContainer from "./Components/ChatContainer.js";
 
 const App = () => {
   return (
@@ -53,6 +54,7 @@ const App = () => {
         <Route path="/about" element={<AboutUs />} />
         <Route path="/services" element={<Services />} />
         <Route path="/contact" element={<ContactUs />} />
+        <Route path="/chat-container" element={<ChatContainer />} />
         <Route path="/*" element={<PageNotFound />} />
       </Routes>
     </Router>
