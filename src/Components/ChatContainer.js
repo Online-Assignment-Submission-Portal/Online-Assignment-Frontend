@@ -13,7 +13,7 @@ function ChatContainer() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const {onlineUsers,socket} = useStore()
-
+  const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
   const senderId = location.state?.senderId;
   const receiverId = location.state?.receiverId;
   const userRole = location.state?.userRole;
@@ -32,7 +32,7 @@ function ChatContainer() {
   
       try {
         const response = await axios.get(
-          `http://localhost:8000/message/get/${receiverId}`,
+          `${apiUrl}/message/get/${receiverId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`, // Include token in headers
@@ -62,7 +62,7 @@ function ChatContainer() {
 
       try {
         const response = await axios.get(
-          `http://localhost:8000/user/getProfile/${receiverId}`,
+          `${apiUrl}/user/getProfile/${receiverId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`, // Include token in headers
@@ -111,7 +111,7 @@ function ChatContainer() {
     try {
       // Send the message via the POST request to the backend
       const response = await axios.post(
-        `http://localhost:8000/message/send/${receiverId}`,
+        `${apiUrl}/message/send/${receiverId}`,
         messageObj, // Include `senderId` in the payload
         {
           headers: {
