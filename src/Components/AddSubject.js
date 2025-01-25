@@ -73,6 +73,10 @@ const AddSubject = () => {
         >
           Create
         </button>
+        <button className="w-full bg-blue-600 hover:bg-blue-500 text-white py-2 px-4 rounded-md 
+          font-bold transition mt-5" onClick={() => navigate(-1)}>
+            Back To Dashboard
+        </button>
       </div>
     </div>
   );
