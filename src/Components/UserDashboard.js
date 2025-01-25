@@ -5,6 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import io from "socket.io-client";
 import Footer from './Footer';
+import useStore from "../lib/useStore";
 
 const UserDashboard = () => {
   const { id } = useParams();
@@ -19,6 +20,7 @@ const UserDashboard = () => {
   const [joinMessage, setJoinMessage] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [notification, setNotification] = useState([]);
+  const { disconnectSocket } = useStore();
   const userId = id.toString();
   let userData;
 
@@ -98,6 +100,7 @@ const UserDashboard = () => {
       if (response.status === 200) {
         document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
         toast.success("Logout Successful")
+        disconnectSocket();
         setTimeout(() => navigate(`/signin`), 1500);
         // setTimeout(() => navigate(`/dashboard/${user._id}`), 1500); // Redirect after 2 seconds
 

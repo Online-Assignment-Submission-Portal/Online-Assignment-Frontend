@@ -4,12 +4,14 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Footer from './Footer';
+import useStore from "../lib/useStore";
 
 
 const Signin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const { connectSocket,setUserId } = useStore();
   const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
   const navigate = useNavigate();
 
@@ -26,7 +28,9 @@ const Signin = () => {
         const { token, user } = response.data;
         document.cookie = `token=${token}; path=/`;
         toast.success("Signin successful!");
-        setTimeout(() => navigate(`/dashboard/${user._id}`), 1500); // Redirect after 2 seconds
+        setUserId(user._id);
+        setTimeout(() => {connectSocket();navigate(`/dashboard/${user._id}`)}, 1500); // Redirect after 2 seconds
+        
       }
     } catch (err) {
       toast.error(err.response?.data?.message || "Invalid credentials. Please try again.");

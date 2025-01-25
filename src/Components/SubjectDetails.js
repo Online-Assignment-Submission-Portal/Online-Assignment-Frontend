@@ -34,6 +34,15 @@ function SubjectDetails() {
     if (subject?.assignments) setAssignments(subject.assignments);
   }, [navigate]);
 
+  const navigateToChat = (receiverId) => {
+    navigate('/chat-container', {
+      state: {
+        senderId: userID,
+        receiverId: receiverId
+      }
+    });
+  };
+
   const handleAddStudents = async () => {
     try {
       const token = document.cookie
@@ -168,9 +177,17 @@ function SubjectDetails() {
         </div>
         <div className="mb-6 text-sm sm:text-base">
           <div className="mb-2">
-            <p className="text-gray-300">
+            <p className="text-gray-300 space-x-5">
               Teacher Name:{" "}
               <span className="font-medium text-gray-100">{subject.teacher_name}</span>
+              {userRole === "student" && (
+                <button
+                  onClick={() => navigateToChat(subject.teacher_id)}
+                  className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+                >
+                  Chat with Teacher
+                </button>
+              )}
             </p>
           </div>
           <div className="mb-2">
@@ -220,18 +237,18 @@ function SubjectDetails() {
               <div className="flex justify-between items-center mb-4 gap-2">
                 <h2 className="text-2xl font-semibold text-gray-200">Assignments</h2>
                 <div className="flex gap-2">
-                {userRole === "teacher" && (
-                  <button
-                  onClick={() =>
-                    navigate("/new-assignment", {
-                      state: { subject, userID, userRole, subjectID },
-                    })
-                  }
-                  className="px-4 py-2 text-sm md:px-6 md:py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-500 transition"
-                  >
-                    + New Assignment
-                  </button>
-                )}
+                  {userRole === "teacher" && (
+                    <button
+                      onClick={() =>
+                        navigate("/new-assignment", {
+                          state: { subject, userID, userRole, subjectID },
+                        })
+                      }
+                      className="px-4 py-2 text-sm md:px-6 md:py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-500 transition"
+                    >
+                      + New Assignment
+                    </button>
+                  )}
                 </div>
               </div>
               {assignments.length > 0 ? (
@@ -311,7 +328,14 @@ function SubjectDetails() {
                           <td className="border-b border-gray-600 px-4 py-2 max-w-[150px] overflow-auto scrollbar-none">{student.email}</td>
                           {userRole === "teacher" && (
                             <>
-                              <td className="border-b border-gray-600 px-4 py-2">Chat</td>
+                              <td className="border-b border-gray-600 px-4 py-2">
+                                <button
+                                  onClick={() => navigateToChat(student._id)}
+                                  className="text-blue-500 hover:text-blue-600"
+                                >
+                                  Chat
+                                </button>
+                              </td>
                               <td className="border-b border-gray-600 px-4 py-2">
                                 <button
                                   onClick={() => handleRemoveStudent(student._id, student.email)}
