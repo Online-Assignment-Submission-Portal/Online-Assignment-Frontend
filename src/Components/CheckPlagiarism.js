@@ -275,7 +275,6 @@ function CheckPlagiarism() {
         // console.log(token);
         const response = await axios.post(
           `${apiUrl}/assignment/checkplagiarism/${assignmentId}`,
-          {},
           {
             headers: {
               Authorization: `Bearer ${token}`,
