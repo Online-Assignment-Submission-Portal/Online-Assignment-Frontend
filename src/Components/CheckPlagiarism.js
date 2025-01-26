@@ -300,6 +300,7 @@ function CheckPlagiarism() {
         } else {
           toast.error("Failed to fetch plagiarism data.");
         }
+      }
       } catch (err) {
         setError(err?.response?.data?.message || "An error occurred.");
       } finally {

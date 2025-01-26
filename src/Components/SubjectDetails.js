@@ -9,7 +9,7 @@ function SubjectDetails() {
   const location = useLocation();
   // const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
   const apiUrl = window.location.hostname === 'localhost'
-  ? "http://localhost:8000" : process.env.REACT_APP_BASE_URL;
+    ? "http://localhost:8000" : process.env.REACT_APP_BASE_URL;
   const navigate = useNavigate();
   const subject = location.state?.subject;
   const userID = location.state?.userID;
@@ -144,6 +144,61 @@ function SubjectDetails() {
     toast.success('Student list downloaded successfully!');
   };
 
+  const confirmDeleteSubject = () => {
+    toast(
+      ({ closeToast }) => (
+        <div className="text-gray-800">
+          <p className='font-semibold text-center'>Are you sure you want to delete this subject? This action cannot be undone.</p>
+          <div className="flex justify-between gap-2 mt-4">
+            <button
+              className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition"
+              onClick={closeToast}
+            >
+              Cancel
+            </button>
+            <button
+              className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-500 transition"
+              onClick={() => {
+                handleDeleteSubject();
+                closeToast();
+              }}
+            >
+              Confirm
+            </button>
+          </div>
+        </div>
+      ),
+      { autoClose: false }
+    );
+  };
+
+  const handleDeleteSubject = async () => {
+    try {
+      const token = document.cookie
+        .split('; ')
+        .find((row) => row.startsWith('token='))
+        ?.split('=')[1];
+
+      if (!token) {
+        return navigate('/signin');
+      }
+      const response = await axios.delete(`${apiUrl}/subject/${subjectID}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.data.success) {
+        toast.success('Subject deleted successfully!');
+        navigate(`/dashboard/${userID}`);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error('Error deleting subject.');
+    }
+  };
 
   if (!subject) {
     return (
@@ -170,12 +225,22 @@ function SubjectDetails() {
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-200 text-center w-full sm:w-auto">
             Subject Name: {subject.subject_name}
           </h1>
-          <button
-            onClick={() => navigate(`/dashboard/${userID}`)}
-            className="px-4 py-2 sm:px-6 sm:py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition text-sm sm:text-base w-full sm:w-auto sm:mt-0"
-          >
-            Back to Dashboard
-          </button>
+          <div className="flex gap-4">
+            {userRole === 'teacher' && (
+              <button
+                onClick={confirmDeleteSubject}
+                className="px-4 py-2 sm:px-6 sm:py-2 bg-red-600 hover:bg-red-500 text-white font-bold rounded-lg transition"
+              >
+                Delete Subject
+              </button>
+            )}
+            <button
+              onClick={() => navigate(`/dashboard/${userID}`)}
+              className="px-4 py-2 sm:px-6 sm:py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition"
+            >
+              Back to Dashboard
+            </button>
+          </div>
         </div>
         <div className="mb-6 text-sm sm:text-base">
           <div className="mb-2">
