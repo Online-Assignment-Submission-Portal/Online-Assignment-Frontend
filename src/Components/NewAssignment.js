@@ -10,7 +10,9 @@ function NewAssignment() {
   const subject = location.state?.subject;
   const userID = location.state?.userID;
   const userRole = location.state?.userRole;
-  const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
+  // const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
+  const apiUrl = window.location.hostname === 'localhost'
+  ? "http://localhost:8000" : process.env.REACT_APP_BASE_URL;
   // const subjectID = location.state?.subject.subject_id
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');

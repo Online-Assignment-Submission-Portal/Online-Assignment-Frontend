@@ -9,7 +9,9 @@ import "react-toastify/dist/ReactToastify.css";
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
-  const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
+  // const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
+  const apiUrl = window.location.hostname === 'localhost'
+  ? "http://localhost:8000" : process.env.REACT_APP_BASE_URL;
   const navigate = useNavigate();
 
   const handleEmailSubmit = async (e) => {

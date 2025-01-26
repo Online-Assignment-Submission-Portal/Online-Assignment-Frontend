@@ -8,7 +8,9 @@ import AssignmentDetails from './AssignmentDetails';
 
 function UpdateAssignment() {
   const navigate = useNavigate();
-  const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
+  // const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
+  const apiUrl = window.location.hostname === 'localhost'
+  ? "http://localhost:8000" : process.env.REACT_APP_BASE_URL;
   const location = useLocation();
   const assignmentId = location.state?.assignment_id;
   const assignmentDetails = location.state?.assignment_details;

@@ -11,10 +11,233 @@ function CheckPlagiarism() {
   const location = useLocation();
   const navigate = useNavigate();
   const assignmentId = location.state?.assignment_id;
-
+  // const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000";
+  const apiUrl = window.location.hostname === 'localhost'
+  ? "http://localhost:8000" : "https://online-assignment-portal-backend.onrender.com";
   const [plagiarismData, setPlagiarismData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+
+  // State for column visibility
+  const [columns, setColumns] = useState({
+    semantic: true,
+    fingerprint: true,
+    combined: true,
+  });
+
+  // hardcoded data for testing
+  // useEffect(() => {
+  //   const fetchPlagiarismData = async () => {
+  //     try {
+  //       const token = document.cookie
+  //         .split("; ")
+  //         .find((row) => row.startsWith("token="))
+  //         ?.split("=")[1];
+
+  //       if (!token) {
+  //         toast.error("Please sign in.");
+  //         return navigate("/signin");
+  //       }
+
+  //       const testData = [
+  //         {
+  //           studentId1: {
+  //             id: "S001",
+  //             name: "Student A",
+  //             fileUrl: "http://example.com/fileA.pdf",
+  //           },
+  //           studentId2: {
+  //             id: "S002",
+  //             name: "Student B",
+  //             fileUrl: "http://example.com/fileB.pdf",
+  //           },
+  //           SemanticSimilarity: 45,
+  //           FingerprintSimilarity: 75,
+  //           CombinedSimilarity: 80,
+  //         },
+  //         {
+  //           studentId1: {
+  //             id: "S003",
+  //             name: "Student C",
+  //             fileUrl: "http://example.com/fileC.pdf",
+  //           },
+  //           studentId2: {
+  //             id: "S004",
+  //             name: "Student D",
+  //             fileUrl: "http://example.com/fileD.pdf",
+  //           },
+  //           SemanticSimilarity: 65,
+  //           FingerprintSimilarity: 70,
+  //           CombinedSimilarity: 68,
+  //         },
+  //         {
+  //           studentId1: {
+  //             id: "S005",
+  //             name: "Student E",
+  //             fileUrl: "http://example.com/fileE.pdf",
+  //           },
+  //           studentId2: {
+  //             id: "S006",
+  //             name: "Student F",
+  //             fileUrl: "http://example.com/fileF.pdf",
+  //           },
+  //           SemanticSimilarity: 90,
+  //           FingerprintSimilarity: 85,
+  //           CombinedSimilarity: 88,
+  //         },
+  //         {
+  //           studentId1: {
+  //             id: "S001",
+  //             name: "Student A",
+  //             fileUrl: "http://example.com/fileA.pdf",
+  //           },
+  //           studentId2: {
+  //             id: "S003",
+  //             name: "Student C",
+  //             fileUrl: "http://example.com/fileC.pdf",
+  //           },
+  //           SemanticSimilarity: 50,
+  //           FingerprintSimilarity: 60,
+  //           CombinedSimilarity: 58,
+  //         },
+  //         {
+  //           studentId1: {
+  //             id: "S002",
+  //             name: "Student B",
+  //             fileUrl: "http://example.com/fileB.pdf",
+  //           },
+  //           studentId2: {
+  //             id: "S004",
+  //             name: "Student D",
+  //             fileUrl: "http://example.com/fileD.pdf",
+  //           },
+  //           SemanticSimilarity: 55,
+  //           FingerprintSimilarity: 65,
+  //           CombinedSimilarity: 63,
+  //         },
+  //         {
+  //           studentId1: {
+  //             id: "S005",
+  //             name: "Student E",
+  //             fileUrl: "http://example.com/fileE.pdf",
+  //           },
+  //           studentId2: {
+  //             id: "S001",
+  //             name: "Student A",
+  //             fileUrl: "http://example.com/fileA.pdf",
+  //           },
+  //           SemanticSimilarity: 75,
+  //           FingerprintSimilarity: 80,
+  //           CombinedSimilarity: 78,
+  //         },
+  //         {
+  //           studentId1: {
+  //             id: "S006",
+  //             name: "Student F",
+  //             fileUrl: "http://example.com/fileF.pdf",
+  //           },
+  //           studentId2: {
+  //             id: "S002",
+  //             name: "Student B",
+  //             fileUrl: "http://example.com/fileB.pdf",
+  //           },
+  //           SemanticSimilarity: 40,
+  //           FingerprintSimilarity: 55,
+  //           CombinedSimilarity: 50,
+  //         },
+  //         {
+  //           studentId1: {
+  //             id: "S003",
+  //             name: "Student C",
+  //             fileUrl: "http://example.com/fileC.pdf",
+  //           },
+  //           studentId2: {
+  //             id: "S005",
+  //             name: "Student E",
+  //             fileUrl: "http://example.com/fileE.pdf",
+  //           },
+  //           SemanticSimilarity: 60,
+  //           FingerprintSimilarity: 75,
+  //           CombinedSimilarity: 70,
+  //         },
+  //         {
+  //           studentId1: {
+  //             id: "S004",
+  //             name: "Student D",
+  //             fileUrl: "http://example.com/fileD.pdf",
+  //           },
+  //           studentId2: {
+  //             id: "S006",
+  //             name: "Student F",
+  //             fileUrl: "http://example.com/fileF.pdf",
+  //           },
+  //           SemanticSimilarity: 85,
+  //           FingerprintSimilarity: 90,
+  //           CombinedSimilarity: 88,
+  //         },
+  //         {
+  //           studentId1: {
+  //             id: "S001",
+  //             name: "Student A",
+  //             fileUrl: "http://example.com/fileA.pdf",
+  //           },
+  //           studentId2: {
+  //             id: "S004",
+  //             name: "Student D",
+  //             fileUrl: "http://example.com/fileD.pdf",
+  //           },
+  //           SemanticSimilarity: 70,
+  //           FingerprintSimilarity: 65,
+  //           CombinedSimilarity: 68,
+  //         },
+  //         {
+  //           studentId1: {
+  //             id: "S003",
+  //             name: "Student C",
+  //             fileUrl: "http://example.com/fileC.pdf",
+  //           },
+  //           studentId2: {
+  //             id: "S006",
+  //             name: "Student F",
+  //             fileUrl: "http://example.com/fileF.pdf",
+  //           },
+  //           SemanticSimilarity: 55,
+  //           FingerprintSimilarity: 50,
+  //           CombinedSimilarity: 53,
+  //         },
+  //         {
+  //           studentId1: {
+  //             id: "S002",
+  //             name: "Student B",
+  //             fileUrl: "http://example.com/fileB.pdf",
+  //           },
+  //           studentId2: {
+  //             id: "S005",
+  //             name: "Student E",
+  //             fileUrl: "http://example.com/fileE.pdf",
+  //           },
+  //           SemanticSimilarity: 72,
+  //           FingerprintSimilarity: 78,
+  //           CombinedSimilarity: 75,
+  //         },
+  //       ];
+
+
+
+  //       setPlagiarismData(testData);
+  //       toast.success("Test plagiarism data loaded successfully.");
+  //     } catch (err) {
+  //       setError("An error occurred while loading test data.");
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchPlagiarismData();
+  // }, [navigate]);
+
+//   useEffect(() => {
 
   useEffect(() => {
 
@@ -37,6 +260,7 @@ function CheckPlagiarism() {
     // setLoading(false);
     // testing end
 
+
     const fetchPlagiarismData = async () => {
       try {
         const token = document.cookie
@@ -50,7 +274,11 @@ function CheckPlagiarism() {
         }
 
         const response = await axios.post(
+
+          `${apiUrl}/assignment/checkplagiarism/${assignmentId}`,
+
           `http://localhost:8000/assignment/checkplagiarism/${assignmentId}`,
+
           {},
           {
             headers: {
@@ -59,9 +287,16 @@ function CheckPlagiarism() {
           }
         );
 
+        console.log(response);
+        if (response.data.success) {
+          // setPlagiarismData(response.data.mlResponse.results);
+          // toast.success("Plagiarism data fetched successfully.");
+
+
         if (response.data.success) {
           setPlagiarismData(response.data.results);
           toast.success("Plagiarism data fetched successfully.");
+
         } else {
           toast.error("Failed to fetch plagiarism data.");
         }

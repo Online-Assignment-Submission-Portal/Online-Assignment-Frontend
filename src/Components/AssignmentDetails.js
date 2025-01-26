@@ -22,7 +22,9 @@ function AssignmentDetails() {
   const [isUploading, setIsUploading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [file, setFile] = useState(null);
-  const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
+  // const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
+  const apiUrl = window.location.hostname === 'localhost'
+  ? "http://localhost:8000" : process.env.REACT_APP_BASE_URL;
   const [submission, setSubmission] = useState(null);
   const [isSubmissionModalOpen, setIsSubmissionModalOpen] = useState(false);
   const [submit, setSubmit] = useState(false);

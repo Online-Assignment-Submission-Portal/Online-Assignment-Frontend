@@ -7,7 +7,9 @@ import * as XLSX from 'xlsx'; // Import XLSX for Excel export
 
 function SubjectDetails() {
   const location = useLocation();
-  const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
+  // const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
+  const apiUrl = window.location.hostname === 'localhost'
+  ? "http://localhost:8000" : process.env.REACT_APP_BASE_URL;
   const navigate = useNavigate();
   const subject = location.state?.subject;
   const userID = location.state?.userID;
