@@ -262,19 +262,21 @@ function CheckPlagiarism() {
     useEffect(() => {
 
     const fetchPlagiarismData = async () => {
-      const token = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("token="))
-        ?.split("=")[1];
-        
+      
+      try {
+        // Extract the token safely from cookies
+        const token = document.cookie
+          .split("; ")
+          .find((row) => row.startsWith("token="))
+          ?.split("=")[1];
+
         if (!token) {
-          toast.error("Please sign in.");
+          toast.error("Authentication token is missing. Please sign in.");
           return navigate("/signin");
         }
-      try {
-        // console.log(token);
+
         const response = await axios.post(
-          `${apiUrl}/assignment/checkplagiarism/${assignmentId}`,
+          `${apiUrl}/checkplagiarism/${assignmentId}`,
           {},
           {
             headers: {
@@ -283,7 +285,6 @@ function CheckPlagiarism() {
           }
         );
 
-        console.log(response);
         if (response.data.success) {
           setPlagiarismData(response.data.mlResponse.results);
           // toast.success("Plagiarism data fetched successfully.");
