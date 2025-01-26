@@ -290,11 +290,12 @@ function CheckPlagiarism() {
           toast.error("Failed to fetch plagiarism data.");
         }
       }
-      } catch (err) {
+       catch (err) {
         setError(err?.response?.data?.message || "An error occurred.");
-      } finally {
+    } finally {
         setLoading(false);
       }
+    }
    
     }
     fetchPlagiarismData();
