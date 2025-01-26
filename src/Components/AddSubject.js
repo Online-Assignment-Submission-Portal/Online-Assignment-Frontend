@@ -8,7 +8,9 @@ const AddSubject = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const teacherId = location.state?.teacherId || null; // Retrieve the teacherId from state
-  const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
+  // const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
+  const apiUrl = window.location.hostname === 'localhost'
+  ? "http://localhost:8000" : process.env.REACT_APP_BASE_URL;
   const [subjectName, setSubjectName] = useState("");
   const [error, setError] = useState("");
 
