@@ -240,24 +240,7 @@ function CheckPlagiarism() {
 //   useEffect(() => {
 
   
-  // testing
-  // const testdata = [
-    //   { "Assignment 1": "http://example.com/file1.pdf", "Assignment 2": "http://example.com/file2.docx", "Similarity (%)": 85.34 },
-    //   { "Assignment 1": "http://example.com/file1.pdf", "Assignment 2": "http://example.com/file2.docx", "Similarity (%)": 85.34 },
-    //   { "Assignment 1": "http://example.com/file1.pdf", "Assignment 2": "http://example.com/file2.docx", "Similarity (%)": 85.34 },
-    //   { "Assignment 1": "http://example.com/file1.pdf", "Assignment 2": "http://example.com/file2.docx", "Similarity (%)": 85.34 },
-    //   { "Assignment 1": "http://example.com/file1.pdf", "Assignment 2": "http://example.com/file2.docx", "Similarity (%)": 85.34 },
-    //   { "Assignment 1": "http://example.com/file1.pdf", "Assignment 2": "http://example.com/file2.docx", "Similarity (%)": 85.34 },
-    //   { "Assignment 1": "http://example.com/file1.pdf", "Assignment 2": "http://example.com/file2.docx", "Similarity (%)": 85.34 },
-    //   { "Assignment 1": "http://example.com/file3.pptx", "Assignment 2": "http://example.com/file4.pdf", "Similarity (%)": 72.45 },
-    //   { "Assignment 1": "http://example.com/file5.pdf", "Assignment 2": "http://example.com/file6.docx", "Similarity (%)": 65.12 },
-    //   { "Assignment 1": "http://example.com/file7.pptx", "Assignment 2": "http://example.com/file8.docx", "Similarity (%)": 45.23 },
-    //   { "Assignment 1": "http://example.com/file9.pdf", "Assignment 2": "http://example.com/file10.pptx", "Similarity (%)": 95.67 },
-    //   { "Assignment 1": "http://example.com/file11.docx", "Assignment 2": "http://example.com/file12.pdf", "Similarity (%)": 33.89 },
-    // ];
-    // setPlagiarismData(testdata);      
-    // setLoading(false);
-    // testing end
+
     
     useEffect(() => {
 
@@ -299,7 +282,7 @@ function CheckPlagiarism() {
       }
     }
    
-    }
+    
     fetchPlagiarismData();
   }, [assignmentId, navigate]);
 
