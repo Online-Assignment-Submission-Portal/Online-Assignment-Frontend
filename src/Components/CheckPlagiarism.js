@@ -262,19 +262,20 @@ function CheckPlagiarism() {
     useEffect(() => {
 
     const fetchPlagiarismData = async () => {
-      try {
-        const token = document.cookie
-          .split("; ")
-          .find((row) => row.startsWith("token="))
-          ?.split("=")[1];
-
+      const token = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("token="))
+        ?.split("=")[1];
+        
         if (!token) {
           toast.error("Please sign in.");
           return navigate("/signin");
         }
+      try {
         // console.log(token);
         const response = await axios.post(
           `${apiUrl}/assignment/checkplagiarism/${assignmentId}`,
+          {},
           {
             headers: {
               Authorization: `Bearer ${token}`,
