@@ -189,9 +189,9 @@ function SubjectDetails() {
         },
       });
 
-      toast.success('Subject deleted successfully!');
-      navigate(`/dashboard/${userID}`);
       if (response.data.success) {
+        toast.success('Subject deleted successfully!');
+        navigate(`/dashboard/${userID}`);
       } else {
         toast.error(response.data.message);
       }
