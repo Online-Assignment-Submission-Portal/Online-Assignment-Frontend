@@ -24,7 +24,41 @@ function CheckPlagiarism() {
     combined: true,
   });
 
-  // hardcoded data for testing
+//   // hardcoded data for testing
+//   useEffect(() => {
+//     const fetchPlagiarismData = async () => {
+//       try {
+//         const token = document.cookie
+//           .split("; ")
+//           .find((row) => row.startsWith("token="))
+//           ?.split("=")[1];
+
+//         if (!token) {
+//           toast.error("Please sign in.");
+//           return navigate("/signin");
+//         }
+//           // Input data
+// const testdata = [
+//   { "Assignment 1": "file1.pdf", "Assignment 2": "file2.docx", "Similarity (%)": 85.34 },
+//   { "Assignment 1": "file1.pdf", "Assignment 2": "file3.pptx", "Similarity (%)": 72.45 },
+//   { "Assignment 1": "file2.docx", "Assignment 2": "file3.pptx", "Similarity (%)": 65.12 },
+// ];
+
+        
+
+
+//         setPlagiarismData(testdata);
+//         toast.success("Test plagiarism data loaded successfully.");
+//       } catch (err) {
+//         setError("An error occurred while loading test data.");
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchPlagiarismData();
+//   }, [navigate]);
+
   useEffect(() => {
     const fetchPlagiarismData = async () => {
       try {
@@ -38,241 +72,31 @@ function CheckPlagiarism() {
           return navigate("/signin");
         }
 
-        const testData = [
+        const response = await axios.post(
+          `http://localhost:8000/assignment/checkplagiarism/${assignmentId}`,
+          {},
           {
-            studentId1: {
-              id: "S001",
-              name: "Student A",
-              fileUrl: "http://example.com/fileA.pdf",
+            headers: {
+              Authorization: `Bearer ${token}`,
             },
-            studentId2: {
-              id: "S002",
-              name: "Student B",
-              fileUrl: "http://example.com/fileB.pdf",
-            },
-            SemanticSimilarity: 45,
-            FingerprintSimilarity: 75,
-            CombinedSimilarity: 80,
-          },
-          {
-            studentId1: {
-              id: "S003",
-              name: "Student C",
-              fileUrl: "http://example.com/fileC.pdf",
-            },
-            studentId2: {
-              id: "S004",
-              name: "Student D",
-              fileUrl: "http://example.com/fileD.pdf",
-            },
-            SemanticSimilarity: 65,
-            FingerprintSimilarity: 70,
-            CombinedSimilarity: 68,
-          },
-          {
-            studentId1: {
-              id: "S005",
-              name: "Student E",
-              fileUrl: "http://example.com/fileE.pdf",
-            },
-            studentId2: {
-              id: "S006",
-              name: "Student F",
-              fileUrl: "http://example.com/fileF.pdf",
-            },
-            SemanticSimilarity: 90,
-            FingerprintSimilarity: 85,
-            CombinedSimilarity: 88,
-          },
-          {
-            studentId1: {
-              id: "S001",
-              name: "Student A",
-              fileUrl: "http://example.com/fileA.pdf",
-            },
-            studentId2: {
-              id: "S003",
-              name: "Student C",
-              fileUrl: "http://example.com/fileC.pdf",
-            },
-            SemanticSimilarity: 50,
-            FingerprintSimilarity: 60,
-            CombinedSimilarity: 58,
-          },
-          {
-            studentId1: {
-              id: "S002",
-              name: "Student B",
-              fileUrl: "http://example.com/fileB.pdf",
-            },
-            studentId2: {
-              id: "S004",
-              name: "Student D",
-              fileUrl: "http://example.com/fileD.pdf",
-            },
-            SemanticSimilarity: 55,
-            FingerprintSimilarity: 65,
-            CombinedSimilarity: 63,
-          },
-          {
-            studentId1: {
-              id: "S005",
-              name: "Student E",
-              fileUrl: "http://example.com/fileE.pdf",
-            },
-            studentId2: {
-              id: "S001",
-              name: "Student A",
-              fileUrl: "http://example.com/fileA.pdf",
-            },
-            SemanticSimilarity: 75,
-            FingerprintSimilarity: 80,
-            CombinedSimilarity: 78,
-          },
-          {
-            studentId1: {
-              id: "S006",
-              name: "Student F",
-              fileUrl: "http://example.com/fileF.pdf",
-            },
-            studentId2: {
-              id: "S002",
-              name: "Student B",
-              fileUrl: "http://example.com/fileB.pdf",
-            },
-            SemanticSimilarity: 40,
-            FingerprintSimilarity: 55,
-            CombinedSimilarity: 50,
-          },
-          {
-            studentId1: {
-              id: "S003",
-              name: "Student C",
-              fileUrl: "http://example.com/fileC.pdf",
-            },
-            studentId2: {
-              id: "S005",
-              name: "Student E",
-              fileUrl: "http://example.com/fileE.pdf",
-            },
-            SemanticSimilarity: 60,
-            FingerprintSimilarity: 75,
-            CombinedSimilarity: 70,
-          },
-          {
-            studentId1: {
-              id: "S004",
-              name: "Student D",
-              fileUrl: "http://example.com/fileD.pdf",
-            },
-            studentId2: {
-              id: "S006",
-              name: "Student F",
-              fileUrl: "http://example.com/fileF.pdf",
-            },
-            SemanticSimilarity: 85,
-            FingerprintSimilarity: 90,
-            CombinedSimilarity: 88,
-          },
-          {
-            studentId1: {
-              id: "S001",
-              name: "Student A",
-              fileUrl: "http://example.com/fileA.pdf",
-            },
-            studentId2: {
-              id: "S004",
-              name: "Student D",
-              fileUrl: "http://example.com/fileD.pdf",
-            },
-            SemanticSimilarity: 70,
-            FingerprintSimilarity: 65,
-            CombinedSimilarity: 68,
-          },
-          {
-            studentId1: {
-              id: "S003",
-              name: "Student C",
-              fileUrl: "http://example.com/fileC.pdf",
-            },
-            studentId2: {
-              id: "S006",
-              name: "Student F",
-              fileUrl: "http://example.com/fileF.pdf",
-            },
-            SemanticSimilarity: 55,
-            FingerprintSimilarity: 50,
-            CombinedSimilarity: 53,
-          },
-          {
-            studentId1: {
-              id: "S002",
-              name: "Student B",
-              fileUrl: "http://example.com/fileB.pdf",
-            },
-            studentId2: {
-              id: "S005",
-              name: "Student E",
-              fileUrl: "http://example.com/fileE.pdf",
-            },
-            SemanticSimilarity: 72,
-            FingerprintSimilarity: 78,
-            CombinedSimilarity: 75,
-          },
-        ];
+          }
+        );
 
-
-
-        setPlagiarismData(testData);
-        toast.success("Test plagiarism data loaded successfully.");
+        if (response.data.success) {
+          setPlagiarismData(response.data.mlResponse.results);
+          toast.success("Plagiarism data fetched successfully.");
+        } else {
+          toast.error("Failed to fetch plagiarism data.");
+        }
       } catch (err) {
-        setError("An error occurred while loading test data.");
+        setError(err?.response?.data?.message || "An error occurred.");
       } finally {
         setLoading(false);
       }
     };
 
     fetchPlagiarismData();
-  }, [navigate]);
-
-  // useEffect(() => {
-  //   const fetchPlagiarismData = async () => {
-  //     try {
-  //       const token = document.cookie
-  //         .split("; ")
-  //         .find((row) => row.startsWith("token="))
-  //         ?.split("=")[1];
-
-  //       if (!token) {
-  //         toast.error("Please sign in.");
-  //         return navigate("/signin");
-  //       }
-
-  //       const response = await axios.post(
-  //         `http://localhost:8000/assignment/checkplagiarism/${assignmentId}`,
-  //         {},
-  //         {
-  //           headers: {
-  //             Authorization: `Bearer ${token}`,
-  //           },
-  //         }
-  //       );
-
-  //       if (response.data.success) {
-  //         setPlagiarismData(response.data.mlResponse.results);
-  //         toast.success("Plagiarism data fetched successfully.");
-  //       } else {
-  //         toast.error("Failed to fetch plagiarism data.");
-  //       }
-  //     } catch (err) {
-  //       setError(err?.response?.data?.message || "An error occurred.");
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchPlagiarismData();
-  // }, [assignmentId, navigate]);
+  }, [assignmentId, navigate]);
 
   if (loading) {
     return <Loding />;
@@ -293,51 +117,79 @@ function CheckPlagiarism() {
     }));
   };
 
-  // Aggregate data into ranges
-  const ranges = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
-  const aggregateCounts = (key) => {
-    return ranges.slice(0, -1).map((rangeStart, index) => {
-      const rangeEnd = ranges[index + 1];
-      return plagiarismData.filter(
-        (entry) => entry[key] >= rangeStart && entry[key] < rangeEnd
-      ).length;
-    });
-  };
 
-  // Prepare chart data
-  const chartData = {
-    labels: ranges.slice(0, -1).map(
-      (rangeStart, index) => `${rangeStart}-${ranges[index + 1] - 1}%`
-    ),
-    datasets: [
-      {
-        label: "Semantic Similarity",
-        data: aggregateCounts("SemanticSimilarity"),
-        backgroundColor: "rgba(255, 0, 0, 1)",
-        borderColor: "rgba(255, 0, 0)",
-        borderWidth: 5,
-      },
-      {
-        label: "Fingerprint Similarity",
-        data: aggregateCounts("FingerprintSimilarity"),
-        backgroundColor: "rgba(110, 44, 242, 1)",
-        borderColor: "rgb(110, 44, 242)",
-        borderWidth: 5,
-      },
-      {
-        label: "Combined Similarity",
-        data: aggregateCounts("CombinedSimilarity"),
-        backgroundColor: "rgba(46, 243, 56, 1)",
-        borderColor: "rgb(46, 243, 56)",
-        borderWidth: 5,
-      },
-    ],
-  };
+
+
+// Ranges for similarity
+const ranges = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+
+// Function to aggregate similarity counts into ranges
+const aggregateCounts = () => {
+  return ranges.slice(0, -1).map((rangeStart, index) => {
+    const rangeEnd = ranges[index + 1];
+    return plagiarismData.filter(
+      (entry) =>
+        entry["Similarity (%)"] >= rangeStart && entry["Similarity (%)"] < rangeEnd
+    ).length;
+  });
+};
+
+// Prepare chart data
+const chartData = {
+  labels: ranges.slice(0, -1).map(
+    (rangeStart, index) => `${rangeStart}-${ranges[index + 1] - 1}%`
+  ),
+  datasets: [
+    {
+      label: "Similarity Distribution",
+      data: aggregateCounts(),
+      backgroundColor: "rgba(75, 192, 192, 0.6)",
+      borderColor: "rgba(75, 192, 192, 1)",
+      borderWidth: 2,
+    },
+  ],
+};
 
   return (
+    
 
     <div className="min-h-screen bg-gray-900 text-gray-200 py-4 sm:py-8">
       <ToastContainer position="top-center" autoClose={1500} />
+
+      <div className="container mx-auto mb-4 sm:mb-8 bg-gray-300 rounded-md overflow-hidden">
+    <div className="h-[250px] sm:h-[300px] md:h-[400px] lg:h-[500px] w-full">
+      <Bar
+        data={chartData}
+        options={{
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: "top" },
+            title: {
+              display: true,
+              text: "Plagiarism Similarity Distribution",
+            },
+          },
+          scales: {
+            x: {
+              title: {
+                display: true,
+                text: "Similarity Percentage",
+                font: { size: 14 },
+              },
+            },
+            y: {
+              title: {
+                display: true,
+                text: "Number of Comparisons",
+                font: { size: 14 },
+              },
+            },
+          },
+        }}
+      />
+    </div>
+  </div>
 
       <div className="container mx-auto bg-gray-800 p-4 sm:p-8 rounded-lg shadow-lg md:max-w-6xl">
         <div className="flex flex-col sm:flex-row justify-between items-center mb-4 sm:mb-8">
