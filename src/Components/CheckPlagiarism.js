@@ -455,7 +455,7 @@ function CheckPlagiarism() {
                       className="px-2 sm:px-4 py-2 border border-gray-600"
                       title={`${entry["Similarity (%)"]}% similarity between the assignments.`}
                     >
-                      {entry["Similarity (%)"].toFixed(2)}%
+                      {/* {entry["Similarity (%)"].toFixed(2)}% */}
                     </td>
                   </tr>
                 ))
