@@ -13,7 +13,7 @@ function CheckPlagiarism() {
   const assignmentId = location.state?.assignment_id;
   // const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000";
   const apiUrl = window.location.hostname === 'localhost'
-  ? "http://localhost:8000" : "https://online-assignment-portal-backend.onrender.com";
+  ? "http://localhost:8000" : process.env.REACT_APP_BASE_URL;
   const [plagiarismData, setPlagiarismData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -239,10 +239,9 @@ function CheckPlagiarism() {
 
 //   useEffect(() => {
 
-  useEffect(() => {
-
-    // testing
-    // const testdata = [
+  
+  // testing
+  // const testdata = [
     //   { "Assignment 1": "http://example.com/file1.pdf", "Assignment 2": "http://example.com/file2.docx", "Similarity (%)": 85.34 },
     //   { "Assignment 1": "http://example.com/file1.pdf", "Assignment 2": "http://example.com/file2.docx", "Similarity (%)": 85.34 },
     //   { "Assignment 1": "http://example.com/file1.pdf", "Assignment 2": "http://example.com/file2.docx", "Similarity (%)": 85.34 },
@@ -259,7 +258,8 @@ function CheckPlagiarism() {
     // setPlagiarismData(testdata);      
     // setLoading(false);
     // testing end
-
+    
+    useEffect(() => {
 
     const fetchPlagiarismData = async () => {
       try {
@@ -272,13 +272,9 @@ function CheckPlagiarism() {
           toast.error("Please sign in.");
           return navigate("/signin");
         }
-
+        // console.log(token);
         const response = await axios.post(
-
           `${apiUrl}/assignment/checkplagiarism/${assignmentId}`,
-
-          `http://localhost:8000/assignment/checkplagiarism/${assignmentId}`,
-
           {},
           {
             headers: {
@@ -289,14 +285,8 @@ function CheckPlagiarism() {
 
         console.log(response);
         if (response.data.success) {
-          // setPlagiarismData(response.data.mlResponse.results);
+          setPlagiarismData(response.data.mlResponse.results);
           // toast.success("Plagiarism data fetched successfully.");
-
-
-        if (response.data.success) {
-          setPlagiarismData(response.data.results);
-          toast.success("Plagiarism data fetched successfully.");
-
         } else {
           toast.error("Failed to fetch plagiarism data.");
         }
@@ -305,8 +295,8 @@ function CheckPlagiarism() {
       } finally {
         setLoading(false);
       }
-    };
-
+   
+    }
     fetchPlagiarismData();
   }, [assignmentId, navigate]);
 
