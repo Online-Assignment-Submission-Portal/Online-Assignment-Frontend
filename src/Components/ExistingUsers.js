@@ -11,7 +11,7 @@ const ExistingUsers = () => {
   const [error, setError] = useState("");
   // const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
   const apiUrl = window.location.hostname === 'localhost'
-  ? "http://localhost:8000" : process.env.REACT_APP_BASE_URL;
+    ? "http://localhost:8000" : process.env.REACT_APP_BASE_URL;
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const navigate = useNavigate();
@@ -106,22 +106,22 @@ const ExistingUsers = () => {
         .split("; ")
         .find((row) => row.startsWith("adminToken="))
         ?.split("=")[1];
-        if (!token) {
-          toast.error("Unauthorized access. Please log in.");
-          return;
-        }
+      if (!token) {
+        toast.error("Unauthorized access. Please log in.");
+        return;
+      }
 
-        const response = await axios.get(
-          `${apiUrl}/admin/user/${userId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+      const response = await axios.get(
+        `${apiUrl}/admin/user/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (response.data.success) {
-        navigate(`/profile/${userId}`, { state: { profile: response.data, userID: userId, userRole : 'admin' } });
+        navigate(`/profile/${userId}`, { state: { profile: response.data, userID: userId, userRole: 'admin' } });
       } else {
         toast.error("Failed to fetch profile data.");
       }
@@ -206,7 +206,7 @@ const ExistingUsers = () => {
     <div className="sm:w-full min-h-screen bg-gray-900 text-white lg:flex lg:flex-col lg:items-center py-10">
       <ToastContainer position="top-center" autoClose={1500} />
       <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full w-4/5 mx-auto">
-        <div className="flex flex-col sm:flex-row justify-between mb-4">
+        <div className="flex flex-row justify-between mb-4 font-semibold">
           <button
             onClick={() => navigate("/admin-dashboard")}
             className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-500 transition mb-2 sm:mb-0"
@@ -215,52 +215,52 @@ const ExistingUsers = () => {
           </button>
           <button
             onClick={handleLogout}
-            className="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-rose-500 transition"
+            className="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-rose-500 transition mb-2 sm:mb-0"
           >
             Logout
           </button>
         </div>
-        
 
-       {/* Search bar */}
-      <div className="mb-6 w-full max-w-md mx-auto relative">
-        <form onSubmit={handleSearchSubmit} className="relative">
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={handleSearchInputChange}
-            className="w-full p-2 rounded-md bg-gray-700 text-white focus:outline-none focus:ring focus:border-blue-300"
-            placeholder="Search by email..."
-          />
-          {suggestions.length > 0 && (
-            <ul className="absolute top-12 left-0 w-full bg-white text-black rounded-md shadow-lg z-10">
-              {suggestions.map(user => (
-                <li
-                  key={user._id}
-                  className="px-4 py-2 hover:bg-gray-300 cursor-pointer"
-                  onClick={() => handleViewUser(user._id)}
-                >
-                  {user.email}
-                </li>
-              ))}
-            </ul>
-          )}
-        </form>
-      </div>
+
+        {/* Search bar */}
+        <div className="mb-6 w-full max-w-md mx-auto relative">
+          <form onSubmit={handleSearchSubmit} className="relative">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={handleSearchInputChange}
+              className="w-full p-2 rounded-md bg-gray-700 text-white focus:outline-none focus:ring focus:border-blue-300"
+              placeholder="Search by email..."
+            />
+            {suggestions.length > 0 && (
+              <ul className="absolute top-12 left-0 w-full bg-white text-black rounded-md shadow-lg z-10">
+                {suggestions.map(user => (
+                  <li
+                    key={user._id}
+                    className="px-4 py-2 hover:bg-gray-300 cursor-pointer"
+                    onClick={() => handleViewUser(user._id)}
+                  >
+                    {user.email}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </form>
+        </div>
 
 
         <h2 className="text-3xl font-bold text-center mb-6">Existing Users</h2>
 
         <div className="sm:w-full lg:flex lg:justify-between mb-8">
-          <div className="sm:mt-4 md:mt-4 lg:w-[45%] justify-between items-center h-96 overflow-y-scroll scrollbar-none lg:pt-2">
-            <div className="flex justify-between">
-            <h3 className="text-xl font-bold mb-4">Students</h3>
-            <button
-          onClick={handleDownloadStudentsExcel}
-          className="mb-4 mr-3 bg-gray-300 text-gray-800 py-2 px-4 rounded-md hover:bg-green-500 font-semibold hover:scale-[103%] transition-transform"
-        >
-          Download Students List
-        </button>
+          <div className="sm:mt-4 md:mt-4 lg:w-[45%] justify-between items-center h-96 overflow-y-scroll scrollbar-none lg:pt-2 mb-6">
+            <div className="flex justify-between gap-4">
+              <h3 className="text-xl font-bold mb-4">Students</h3>
+              <button
+                onClick={handleDownloadStudentsExcel}
+                className="mb-4 mr-3 bg-gray-300 text-gray-800 py-2 px-4 rounded-md hover:bg-green-500 font-semibold hover:scale-[103%] transition-transform"
+              >
+                Download Students List
+              </button>
             </div>
             {students.length === 0 ? (
               <p className="text-center">No students found.</p>
@@ -305,15 +305,15 @@ const ExistingUsers = () => {
             )}
           </div>
 
-          <div className="sm:mt-4 md:mt-4 lg:w-[45%] justify-between items-center h-96 overflow-y-scroll scrollbar-none lg:pt-2">
-          <div className="flex justify-between">
-            <h3 className="text-xl font-bold mb-4">Teachers</h3>
-            <button
-          onClick={handleDownloadTeachersExcel}
-          className="mb-4 mr-3 bg-gray-300 text-gray-800 py-2 px-4 rounded-md hover:bg-green-500 font-semibold hover:scale-[103%] transition-transform"
-        >
-          Download Teachers List
-        </button>
+          <div className="sm:mt-4 md:mt-4 lg:w-[45%] justify-between items-center h-96 overflow-y-scroll scrollbar-none lg:pt-2 mb-6">
+            <div className="flex justify-between gap-4">
+              <h3 className="text-xl font-bold mb-4">Teachers</h3>
+              <button
+                onClick={handleDownloadTeachersExcel}
+                className="mb-4 mr-3 bg-gray-300 text-gray-800 py-2 px-4 rounded-md hover:bg-green-500 font-semibold hover:scale-[103%] transition-transform"
+              >
+                Download Teachers List
+              </button>
             </div>
             {teachers.length === 0 ? (
               <p className="text-center">No teachers found.</p>
@@ -359,7 +359,7 @@ const ExistingUsers = () => {
           </div>
         </div>
 
-        
+
       </div>
     </div>
   );
