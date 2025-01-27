@@ -11,6 +11,7 @@ function ChatContainer() {
   const location = useLocation();
   const navigate = useNavigate();
   const [messages, setMessages] = useState([]);
+  const [selectedMessageId, setSelectedMessageId] = useState(null);
   const [newMessage, setNewMessage] = useState('');
   const {onlineUsers,socket,connectSocket} = useStore()
   console.log(onlineUsers);
@@ -28,6 +29,11 @@ function ChatContainer() {
     status: 'Offline', // Default status
   });
 
+
+  const handleSelectMessage = (messageId) => {
+    setSelectedMessageId(messageId); // Store the selected message ID in state
+  };
+  
   useEffect(() => {
     if (receiverId) {
       const isOnline = onlineUsers.includes(receiverId);
@@ -54,7 +60,7 @@ function ChatContainer() {
             },
           }
         );
-        console.log('kya bhai:', response);
+      // console.log('kya bhai:', response);
         setMessages(response.data); // Update the messages state with fetched messages
       } catch (error) {
         console.error('Error fetching messages:', error);
@@ -146,7 +152,33 @@ function ChatContainer() {
     }
   };
 
- 
+
+  const handleDeleteMessage = async (messageId) => {
+    const token = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("token="))
+      ?.split("=")[1];
+  
+    if (!token) {
+      console.error("Authorization token is missing.");
+      return;
+    }
+  
+    try {
+      await axios.delete(`${apiUrl}/message/delete/${messageId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Ensure the token is included here
+        },
+      });
+  
+      // Update the UI by filtering out the deleted message
+      setMessages((prevMessages) => prevMessages.filter((msg) => msg._id !== messageId));
+      setSelectedMessageId(null); // Clear the selected message ID
+    } catch (error) {
+      console.error("Error deleting message:", error.response || error.message);
+    }
+  };
+   
 
 
   useEffect(() => {
@@ -210,21 +242,34 @@ function ChatContainer() {
             }`}
           >
             <div
-              className={`max-w-[70%] p-3 rounded-lg ${
+              onClick={() => handleSelectMessage(msg._id)} // Handle message selection
+              className={`relative max-w-[70%] p-3 rounded-lg cursor-pointer ${
                 msg.senderId === senderId
                   ? 'bg-blue-600 text-white'
                   : 'bg-gray-700 text-white'
-              }`}
+              } ${selectedMessageId === msg._id ? 'ring-2 ring-red-500' : ''}`}
             >
               {msg.text}
               <div className="text-xs text-gray-300 text-right mt-1">
               {msg.date || msg.createdAt
-            ? new Date(msg.date || msg.createdAt).toLocaleTimeString([], {
+            ? new Date(msg.date || msg.createdAt).toLocaleString([], {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
                 hour: '2-digit',
                 minute: '2-digit',
               })
             : 'No Date Available'}
               </div>
+               {/* Add Delete Button */}
+        {selectedMessageId === msg._id && (
+      <button
+        onClick={() => handleDeleteMessage(msg._id)}
+        className="absolute top-2 right-2 text-sm text-white bg-red-600 p-1 rounded-full hover:bg-red-700"
+      >
+        Delete
+      </button>
+    )}
             </div>
           </div>
         ))}
