@@ -12,7 +12,8 @@ function ChatContainer() {
   const navigate = useNavigate();
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
-  const {onlineUsers,socket} = useStore()
+  const {onlineUsers,socket,connectSocket} = useStore()
+  console.log(onlineUsers);
   // const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
   const apiUrl = window.location.hostname === 'localhost'
   ? "http://localhost:8000" : process.env.REACT_APP_BASE_URL;
@@ -26,6 +27,17 @@ function ChatContainer() {
     avatar: null, // Default avatar
     status: 'Offline', // Default status
   });
+
+  useEffect(() => {
+    if (receiverId) {
+      const isOnline = onlineUsers.includes(receiverId);
+      console.log(isOnline)
+      setReceiverProfile((prevProfile) => ({
+        ...prevProfile,
+        status: isOnline ? 'Online' : 'Offline',
+      }));
+    }
+  }, [onlineUsers, receiverId]);
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -54,8 +66,15 @@ function ChatContainer() {
       fetchMessages();
     }
   }, [receiverId]);
-  
-  
+
+  useEffect(() => {
+    if(!socket)
+      return;
+    socket.onclose = () => {
+      console.log("WebSocket disconnected, attempting to reconnect...");
+      setTimeout(connectSocket, 1000); // Retry connection after 1 second
+    };
+  },[socket])
   // Fetch receiver's profile on component mount
   useEffect(() => {
     const fetchReceiverProfile = async () => {
@@ -72,13 +91,15 @@ function ChatContainer() {
             },
           }
         );
-
+        
+        console.clear();
+        console.log(response.data);
         // Update the receiver's profile state with the fetched data
-        setReceiverProfile({
+        setReceiverProfile((prevProfile) => ({
+          ...prevProfile,
           name: response.data.name || 'Unknown User',
           avatar: response.data.avatar || null,
-          status: response.data.status || 'Offline',
-        });
+        }));
       } catch (error) {
         console.error('Error fetching profile:', error);
       }
@@ -91,13 +112,6 @@ function ChatContainer() {
 
   const handleSendMessage = async () => {
     if (newMessage.trim() === '') return;
-  
-    // const messageObj = {
-    //     senderId, // Explicitly include senderId
-    //     receiverId,
-    //   text: newMessage,
-    //   image: null,  // Set this if you're attaching an image (you can use a file input to get the image)
-    // };
   
     const token = document.cookie
     .split('; ')
@@ -132,32 +146,7 @@ function ChatContainer() {
     }
   };
 
-// const handleSendMessage = () => {
-//     if (newMessage.trim() === '') return;
-
-//     const messageObj = {
-//       id: Date.now(),
-//       text: newMessage,
-//       senderId: senderId,
-//       timestamp: new Date()
-//     };
-
-//     setMessages([...messages, messageObj]);
-//     setNewMessage('');
-//   };
-
-
-  
-
-  useEffect(() => {
-    if (receiverId) {
-      const isOnline = onlineUsers.includes(receiverId);
-      setReceiverProfile((prevProfile) => ({
-        ...prevProfile,
-        status: isOnline ? 'Online' : 'Offline',
-      }));
-    }
-  }, [onlineUsers, receiverId]);
+ 
 
 
   useEffect(() => {
