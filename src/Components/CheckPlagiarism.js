@@ -259,7 +259,7 @@ function CheckPlagiarism() {
         }
 
         const response = await axios.post(
-          `${apiUrl}/checkplagiarism/${assignmentId}`,
+          `${apiUrl}/assignment/checkplagiarism/${assignmentId}`,
           {},
           {
             headers: {
