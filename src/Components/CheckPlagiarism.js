@@ -21,106 +21,106 @@ function CheckPlagiarism() {
 
   console.log("CheckPlagiarism", plagiarismData);
 
-  useEffect(() => {
-    // Hardcoded test data
-    const testData = [
-      {
-        "Assignment 1": "Assignment_A",
-        "Assignment 2": "Assignment_B",
-        "Cosine Similarity (%)": 45.23,
-        "Jaccard Similarity (%)": 38.12,
-        "Combined Similarity (%)": 41.67,
-      },
-      {
-        "Assignment 1": "Assignment_A",
-        "Assignment 2": "Assignment_C",
-        "Cosine Similarity (%)": 78.56,
-        "Jaccard Similarity (%)": 72.34,
-        "Combined Similarity (%)": 75.45,
-      },
-      {
-        "Assignment 1": "Assignment_B",
-        "Assignment 2": "Assignment_D",
-        "Cosine Similarity (%)": 12.34,
-        "Jaccard Similarity (%)": 8.45,
-        "Combined Similarity (%)": 10.12,
-      },
-      {
-        "Assignment 1": "Assignment_C",
-        "Assignment 2": "Assignment_E",
-        "Cosine Similarity (%)": 60.78,
-        "Jaccard Similarity (%)": 54.32,
-        "Combined Similarity (%)": 57.55,
-      },
-      {
-        "Assignment 1": "Assignment_C",
-        "Assignment 2": "Assignment_E",
-        "Cosine Similarity (%)": 60.78,
-        "Jaccard Similarity (%)": 54.32,
-        "Combined Similarity (%)": 57.55,
-      },
-      {
-        "Assignment 1": "Assignment_C",
-        "Assignment 2": "Assignment_E",
-        "Cosine Similarity (%)": 60.78,
-        "Jaccard Similarity (%)": 54.32,
-        "Combined Similarity (%)": 57.55,
-      },
-      {
-        "Assignment 1": "Assignment_D",
-        "Assignment 2": "Assignment_F",
-        "Cosine Similarity (%)": 90.12,
-        "Jaccard Similarity (%)": 88.34,
-        "Combined Similarity (%)": 89.23,
-      },
-    ];
-
-    // Simulate data fetching
-    setTimeout(() => {
-      setPlagiarismData(testData);
-      setLoading(false);
-    }, 1000);
-  }, []);
-
-
   // useEffect(() => {
-  //   const fetchPlagiarismData = async () => {
-  //     try {
-  //       const token = document.cookie
-  //         .split("; ")
-  //         .find((row) => row.startsWith("token="))
-  //         ?.split("=")[1];
+  //   // Hardcoded test data
+  //   const testData = [
+  //     {
+  //       "Assignment 1": "Assignment_A",
+  //       "Assignment 2": "Assignment_B",
+  //       "Cosine Similarity (%)": 45.23,
+  //       "Jaccard Similarity (%)": 38.12,
+  //       "Combined Similarity (%)": 41.67,
+  //     },
+  //     {
+  //       "Assignment 1": "Assignment_A",
+  //       "Assignment 2": "Assignment_C",
+  //       "Cosine Similarity (%)": 78.56,
+  //       "Jaccard Similarity (%)": 72.34,
+  //       "Combined Similarity (%)": 75.45,
+  //     },
+  //     {
+  //       "Assignment 1": "Assignment_B",
+  //       "Assignment 2": "Assignment_D",
+  //       "Cosine Similarity (%)": 12.34,
+  //       "Jaccard Similarity (%)": 8.45,
+  //       "Combined Similarity (%)": 10.12,
+  //     },
+  //     {
+  //       "Assignment 1": "Assignment_C",
+  //       "Assignment 2": "Assignment_E",
+  //       "Cosine Similarity (%)": 60.78,
+  //       "Jaccard Similarity (%)": 54.32,
+  //       "Combined Similarity (%)": 57.55,
+  //     },
+  //     {
+  //       "Assignment 1": "Assignment_C",
+  //       "Assignment 2": "Assignment_E",
+  //       "Cosine Similarity (%)": 60.78,
+  //       "Jaccard Similarity (%)": 54.32,
+  //       "Combined Similarity (%)": 57.55,
+  //     },
+  //     {
+  //       "Assignment 1": "Assignment_C",
+  //       "Assignment 2": "Assignment_E",
+  //       "Cosine Similarity (%)": 60.78,
+  //       "Jaccard Similarity (%)": 54.32,
+  //       "Combined Similarity (%)": 57.55,
+  //     },
+  //     {
+  //       "Assignment 1": "Assignment_D",
+  //       "Assignment 2": "Assignment_F",
+  //       "Cosine Similarity (%)": 90.12,
+  //       "Jaccard Similarity (%)": 88.34,
+  //       "Combined Similarity (%)": 89.23,
+  //     },
+  //   ];
 
-  //       if (!token) {
-  //         toast.error("Authentication token is missing. Please sign in.");
-  //         return navigate("/signin");
-  //       }
+  //   // Simulate data fetching
+  //   setTimeout(() => {
+  //     setPlagiarismData(testData);
+  //     setLoading(false);
+  //   }, 1000);
+  // }, []);
 
-  //       const response = await axios.post(
-  //         `${apiUrl}/assignment/checkplagiarism/${assignmentId}`,
-  //         {},
-  //         {
-  //           headers: {
-  //             Authorization: `Bearer ${token}`,
-  //           },
-  //         }
-  //       );
 
-  //       if (response.data.results) {
-  //         setPlagiarismData(response.data.results);
-  //         toast.success("Plagiarism data fetched successfully.");
-  //       } else {
-  //         toast.error("Failed to fetch plagiarism data.");
-  //       }
-  //     } catch (err) {
-  //       setError(err?.response?.data?.message || "An error occurred.");
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
+  useEffect(() => {
+    const fetchPlagiarismData = async () => {
+      try {
+        const token = document.cookie
+          .split("; ")
+          .find((row) => row.startsWith("token="))
+          ?.split("=")[1];
 
-  //   fetchPlagiarismData();
-  // }, [assignmentId, navigate]);
+        if (!token) {
+          toast.error("Authentication token is missing. Please sign in.");
+          return navigate("/signin");
+        }
+
+        const response = await axios.post(
+          `${apiUrl}/assignment/checkplagiarism/${assignmentId}`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        
+        if (response.data.success && response.data.mlResponse.results) {
+          setPlagiarismData(response.data.mlResponse.results);
+          toast.success("Plagiarism data fetched successfully.");
+        } else {
+          toast.error("Failed to fetch plagiarism data.");
+        }
+      } catch (err) {
+        setError(err?.response?.data?.message || "An error occurred.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPlagiarismData();
+  }, [assignmentId, navigate]);
 
   if (loading) {
     return <Loding />;
@@ -271,28 +271,28 @@ function CheckPlagiarism() {
                   >
                     <td
                       className="px-2 sm:px-4 py-2 border border-gray-600"
-                      title={entry["Assignment 1"]}
+                      title={'Assignment 1'}
                     >
                       <a
-                        href={`/assignment/${entry["Assignment 1"]}`}
+                        href={`/assignment/${entry['Assignment 1']}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-blue-400 hover:underline"
                       >
-                        {entry["Assignment 1"]}
+                        {entry['Assignment 1']}
                       </a>
                     </td>
                     <td
                       className="px-2 sm:px-4 py-2 border border-gray-600"
-                      title={entry["Assignment 2"]}
+                      title={"Assignment 2"}
                     >
                       <a
-                        href={`/assignment/${entry["Assignment 2"]}`}
+                        href={`/assignment/${entry['Assignment 2']}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-blue-400 hover:underline"
                       >
-                        {entry["Assignment 2"]}
+                        {entry['Assignment 2']}
                       </a>
                     </td>
                     <td className="px-2 sm:px-4 py-2 border border-gray-600">
