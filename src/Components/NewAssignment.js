@@ -182,7 +182,7 @@ function NewAssignment() {
             />
           </div>
 
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center gap-2 font-semibold">
             <button
               type="button"
               onClick={() => navigate(-1)}
@@ -195,7 +195,7 @@ function NewAssignment() {
               className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition"
               disabled={loading}
             >
-              {loading ? "Creating..." : "Create Assignment"}
+              {loading ? "Creating..." : "Create"}
             </button>
           </div>
         </form>

@@ -242,22 +242,24 @@ function SubjectDetails() {
             </button>
           </div>
         </div>
-        <div className="mb-6 text-sm sm:text-base">
-          <div className="mb-2">
-            <p className="text-gray-300 space-x-5">
+        <div className="space-y-2 text-sm sm:text-base">
+          <div>
+            <p className="flex flex-row text-gray-300 space-x-5 items-baseline">
+              <div>
               Teacher Name:{" "}
               <span className="font-medium text-gray-100">{subject.teacher_name}</span>
+              </div>
               {userRole === "student" && (
                 <button
                   onClick={() => navigateToChat(subject.teacher_id)}
-                  className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+                  className="px-2 py-1 bg-blue-600 text-white hover:bg-blue-500 font-semibold rounded-lg transition"
                 >
                   Chat with Teacher
                 </button>
               )}
             </p>
           </div>
-          <div className="mb-2">
+          <div>
             <p className="text-gray-300">
               Number of Students:{" "}
               <span className="font-medium text-gray-100">{foundStudents.length}</span>

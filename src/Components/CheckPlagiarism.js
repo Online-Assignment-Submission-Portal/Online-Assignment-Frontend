@@ -11,22 +11,78 @@ function CheckPlagiarism() {
   const location = useLocation();
   const navigate = useNavigate();
   const assignmentId = location.state?.assignment_id;
-  // const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000";
-  const apiUrl = window.location.hostname === 'localhost'
-  ? "http://localhost:8000" : process.env.REACT_APP_BASE_URL;
+  const apiUrl =
+    window.location.hostname === "localhost"
+      ? "http://localhost:8000"
+      : process.env.REACT_APP_BASE_URL;
   const [plagiarismData, setPlagiarismData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-console.log("CheckPlagiarism", plagiarismData)
-  // State for column visibility
-  const [columns, setColumns] = useState({
-    semantic: true,
-    fingerprint: true,
-    combined: true,
-  });
+  console.log("CheckPlagiarism", plagiarismData);
 
-  // hardcoded data for testing
+  useEffect(() => {
+    // Hardcoded test data
+    const testData = [
+      {
+        "Assignment 1": "Assignment_A",
+        "Assignment 2": "Assignment_B",
+        "Cosine Similarity (%)": 45.23,
+        "Jaccard Similarity (%)": 38.12,
+        "Combined Similarity (%)": 41.67,
+      },
+      {
+        "Assignment 1": "Assignment_A",
+        "Assignment 2": "Assignment_C",
+        "Cosine Similarity (%)": 78.56,
+        "Jaccard Similarity (%)": 72.34,
+        "Combined Similarity (%)": 75.45,
+      },
+      {
+        "Assignment 1": "Assignment_B",
+        "Assignment 2": "Assignment_D",
+        "Cosine Similarity (%)": 12.34,
+        "Jaccard Similarity (%)": 8.45,
+        "Combined Similarity (%)": 10.12,
+      },
+      {
+        "Assignment 1": "Assignment_C",
+        "Assignment 2": "Assignment_E",
+        "Cosine Similarity (%)": 60.78,
+        "Jaccard Similarity (%)": 54.32,
+        "Combined Similarity (%)": 57.55,
+      },
+      {
+        "Assignment 1": "Assignment_C",
+        "Assignment 2": "Assignment_E",
+        "Cosine Similarity (%)": 60.78,
+        "Jaccard Similarity (%)": 54.32,
+        "Combined Similarity (%)": 57.55,
+      },
+      {
+        "Assignment 1": "Assignment_C",
+        "Assignment 2": "Assignment_E",
+        "Cosine Similarity (%)": 60.78,
+        "Jaccard Similarity (%)": 54.32,
+        "Combined Similarity (%)": 57.55,
+      },
+      {
+        "Assignment 1": "Assignment_D",
+        "Assignment 2": "Assignment_F",
+        "Cosine Similarity (%)": 90.12,
+        "Jaccard Similarity (%)": 88.34,
+        "Combined Similarity (%)": 89.23,
+      },
+    ];
+
+    // Simulate data fetching
+    setTimeout(() => {
+      setPlagiarismData(testData);
+      setLoading(false);
+    }, 1000);
+  }, []);
+
+
   // useEffect(() => {
   //   const fetchPlagiarismData = async () => {
   //     try {
@@ -36,255 +92,35 @@ console.log("CheckPlagiarism", plagiarismData)
   //         ?.split("=")[1];
 
   //       if (!token) {
-  //         toast.error("Please sign in.");
+  //         toast.error("Authentication token is missing. Please sign in.");
   //         return navigate("/signin");
   //       }
 
-  //       const testData = [
+  //       const response = await axios.post(
+  //         `${apiUrl}/assignment/checkplagiarism/${assignmentId}`,
+  //         {},
   //         {
-  //           studentId1: {
-  //             id: "S001",
-  //             name: "Student A",
-  //             fileUrl: "http://example.com/fileA.pdf",
+  //           headers: {
+  //             Authorization: `Bearer ${token}`,
   //           },
-  //           studentId2: {
-  //             id: "S002",
-  //             name: "Student B",
-  //             fileUrl: "http://example.com/fileB.pdf",
-  //           },
-  //           SemanticSimilarity: 45,
-  //           FingerprintSimilarity: 75,
-  //           CombinedSimilarity: 80,
-  //         },
-  //         {
-  //           studentId1: {
-  //             id: "S003",
-  //             name: "Student C",
-  //             fileUrl: "http://example.com/fileC.pdf",
-  //           },
-  //           studentId2: {
-  //             id: "S004",
-  //             name: "Student D",
-  //             fileUrl: "http://example.com/fileD.pdf",
-  //           },
-  //           SemanticSimilarity: 65,
-  //           FingerprintSimilarity: 70,
-  //           CombinedSimilarity: 68,
-  //         },
-  //         {
-  //           studentId1: {
-  //             id: "S005",
-  //             name: "Student E",
-  //             fileUrl: "http://example.com/fileE.pdf",
-  //           },
-  //           studentId2: {
-  //             id: "S006",
-  //             name: "Student F",
-  //             fileUrl: "http://example.com/fileF.pdf",
-  //           },
-  //           SemanticSimilarity: 90,
-  //           FingerprintSimilarity: 85,
-  //           CombinedSimilarity: 88,
-  //         },
-  //         {
-  //           studentId1: {
-  //             id: "S001",
-  //             name: "Student A",
-  //             fileUrl: "http://example.com/fileA.pdf",
-  //           },
-  //           studentId2: {
-  //             id: "S003",
-  //             name: "Student C",
-  //             fileUrl: "http://example.com/fileC.pdf",
-  //           },
-  //           SemanticSimilarity: 50,
-  //           FingerprintSimilarity: 60,
-  //           CombinedSimilarity: 58,
-  //         },
-  //         {
-  //           studentId1: {
-  //             id: "S002",
-  //             name: "Student B",
-  //             fileUrl: "http://example.com/fileB.pdf",
-  //           },
-  //           studentId2: {
-  //             id: "S004",
-  //             name: "Student D",
-  //             fileUrl: "http://example.com/fileD.pdf",
-  //           },
-  //           SemanticSimilarity: 55,
-  //           FingerprintSimilarity: 65,
-  //           CombinedSimilarity: 63,
-  //         },
-  //         {
-  //           studentId1: {
-  //             id: "S005",
-  //             name: "Student E",
-  //             fileUrl: "http://example.com/fileE.pdf",
-  //           },
-  //           studentId2: {
-  //             id: "S001",
-  //             name: "Student A",
-  //             fileUrl: "http://example.com/fileA.pdf",
-  //           },
-  //           SemanticSimilarity: 75,
-  //           FingerprintSimilarity: 80,
-  //           CombinedSimilarity: 78,
-  //         },
-  //         {
-  //           studentId1: {
-  //             id: "S006",
-  //             name: "Student F",
-  //             fileUrl: "http://example.com/fileF.pdf",
-  //           },
-  //           studentId2: {
-  //             id: "S002",
-  //             name: "Student B",
-  //             fileUrl: "http://example.com/fileB.pdf",
-  //           },
-  //           SemanticSimilarity: 40,
-  //           FingerprintSimilarity: 55,
-  //           CombinedSimilarity: 50,
-  //         },
-  //         {
-  //           studentId1: {
-  //             id: "S003",
-  //             name: "Student C",
-  //             fileUrl: "http://example.com/fileC.pdf",
-  //           },
-  //           studentId2: {
-  //             id: "S005",
-  //             name: "Student E",
-  //             fileUrl: "http://example.com/fileE.pdf",
-  //           },
-  //           SemanticSimilarity: 60,
-  //           FingerprintSimilarity: 75,
-  //           CombinedSimilarity: 70,
-  //         },
-  //         {
-  //           studentId1: {
-  //             id: "S004",
-  //             name: "Student D",
-  //             fileUrl: "http://example.com/fileD.pdf",
-  //           },
-  //           studentId2: {
-  //             id: "S006",
-  //             name: "Student F",
-  //             fileUrl: "http://example.com/fileF.pdf",
-  //           },
-  //           SemanticSimilarity: 85,
-  //           FingerprintSimilarity: 90,
-  //           CombinedSimilarity: 88,
-  //         },
-  //         {
-  //           studentId1: {
-  //             id: "S001",
-  //             name: "Student A",
-  //             fileUrl: "http://example.com/fileA.pdf",
-  //           },
-  //           studentId2: {
-  //             id: "S004",
-  //             name: "Student D",
-  //             fileUrl: "http://example.com/fileD.pdf",
-  //           },
-  //           SemanticSimilarity: 70,
-  //           FingerprintSimilarity: 65,
-  //           CombinedSimilarity: 68,
-  //         },
-  //         {
-  //           studentId1: {
-  //             id: "S003",
-  //             name: "Student C",
-  //             fileUrl: "http://example.com/fileC.pdf",
-  //           },
-  //           studentId2: {
-  //             id: "S006",
-  //             name: "Student F",
-  //             fileUrl: "http://example.com/fileF.pdf",
-  //           },
-  //           SemanticSimilarity: 55,
-  //           FingerprintSimilarity: 50,
-  //           CombinedSimilarity: 53,
-  //         },
-  //         {
-  //           studentId1: {
-  //             id: "S002",
-  //             name: "Student B",
-  //             fileUrl: "http://example.com/fileB.pdf",
-  //           },
-  //           studentId2: {
-  //             id: "S005",
-  //             name: "Student E",
-  //             fileUrl: "http://example.com/fileE.pdf",
-  //           },
-  //           SemanticSimilarity: 72,
-  //           FingerprintSimilarity: 78,
-  //           CombinedSimilarity: 75,
-  //         },
-  //       ];
+  //         }
+  //       );
 
-
-
-  //       setPlagiarismData(testData);
-  //       toast.success("Test plagiarism data loaded successfully.");
+  //       if (response.data.results) {
+  //         setPlagiarismData(response.data.results);
+  //         toast.success("Plagiarism data fetched successfully.");
+  //       } else {
+  //         toast.error("Failed to fetch plagiarism data.");
+  //       }
   //     } catch (err) {
-  //       setError("An error occurred while loading test data.");
+  //       setError(err?.response?.data?.message || "An error occurred.");
   //     } finally {
   //       setLoading(false);
   //     }
   //   };
 
   //   fetchPlagiarismData();
-  // }, [navigate]);
-
-//   useEffect(() => {
-
-  
-
-    
-    useEffect(() => {
-
-    const fetchPlagiarismData = async () => {
-      
-      try {
-        // Extract the token safely from cookies
-        const token = document.cookie
-          .split("; ")
-          .find((row) => row.startsWith("token="))
-          ?.split("=")[1];
-
-        if (!token) {
-          toast.error("Authentication token is missing. Please sign in.");
-          return navigate("/signin");
-        }
-
-        const response = await axios.post(
-          `${apiUrl}/assignment/checkplagiarism/${assignmentId}`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        console.log(response);
-        if (response.data.success) {
-          setPlagiarismData(response.data.mlResponse.results);
-          toast.success("Plagiarism data fetched successfully.");
-        } else {
-          toast.error("Failed to fetch plagiarism data.");
-        }
-      }
-       catch (err) {
-        setError(err?.response?.data?.message || "An error occurred.");
-    } finally {
-        setLoading(false);
-      }
-    }
-   
-    
-    fetchPlagiarismData();
-  }, [assignmentId, navigate]);
+  // }, [assignmentId, navigate]);
 
   if (loading) {
     return <Loding />;
@@ -298,32 +134,42 @@ console.log("CheckPlagiarism", plagiarismData)
     );
   }
 
-  // Ranges for similarity
   const ranges = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 
-  // Function to aggregate similarity counts into ranges
-  const aggregateCounts = () => {
+  const aggregateCounts = (key) => {
     return ranges.slice(0, -1).map((rangeStart, index) => {
       const rangeEnd = ranges[index + 1];
       return plagiarismData.filter(
         (entry) =>
-          entry["Similarity"] >= rangeStart &&
-          entry["Similarity"] < rangeEnd
+          entry[key] >= rangeStart && entry[key] < rangeEnd
       ).length;
     });
   };
 
-  // Prepare chart data
   const chartData = {
     labels: ranges.slice(0, -1).map(
       (rangeStart, index) => `${rangeStart}-${ranges[index + 1] - 1}%`
     ),
     datasets: [
       {
-        label: "Similarity Distribution",
-        data: aggregateCounts(),
+        label: "Combined Similarity (%)",
+        data: aggregateCounts("Combined Similarity (%)"),
         backgroundColor: "rgba(75, 192, 192, 0.6)",
         borderColor: "rgba(75, 192, 192, 1)",
+        borderWidth: 2,
+      },
+      {
+        label: "Cosine Similarity (%)",
+        data: aggregateCounts("Cosine Similarity (%)"),
+        backgroundColor: "rgba(54, 162, 235, 0.6)",
+        borderColor: "rgba(54, 162, 235, 1)",
+        borderWidth: 2,
+      },
+      {
+        label: "Jaccard Similarity (%)",
+        data: aggregateCounts("Jaccard Similarity (%)"),
+        backgroundColor: "rgba(255, 99, 132, 0.6)",
+        borderColor: "rgba(255, 99, 132, 1)",
         borderWidth: 2,
       },
     ],
@@ -340,13 +186,12 @@ console.log("CheckPlagiarism", plagiarismData)
           </h1>
           <button
             onClick={() => navigate(-1)}
-            className="w-full sm:w-auto px-4 sm:px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition"
+            className="w-auto px-4 sm:px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition"
           >
             Back
           </button>
         </div>
 
-        {/* Chart */}
         <div className="container mx-auto mb-4 sm:mb-8 bg-gray-300 rounded-md overflow-hidden">
           <div className="h-[250px] sm:h-[300px] md:h-[400px] lg:h-[500px] w-full">
             <Bar
@@ -358,7 +203,7 @@ console.log("CheckPlagiarism", plagiarismData)
                   legend: { position: "top" },
                   title: {
                     display: true,
-                    text: "Plagiarism Similarity Distribution",
+                    text: "Similarity Distribution",
                   },
                 },
                 scales: {
@@ -382,7 +227,6 @@ console.log("CheckPlagiarism", plagiarismData)
           </div>
         </div>
 
-        {/* Table */}
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse border border-gray-700">
             <thead>
@@ -394,17 +238,27 @@ console.log("CheckPlagiarism", plagiarismData)
                   Assignment 2
                 </th>
                 <th
-                  className="px-2 sm:px-4 py-2 border border-gray-600"
-                  title="The percentage similarity between the two assignments."
+                  className="px-2 sm:px-4 py-2 border border-gray-600 relative group"
+                  title="Measures similarity by comparing the angle between two text vectors, focusing on word usage patterns"
                 >
-                  Similarity (%)
-                  <span
-                    className="inline-block ml-1 text-gray-400 cursor-pointer"
-                    title="The percentage similarity between the two assignments."
-                  >
-                    ⓘ
-                  </span>
+                  Cosine Similarity (%){" "}
+                  <span className="text-blue-400 cursor-help ml-1">🛈</span>
                 </th>
+                <th
+                  className="px-2 sm:px-4 py-2 border border-gray-600 relative group"
+                  title="Measures similarity by comparing the overlap of unique words between two documents."
+                >
+                  Jaccard Similarity (%){" "}
+                  <span className="text-blue-400 cursor-help ml-1">🛈</span>
+                </th>
+                <th
+                  className="px-2 sm:px-4 py-2 border border-gray-600 relative group"
+                  title="Combines cosine and Jaccard similarity for a more balanced score."
+                >
+                  Combined Similarity (%){" "}
+                  <span className="text-blue-400 cursor-help ml-1">🛈</span>
+                </th>
+
               </tr>
             </thead>
             <tbody>
@@ -412,42 +266,50 @@ console.log("CheckPlagiarism", plagiarismData)
                 plagiarismData.map((entry, index) => (
                   <tr
                     key={index}
-                    className={`${
-                      index % 2 === 0 ? "bg-gray-800" : "bg-gray-700"
-                    } hover:bg-gray-600`}
+                    className={`${index % 2 === 0 ? "bg-gray-800" : "bg-gray-700"
+                      } hover:bg-gray-600`}
                   >
-                    <td className="px-2 sm:px-4 py-2 border border-gray-600">
+                    <td
+                      className="px-2 sm:px-4 py-2 border border-gray-600"
+                      title={entry["Assignment 1"]}
+                    >
                       <a
-                        href={entry['Assignment1']}
+                        href={`/assignment/${entry["Assignment 1"]}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-blue-400 hover:text-blue-300 underline"
+                        className="text-blue-400 hover:underline"
                       >
-                        {entry['Assignment1']}
-                      </a>
-                    </td>
-                    <td className="px-2 sm:px-4 py-2 border border-gray-600">
-                      <a
-                        href={entry['Assignment2']}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-400 hover:text-blue-300 underline"
-                      >
-                        {entry['Assignment2']}
+                        {entry["Assignment 1"]}
                       </a>
                     </td>
                     <td
                       className="px-2 sm:px-4 py-2 border border-gray-600"
-                      title={`${entry['Similarity']}% similarity between the assignments.`}
+                      title={entry["Assignment 2"]}
                     >
-                      {entry['Similarity'].toFixed(2)}%
+                      <a
+                        href={`/assignment/${entry["Assignment 2"]}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-400 hover:underline"
+                      >
+                        {entry["Assignment 2"]}
+                      </a>
+                    </td>
+                    <td className="px-2 sm:px-4 py-2 border border-gray-600">
+                      {entry["Cosine Similarity (%)"].toFixed(2)}%
+                    </td>
+                    <td className="px-2 sm:px-4 py-2 border border-gray-600">
+                      {entry["Jaccard Similarity (%)"].toFixed(2)}%
+                    </td>
+                    <td className="px-2 sm:px-4 py-2 border border-gray-600">
+                      {entry["Combined Similarity (%)"].toFixed(2)}%
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
                   <td
-                    colSpan="3"
+                    colSpan="5"
                     className="text-center text-gray-400 px-4 py-2"
                   >
                     No plagiarism data found.
