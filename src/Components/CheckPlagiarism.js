@@ -18,7 +18,7 @@ function CheckPlagiarism() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-
+console.log("CheckPlagiarism", plagiarismData)
   // State for column visibility
   const [columns, setColumns] = useState({
     semantic: true,
@@ -267,10 +267,10 @@ function CheckPlagiarism() {
             },
           }
         );
-
+        console.log(response);
         if (response.data.success) {
           setPlagiarismData(response.data.mlResponse.results);
-          // toast.success("Plagiarism data fetched successfully.");
+          toast.success("Plagiarism data fetched successfully.");
         } else {
           toast.error("Failed to fetch plagiarism data.");
         }
@@ -307,8 +307,8 @@ function CheckPlagiarism() {
       const rangeEnd = ranges[index + 1];
       return plagiarismData.filter(
         (entry) =>
-          entry["Similarity (%)"] >= rangeStart &&
-          entry["Similarity (%)"] < rangeEnd
+          entry["Similarity"] >= rangeStart &&
+          entry["Similarity"] < rangeEnd
       ).length;
     });
   };
@@ -418,29 +418,29 @@ function CheckPlagiarism() {
                   >
                     <td className="px-2 sm:px-4 py-2 border border-gray-600">
                       <a
-                        href={entry["Assignment 1"]}
+                        href={entry['Assignment1']}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-blue-400 hover:text-blue-300 underline"
                       >
-                        {entry["Assignment 1"]}
+                        {entry['Assignment1']}
                       </a>
                     </td>
                     <td className="px-2 sm:px-4 py-2 border border-gray-600">
                       <a
-                        href={entry["Assignment 2"]}
+                        href={entry['Assignment2']}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-blue-400 hover:text-blue-300 underline"
                       >
-                        {entry["Assignment 2"]}
+                        {entry['Assignment2']}
                       </a>
                     </td>
                     <td
                       className="px-2 sm:px-4 py-2 border border-gray-600"
-                      title={`${entry["Similarity (%)"]}% similarity between the assignments.`}
+                      title={`${entry['Similarity']}% similarity between the assignments.`}
                     >
-                      {/* {entry["Similarity (%)"].toFixed(2)}% */}
+                      {entry['Similarity'].toFixed(2)}%
                     </td>
                   </tr>
                 ))
