@@ -153,21 +153,21 @@ function CheckPlagiarism() {
     datasets: [
       {
         label: "Combined Similarity (%)",
-        data: aggregateCounts("Combined Similarity (%)"),
+        data: aggregateCounts("CombinedSimilarity"),
         backgroundColor: "rgba(75, 192, 192, 0.6)",
         borderColor: "rgba(75, 192, 192, 1)",
         borderWidth: 2,
       },
       {
         label: "Cosine Similarity (%)",
-        data: aggregateCounts("Cosine Similarity (%)"),
+        data: aggregateCounts("CosineSimilarity"),
         backgroundColor: "rgba(54, 162, 235, 0.6)",
         borderColor: "rgba(54, 162, 235, 1)",
         borderWidth: 2,
       },
       {
         label: "Jaccard Similarity (%)",
-        data: aggregateCounts("Jaccard Similarity (%)"),
+        data: aggregateCounts("JaccardSimilarity"),
         backgroundColor: "rgba(255, 99, 132, 0.6)",
         borderColor: "rgba(255, 99, 132, 1)",
         borderWidth: 2,
@@ -232,6 +232,12 @@ function CheckPlagiarism() {
             <thead>
               <tr className="bg-gray-700 text-gray-200">
                 <th className="px-2 sm:px-4 py-2 border border-gray-600">
+                  Student 1
+                </th>
+                <th className="px-2 sm:px-4 py-2 border border-gray-600">
+                  Student 2
+                </th>
+                <th className="px-2 sm:px-4 py-2 border border-gray-600">
                   Assignment 1
                 </th>
                 <th className="px-2 sm:px-4 py-2 border border-gray-600">
@@ -270,16 +276,28 @@ function CheckPlagiarism() {
                       } hover:bg-gray-600`}
                   >
                     <td
+                    className="px-2 sm:px-4 py-2 border border-gray-600"
+                    title={'Student 1'}
+                    >
+                      {entry.studentId1.name}
+                    </td>
+                    <td
+                    className="px-2 sm:px-4 py-2 border border-gray-600"
+                    title={'Student 2'}
+                    >
+                      {entry.studentId2.name}
+                    </td>
+                    <td
                       className="px-2 sm:px-4 py-2 border border-gray-600"
                       title={'Assignment 1'}
                     >
                       <a
-                        href={`/assignment/${entry['Assignment 1']}`}
+                        href={`/assignment/${entry['Assignment1']}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-blue-400 hover:underline"
                       >
-                        {entry['Assignment 1']}
+                        {entry['Assignment1']}
                       </a>
                     </td>
                     <td
@@ -287,22 +305,22 @@ function CheckPlagiarism() {
                       title={"Assignment 2"}
                     >
                       <a
-                        href={`/assignment/${entry['Assignment 2']}`}
+                        href={`/assignment/${entry['Assignment2']}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-blue-400 hover:underline"
                       >
-                        {entry['Assignment 2']}
+                        {entry['Assignment2']}
                       </a>
                     </td>
                     <td className="px-2 sm:px-4 py-2 border border-gray-600">
-                      {entry["Cosine Similarity (%)"].toFixed(2)}%
+                      {entry.CosineSimilarity.toFixed(2)}%
                     </td>
                     <td className="px-2 sm:px-4 py-2 border border-gray-600">
-                      {entry["Jaccard Similarity (%)"].toFixed(2)}%
+                      {entry.JaccardSimilarity.toFixed(2)}%
                     </td>
                     <td className="px-2 sm:px-4 py-2 border border-gray-600">
-                      {entry["Combined Similarity (%)"].toFixed(2)}%
+                      {entry.CombinedSimilarity.toFixed(2)}%
                     </td>
                   </tr>
                 ))
