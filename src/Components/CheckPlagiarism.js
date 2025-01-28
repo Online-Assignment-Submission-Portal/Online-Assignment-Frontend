@@ -105,6 +105,8 @@ function CheckPlagiarism() {
             },
           }
         );
+
+        console.log(response);
         
         if (response.data.success && response.data.mlResponse.results) {
           setPlagiarismData(response.data.mlResponse.results);
@@ -237,12 +239,6 @@ function CheckPlagiarism() {
                 <th className="px-2 sm:px-4 py-2 border border-gray-600">
                   Student 2
                 </th>
-                <th className="px-2 sm:px-4 py-2 border border-gray-600">
-                  Assignment 1
-                </th>
-                <th className="px-2 sm:px-4 py-2 border border-gray-600">
-                  Assignment 2
-                </th>
                 <th
                   className="px-2 sm:px-4 py-2 border border-gray-600 relative group"
                   title="Measures similarity by comparing the angle between two text vectors, focusing on word usage patterns"
@@ -276,28 +272,16 @@ function CheckPlagiarism() {
                       } hover:bg-gray-600`}
                   >
                     <td
-                    className="px-2 sm:px-4 py-2 border border-gray-600"
-                    title={'Student 1'}
-                    >
-                      {entry.studentId1.name}
-                    </td>
-                    <td
-                    className="px-2 sm:px-4 py-2 border border-gray-600"
-                    title={'Student 2'}
-                    >
-                      {entry.studentId2.name}
-                    </td>
-                    <td
                       className="px-2 sm:px-4 py-2 border border-gray-600"
                       title={'Assignment 1'}
                     >
                       <a
-                        href={`/assignment/${entry['Assignment1']}`}
+                        href={`https://docs.google.com/gview?url=${entry.studentId1.fileUrl}&embedded=true`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-blue-400 hover:underline"
                       >
-                        {entry['Assignment1']}
+                        {entry.studentId1.name}
                       </a>
                     </td>
                     <td
@@ -305,12 +289,12 @@ function CheckPlagiarism() {
                       title={"Assignment 2"}
                     >
                       <a
-                        href={`/assignment/${entry['Assignment2']}`}
+                        href={`https://docs.google.com/gview?url=${encodeURIComponent(entry.studentId2.fileUrl)}&embedded=true`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-blue-400 hover:underline"
                       >
-                        {entry['Assignment2']}
+                        {entry.studentId2.name}
                       </a>
                     </td>
                     <td className="px-2 sm:px-4 py-2 border border-gray-600">
