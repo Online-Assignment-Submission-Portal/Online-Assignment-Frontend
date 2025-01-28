@@ -20,8 +20,45 @@ function SubjectDetails() {
   const [foundStudents, setFoundStudents] = useState([]);
   const [notFoundEmails, setNotFoundEmails] = useState([]);
   const [assignments, setAssignments] = useState([]);
-
+  const [unreadMessages, setUnreadMessages] = useState({});
   // console.log(location.state, " there ");
+
+
+  useEffect(() => {
+    const fetchUnreadMessages = async () => {
+      try {
+        const token = document.cookie
+        .split('; ')
+        .find((row) => row.startsWith('token='))
+        ?.split('=')[1];
+
+        const response = await axios.get(`${apiUrl}/message/read/${userID}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+        const data = response.data;
+        // Transform the data into a more usable format (keyed by user ID)
+        const unreadByUser = {};
+        data.forEach((user) => {
+          unreadByUser[user._id] = user.unreadMessages;
+        });
+
+        setUnreadMessages(unreadByUser);
+      } catch (error) {
+        console.error("Error fetching unread messages:", error);
+      }
+    };
+
+    fetchUnreadMessages();
+
+    const interval = setInterval(fetchUnreadMessages, 10000);
+
+    // Cleanup interval on component unmount
+    return () => clearInterval(interval);
+  }, [userID, apiUrl]);
+
 
   useEffect(() => {
     const token = document.cookie
@@ -36,14 +73,47 @@ function SubjectDetails() {
     if (subject?.assignments) setAssignments(subject.assignments);
   }, [navigate]);
 
-  const navigateToChat = (receiverId) => {
-    navigate('/chat-container', {
-      state: {
-        senderId: userID,
-        receiverId: receiverId
-      }
-    });
+  const navigateToChat = async (receiverId) => {
+    try {
+      // Call the backend API to mark the messages as read
+      const token = document.cookie
+        .split('; ')
+        .find((row) => row.startsWith('token='))
+        ?.split('=')[1];
+
+      await axios.post(
+        `${apiUrl}/message/markread`, 
+        { senderId: receiverId },  // Pass the senderId (the current student)
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+  
+      // Optionally update the unreadMessages state locally to reflect the changes
+      setUnreadMessages((prev) => ({
+        ...prev,
+        [receiverId]: 0, // Set unread count for this sender to 0
+      }));
+  
+      // Navigate to the chat container with the sender and receiver IDs
+      navigate('/chat-container', {
+        state: {
+          senderId: userID,
+          receiverId: receiverId
+        }
+      });
+    } catch (error) {
+      console.error("Error marking messages as read:", error);
+    }
   };
+  
+
+  useEffect(() => {
+    console.log("Unread Messages State:", unreadMessages);
+  }, [unreadMessages]);
 
   const handleAddStudents = async () => {
     try {
@@ -200,6 +270,49 @@ function SubjectDetails() {
     }
   };
 
+
+  const renderStudentRow = (student) => (
+    <tr key={student._id} className="hover:bg-gray-700 transition text-center">
+      <td className="border-b border-gray-600 px-4 py-2 max-w-[150px] overflow-auto scrollbar-none">
+        <div className="flex items-center justify-center gap-2">
+          {unreadMessages[student._id] > 0 && (
+            <div className="relative">
+              <div className="absolute -left-2 -top-2">
+                <span className="flex h-3 w-3">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                </span>
+              </div>
+            </div>
+          )}
+          <span>{student.firstName} {student.lastName}</span>
+        </div>
+      </td>
+      <td className="border-b border-gray-600 px-4 py-2 max-w-[150px] overflow-auto scrollbar-none">
+        {student.email}
+      </td>
+      {userRole === "teacher" && (
+        <>
+          <td className="border-b border-gray-600 px-4 py-2">
+            <button
+              onClick={() => navigateToChat(student._id)}
+              className="px-3 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition"
+            >
+              {unreadMessages[student._id] > 0 ? `Chat (${unreadMessages[student._id]})` : 'Chat'}
+            </button>
+          </td>
+          <td className="border-b border-gray-600 px-4 py-2">
+            <button
+              onClick={() => handleRemoveStudent(student._id, student.email)}
+              className="px-3 py-1 bg-red-600 text-white rounded-lg hover:bg-red-500 transition"
+            >
+              Remove
+            </button>
+          </td>
+        </>
+      )}
+    </tr>
+  );
   if (!subject) {
     return (
       <div className="flex items-center justify-center h-screen bg-gray-900">
@@ -246,8 +359,8 @@ function SubjectDetails() {
           <div>
             <p className="flex flex-row text-gray-300 space-x-5 items-baseline">
               <div>
-              Teacher Name:{" "}
-              <span className="font-medium text-gray-100">{subject.teacher_name}</span>
+                Teacher Name:{" "}
+                <span className="font-medium text-gray-100">{subject.teacher_name}</span>
               </div>
               {userRole === "student" && (
                 <button
@@ -389,34 +502,7 @@ function SubjectDetails() {
                       </tr>
                     </thead>
                     <tbody>
-                      {foundStudents.map((student) => (
-                        <tr key={student._id} className="hover:bg-gray-700 transition text-center">
-                          <td className="border-b border-gray-600 px-4 py-2 max-w-[150px] overflow-auto scrollbar-none">
-                            {student.firstName} {student.lastName}
-                          </td>
-                          <td className="border-b border-gray-600 px-4 py-2 max-w-[150px] overflow-auto scrollbar-none">{student.email}</td>
-                          {userRole === "teacher" && (
-                            <>
-                              <td className="border-b border-gray-600 px-4 py-2">
-                                <button
-                                  onClick={() => navigateToChat(student._id)}
-                                  className="text-blue-500 hover:text-blue-600"
-                                >
-                                  Chat
-                                </button>
-                              </td>
-                              <td className="border-b border-gray-600 px-4 py-2">
-                                <button
-                                  onClick={() => handleRemoveStudent(student._id, student.email)}
-                                  className="text-red-500 hover:text-red-600"
-                                >
-                                  ✕
-                                </button>
-                              </td>
-                            </>
-                          )}
-                        </tr>
-                      ))}
+                    {foundStudents.map(student => renderStudentRow(student))}
                     </tbody>
                   </table>
                 </div>
