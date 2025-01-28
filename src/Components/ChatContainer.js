@@ -128,6 +128,7 @@ function ChatContainer() {
         text: newMessage,
         senderId, // Include sender ID
         receiverId, // Include receiver ID
+        isRead: false,
         date: new Date(), // Add the current timestamp
       };
 
@@ -188,8 +189,8 @@ function ChatContainer() {
       
       // Only update the state if the new message is from the current receiver
       if (newMessage.senderId === receiverId) {
-        console.log('kya be sender:', senderId);
-        console.log('haa tumhi to ho message:', newMessage);
+        // console.log('kya be sender:', senderId);
+        // console.log('haa tumhi to ho message:', newMessage);
         setMessages((prevMessages) => [...prevMessages, newMessage]);
       }
     };
@@ -203,6 +204,8 @@ function ChatContainer() {
     };
   }, [socket, receiverId, messages]);
 
+
+  
   return (
     <div className="min-h-screen bg-gray-900 flex flex-col">
       {/* Chat Header */}
