@@ -2,10 +2,23 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
-import { Bar } from "react-chartjs-2";
+import { Bar, Pie } from "react-chartjs-2";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import Loding from "../partials/Loding";
 import "react-toastify/dist/ReactToastify.css";
-import { Chart as ChartJS } from "chart.js/auto";
+import {
+  Chart,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  BarController,
+} from 'chart.js';
+
+// Register required components
+Chart.register(BarElement, CategoryScale, LinearScale, BarController);
+
+
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 function CheckPlagiarism() {
   const location = useLocation();
@@ -15,72 +28,13 @@ function CheckPlagiarism() {
     window.location.hostname === "localhost"
       ? "http://localhost:8000"
       : process.env.REACT_APP_BASE_URL;
+
   const [plagiarismData, setPlagiarismData] = useState([]);
+  const [submitted, setSubmitted] = useState(0);
+  const [notSubmitted, setNotSubmitted] = useState(0);
+  const [late, setLate] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  console.log("CheckPlagiarism", plagiarismData);
-
-  // useEffect(() => {
-  //   // Hardcoded test data
-  //   const testData = [
-  //     {
-  //       "Assignment 1": "Assignment_A",
-  //       "Assignment 2": "Assignment_B",
-  //       "Cosine Similarity (%)": 45.23,
-  //       "Jaccard Similarity (%)": 38.12,
-  //       "Combined Similarity (%)": 41.67,
-  //     },
-  //     {
-  //       "Assignment 1": "Assignment_A",
-  //       "Assignment 2": "Assignment_C",
-  //       "Cosine Similarity (%)": 78.56,
-  //       "Jaccard Similarity (%)": 72.34,
-  //       "Combined Similarity (%)": 75.45,
-  //     },
-  //     {
-  //       "Assignment 1": "Assignment_B",
-  //       "Assignment 2": "Assignment_D",
-  //       "Cosine Similarity (%)": 12.34,
-  //       "Jaccard Similarity (%)": 8.45,
-  //       "Combined Similarity (%)": 10.12,
-  //     },
-  //     {
-  //       "Assignment 1": "Assignment_C",
-  //       "Assignment 2": "Assignment_E",
-  //       "Cosine Similarity (%)": 60.78,
-  //       "Jaccard Similarity (%)": 54.32,
-  //       "Combined Similarity (%)": 57.55,
-  //     },
-  //     {
-  //       "Assignment 1": "Assignment_C",
-  //       "Assignment 2": "Assignment_E",
-  //       "Cosine Similarity (%)": 60.78,
-  //       "Jaccard Similarity (%)": 54.32,
-  //       "Combined Similarity (%)": 57.55,
-  //     },
-  //     {
-  //       "Assignment 1": "Assignment_C",
-  //       "Assignment 2": "Assignment_E",
-  //       "Cosine Similarity (%)": 60.78,
-  //       "Jaccard Similarity (%)": 54.32,
-  //       "Combined Similarity (%)": 57.55,
-  //     },
-  //     {
-  //       "Assignment 1": "Assignment_D",
-  //       "Assignment 2": "Assignment_F",
-  //       "Cosine Similarity (%)": 90.12,
-  //       "Jaccard Similarity (%)": 88.34,
-  //       "Combined Similarity (%)": 89.23,
-  //     },
-  //   ];
-
-  //   // Simulate data fetching
-  //   setTimeout(() => {
-  //     setPlagiarismData(testData);
-  //     setLoading(false);
-  //   }, 1000);
-  // }, []);
 
 
   useEffect(() => {
@@ -106,10 +60,11 @@ function CheckPlagiarism() {
           }
         );
 
-        console.log(response);
-        
         if (response.data.success && response.data.mlResponse.results) {
           setPlagiarismData(response.data.mlResponse.results);
+          setSubmitted(response.data.submitted);
+          setNotSubmitted(response.data.notSubmitted);
+          setLate(response.data.late);
           toast.success("Plagiarism data fetched successfully.");
         } else {
           toast.error("Failed to fetch plagiarism data.");
@@ -177,6 +132,41 @@ function CheckPlagiarism() {
     ],
   };
 
+
+
+  const pieData = {
+    labels: ["Submitted", "Not Submitted", "Late"],
+    datasets: [
+      {
+        label: "Assignment Status",
+        data: [submitted, notSubmitted, late],
+        backgroundColor: ["#4caf50", "#f44336", "#ff9800"],
+        borderColor: ["#4caf50", "#f44336", "#ff9800"],
+        borderWidth: 1,
+        hoverOffset: 20,
+      },
+    ],
+  };
+
+  const pieOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top",
+      },
+      tooltip: {
+        callbacks: {
+          label: (tooltipItem) =>
+            `${tooltipItem.label}: ${tooltipItem.raw} (${(
+              (tooltipItem.raw / (submitted + notSubmitted + late)) *
+              100
+            ).toFixed(2)}%)`,
+        },
+      },
+    },
+  };
+
+
   return (
     <div className="min-h-screen bg-gray-900 text-gray-200 py-4 sm:py-8">
       <ToastContainer position="top-center" autoClose={1500} />
@@ -227,6 +217,10 @@ function CheckPlagiarism() {
               }}
             />
           </div>
+        </div>
+
+        <div style={{ width: "50%", margin: "auto" }}>
+          <Pie data={pieData} options={pieOptions} />
         </div>
 
         <div className="overflow-x-auto">
