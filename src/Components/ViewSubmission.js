@@ -4,6 +4,19 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Loding from "../partials/Loding";
+import "react-toastify/dist/ReactToastify.css";
+import { Bar, Pie } from "react-chartjs-2";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import {
+  Chart,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  BarController,
+} from 'chart.js';
+
+// Register required components
+Chart.register(BarElement, CategoryScale, LinearScale, BarController);
 
 function ViewSubmission() {
   // const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
@@ -14,6 +27,9 @@ function ViewSubmission() {
   const assignmentId = location.state?.assignment_id;
   const [submittedSubmissions, setSubmittedSubmissions] = useState([]);
   const [lateSubmissions, setLateSubmissions] = useState([]);
+  const [submitted, setSubmitted] = useState(0);
+  const [notSubmitted, setNotSubmitted] = useState(0);
+  const [late, setLate] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -40,6 +56,9 @@ function ViewSubmission() {
         if (response.data.success) {
           setSubmittedSubmissions(response.data.submissions.submitted);
           setLateSubmissions(response.data.submissions.late);
+          setSubmitted(response.data.submitted);
+          setNotSubmitted(response.data.notSubmitted);
+          setLate(response.data.late);
           toast.success('Submissions loaded successfully!');
 
         } else {
@@ -84,6 +103,42 @@ function ViewSubmission() {
     );
   }
 
+  const pieData = {
+    labels: ["Submitted", "Not Submitted", "Late"],
+    datasets: [
+      {
+        label: "Assignment Status",
+        data: [submitted, notSubmitted, late],
+        backgroundColor: ["#4caf50", "#f44336", "#ff9800"],
+        borderColor: ["#4caf50", "#f44336", "#ff9800"],
+        borderWidth: 1,
+        hoverOffset: 20,
+      },
+    ],
+  };
+
+  const pieOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    layout: {
+      padding: 10
+    },
+    plugins: {
+      legend: {
+        position: "top",
+      },
+      tooltip: {
+        callbacks: {
+          label: (tooltipItem) =>
+            `${tooltipItem.label}: ${tooltipItem.raw} (${(
+              (tooltipItem.raw / (submitted + notSubmitted + late)) *
+              100
+            ).toFixed(2)}%)`,
+        },
+      },
+    },
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 text-gray-200 py-8">
       <ToastContainer
@@ -104,6 +159,15 @@ function ViewSubmission() {
             Back
           </button>
         </div>
+
+        <div className="flex justify-center items-center bg-gray-800 rounded-lg shadow-md mb-10 overflow-visible">
+            <div className="w-full md:w-1/2 lg:w-1/3 h-[400px] overflow-visible">
+                <Pie
+                  data={pieData}
+                  options={pieOptions}
+                />
+              </div>
+          </div>
 
         {/* Submitted Submissions Table */}
         <h2 className="text-2xl font-semibold mb-4">Submissions</h2>
