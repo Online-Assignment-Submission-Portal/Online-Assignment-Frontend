@@ -26,6 +26,12 @@ const Signup = () => {
       return;
     }
 
+    if(role != "student" && role != "teacher") {
+      console.log(role);
+      setError("role must be student or teacher");
+      return;
+    }
+
     const userDetails = { firstName, lastName, email, password, confirmPassword, role };
     const userEmail = { email };
 
@@ -130,6 +136,21 @@ const Signup = () => {
               placeholder="Re-enter your password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+              className="w-full p-2 bg-gray-700 rounded-md text-white outline-none focus:ring-2 focus:ring-green-500"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="lastName" className="block text-sm font-medium mb-1">
+              Role: 
+            </label>
+            <input
+              type="text"
+              id="role"
+              placeholder="student/teacher"
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
               required
               className="w-full p-2 bg-gray-700 rounded-md text-white outline-none focus:ring-2 focus:ring-green-500"
             />

@@ -46,8 +46,7 @@ const Feedback = ({ assignmentId }) => {
             }
 
             // Send the updated marks and feedback to your backend
-            const response = await axios.post(`${apiUrl}/assignment/submission/save`, {
-                studentId,
+            const response = await axios.post(`${apiUrl}/assignment/submission/save/${studentId}/${assignmentId}`, {
                 marks: submissionData.marks,
                 feedback: submissionData.feedback
             }, {
