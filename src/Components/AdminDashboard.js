@@ -33,6 +33,7 @@ const AdminDashboard = () => {
             Authorization: `Bearer ${token}`,
           },
         });
+        console.log(response);
 
         setPendingUsers(response.data);
       } catch (err) {
@@ -173,6 +174,7 @@ const AdminDashboard = () => {
               <tr>
                 <th className="px-4 py-2 text-center">Name</th>
                 <th className="px-4 py-2 text-center">Email</th>
+                <th className="px-4 py-2 text-center">Role asked</th>
                 <th className="px-4 py-2 text-center">Set role</th>
                 <th className="px-4 py-2 text-center">Options</th>
               </tr>
@@ -182,6 +184,7 @@ const AdminDashboard = () => {
                 <tr key={user._id} className="odd:bg-gray-600 even:bg-gray-700 text-center">
                   <td className="px-4 py-2">{`${user.firstName} ${user.lastName}`}</td>
                   <td className="px-4 py-2">{user.email}</td>
+                  <td className="px-4 py-2">{user.role}</td>
                   <td className="px-4 py-2">
                     <div className="flex justify-between">
                       <label className="flex items-center">
