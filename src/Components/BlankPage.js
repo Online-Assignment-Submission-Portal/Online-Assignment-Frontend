@@ -45,7 +45,7 @@ const BlankPage = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <ToastContainer position="top-center" autoClose={1500} />
+      {/* <ToastContainer position="top-center" autoClose={1500} /> */}
       <h1 className="text-3xl font-bold text-gray-800 mb-6">
         Welcome to Your Dashboard
       </h1>

@@ -332,7 +332,7 @@ function SubjectDetails() {
 
   return (
     <div className="min-h-screen bg-gray-900 py-8 flex flex-col">
-      <ToastContainer position="top-center" autoClose={1500} />
+      {/* <ToastContainer position="top-center" autoClose={1500} /> */}
       <div className="container mx-auto bg-gray-800 p-8 rounded-lg shadow-lg">
         <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-200 text-center w-full sm:w-auto">

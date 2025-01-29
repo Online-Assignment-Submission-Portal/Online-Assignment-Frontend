@@ -50,7 +50,7 @@ const UpdateProfile = () => {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
-            <ToastContainer position="top-center" autoClose={1500} />
+            {/* <ToastContainer position="top-center" autoClose={1500} /> */}
             <div className="bg-gray-800 mt-3 mb-3 p-6 rounded-lg shadow-lg w-full max-w-md">
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>

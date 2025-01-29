@@ -26,10 +26,13 @@ import AboutUs from './Components/AboutUs.js';
 import Services from './Components/Services.js';
 import ContactUs from "./Components/ContactUs.js";
 import ChatContainer from "./Components/ChatContainer.js";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; 
 
 const App = () => {
   return (
     <Router>
+      <ToastContainer position="top-center" autoClose={1500} />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<Signup />} />

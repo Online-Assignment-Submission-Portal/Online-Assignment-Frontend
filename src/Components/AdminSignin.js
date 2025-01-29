@@ -45,7 +45,7 @@ const AdminSignin = () => {
       backgroundSize: "cover",
       backgroundPosition: "center"
     }}>
-      <ToastContainer position="top-center" autoClose={1500} />
+      {/* <ToastContainer position="top-center" autoClose={1500} /> */}
       <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold text-center mb-6">Admin Login</h2>
         {error && (

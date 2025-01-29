@@ -152,7 +152,7 @@ const Profile = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <div className="min-h-screen bg-gray-900 text-gray-200">
-        <ToastContainer position="top-center" autoClose={1500} />
+        {/* <ToastContainer position="top-center" autoClose={1500} /> */}
         <div className="container mx-auto py-8 px-6">
           <div className="flex flex-col sm:flex-row items-center sm:justify-between mb-6 space-y-6 sm:space-y-0 gap-4">
             <div className="flex items-center flex-col sm:flex-row sm:space-x-6">

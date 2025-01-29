@@ -54,7 +54,7 @@ const ForgotPassword = () => {
             Send OTP
           </button>
         </form>
-        <ToastContainer position="top-center" autoClose={1500} />
+        {/* <ToastContainer position="top-center" autoClose={1500} /> */}
       </div>
     </div>
   );
