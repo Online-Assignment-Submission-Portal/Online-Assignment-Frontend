@@ -5,7 +5,8 @@ import { IoArrowBack } from 'react-icons/io5';
 import { FaPaperPlane } from 'react-icons/fa';
 import axios from 'axios'; // Import Axios
 import useStore from '../lib/useStore';
-// import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function ChatContainer() {
   const location = useLocation();
@@ -64,6 +65,7 @@ function ChatContainer() {
         setMessages(response.data); // Update the messages state with fetched messages
       } catch (error) {
         console.error('Error fetching messages:', error);
+        
       }
     };
     console.log("Receiver ID:", receiverId);
@@ -145,7 +147,6 @@ function ChatContainer() {
       );
       
   
-      // Add the new message to the state (you can also handle socket updates here)
       setMessages([...messages, response.data]);
       setNewMessage('');  // Reset the message input field
     } catch (error) {
@@ -168,7 +169,7 @@ function ChatContainer() {
     try {
       await axios.delete(`${apiUrl}/message/delete/${messageId}`, {
         headers: {
-          Authorization: `Bearer ${token}`, // Ensure the token is included here
+          Authorization: `Bearer ${token}`, 
         },
       });
   
@@ -176,7 +177,8 @@ function ChatContainer() {
       setMessages((prevMessages) => prevMessages.filter((msg) => msg._id !== messageId));
       setSelectedMessageId(null); // Clear the selected message ID
     } catch (error) {
-      console.error("Error deleting message:", error.response || error.message);
+      // console.error("Error deleting message:", error.response || error.message);
+      alert(`${error.response.data.error}`);
     }
   };
    
