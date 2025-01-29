@@ -110,7 +110,7 @@ const Signin = () => {
           </a>
         </p>
       </div>
-      <ToastContainer position="top-center" autoClose={2500} />
+      {/* <ToastContainer position="top-center" autoClose={2500} /> */}
     </div>
     <Footer/>
     </div>

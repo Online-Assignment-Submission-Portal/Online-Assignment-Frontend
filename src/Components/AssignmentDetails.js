@@ -280,7 +280,7 @@ function AssignmentDetails() {
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-200 py-8">
-      <ToastContainer position="top-center" autoClose={1500} />
+      {/* <ToastContainer position="top-center" autoClose={1500} /> */}
       <div className="container mx-auto bg-gray-800 p-8 rounded-lg shadow-lg max-w-4xl">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">

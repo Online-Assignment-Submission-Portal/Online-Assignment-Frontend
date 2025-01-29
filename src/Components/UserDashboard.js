@@ -255,7 +255,7 @@ const UserDashboard = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <div className="min-h-screen bg-gray-900 text-gray-200">
-        <ToastContainer position="top-center" autoClose={1500} />
+        {/* <ToastContainer position="top-center" autoClose={1500} /> */}
         <div className="container mx-auto py-8 px-6">
           <div className="flex flex-row justify-between items-center mb-6 gap-4">
             <h1 className="text-3xl font-bold text-center md:text-left">

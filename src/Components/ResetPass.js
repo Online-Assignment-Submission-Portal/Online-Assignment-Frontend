@@ -92,7 +92,7 @@ const ResetPassword = () => {
           </button>
         </form>
       </div>
-      <ToastContainer position="top-center" autoClose={2500} />
+      {/* <ToastContainer position="top-center" autoClose={2500} /> */}
     </div>
   );
 };
