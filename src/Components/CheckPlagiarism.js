@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { Bar, Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import Loding from "../partials/Loding";
@@ -36,7 +36,6 @@ function CheckPlagiarism() {
   const [late, setLate] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [editedSubmissions, setEditedSubmissions] = useState({});
   const [columns, setColumns] = useState({
     CosineSimilarity: true,
     JaccardSimilarity: true,
