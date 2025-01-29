@@ -17,6 +17,7 @@ function ViewSubmission() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+
   useEffect(() => {
     const fetchSubmissions = async () => {
       try {
@@ -42,11 +43,9 @@ function ViewSubmission() {
           toast.success('Submissions loaded successfully!');
 
         } else {
-          // setError('Failed to fetch assignment submissions.');
           toast.error('Failed to fetch assignment submissions.');
         }
       } catch (err) {
-        // setError("Error in fetching submissions.");
         toast.error('Error in fetching submissions.');
 
       } finally {
