@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import useStore from './lib/useStore';
 import Header from "./Components/Header";
 import Signup from "./Components/Signup";
 import Signin from "./Components/Signin";
@@ -30,6 +31,12 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; 
 
 const App = () => {
+  const { monitorSocketConnection } = useStore();
+
+  useEffect(() => {
+    monitorSocketConnection();
+  }, [monitorSocketConnection]);
+
   return (
     <Router>
       <ToastContainer position="top-center" autoClose={1500} />
