@@ -15,7 +15,7 @@ const Signup = () => {
   const [role, setRole] = useState("student");
   // const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
   const apiUrl = window.location.hostname === 'localhost'
-  ? "http://localhost:8000" : process.env.REACT_APP_BASE_URL;
+    ? "http://localhost:8000" : process.env.REACT_APP_BASE_URL;
   const navigate = useNavigate();
 
   const handleSignup = async (e) => {
@@ -26,7 +26,7 @@ const Signup = () => {
       return;
     }
 
-    if(role != "student" && role != "teacher") {
+    if (role !== "student" && role !== "teacher") {
       console.log(role);
       setError("role must be student or teacher");
       return;
@@ -51,135 +51,139 @@ const Signup = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
-    <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white"
-    style={{
-      backgroundImage: "url('https://jharkhand.studyinfo.org.in/wp-content/uploads/2023/08/Screenshot-66-1024x469.png')",
-      backgroundSize: "cover",
-      backgroundPosition: "top"
-    }}>
-      <div className="bg-gray-800 mt-3 mb-3 p-6 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold text-center mb-6">Sign Up</h2>
-        {error && (
-          <div className="bg-red-600 text-white text-center py-2 px-4 mb-4 rounded-md">
-            {error}
+      <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white"
+        style={{
+          backgroundImage: "url('https://jharkhand.studyinfo.org.in/wp-content/uploads/2023/08/Screenshot-66-1024x469.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "top"
+        }}>
+        <div className="bg-gray-800 mt-3 mb-3 p-6 rounded-lg shadow-lg w-full max-w-md">
+          <h2 className="text-2xl font-bold text-center mb-6">Sign Up</h2>
+          {error && (
+            <div className="bg-red-600 text-white text-center py-2 px-4 mb-4 rounded-md">
+              {error}
+            </div>
+          )}
+
+          <div className="space-y-4">
+
+            <form onSubmit={handleSignup} className="space-y-4">
+              <div>
+                <label htmlFor="firstName" className="block text-sm font-medium mb-1">
+                  First Name
+                </label>
+                <input
+                  type="text"
+                  id="firstName"
+                  placeholder="Enter your first name"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  required
+                  className="w-full p-2 bg-gray-700 rounded-md text-white outline-none focus:ring-2 focus:ring-green-500"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="lastName" className="block text-sm font-medium mb-1">
+                  Last Name
+                </label>
+                <input
+                  type="text"
+                  id="lastName"
+                  placeholder="Enter your last name"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  required
+                  className="w-full p-2 bg-gray-700 rounded-md text-white outline-none focus:ring-2 focus:ring-green-500"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium mb-1">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="w-full p-2 bg-gray-700 rounded-md text-white outline-none focus:ring-2 focus:ring-green-500"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="password" className="block text-sm font-medium mb-1">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  id="password"
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="w-full p-2 bg-gray-700 rounded-md text-white outline-none focus:ring-2 focus:ring-green-500"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="confirmPassword" className="block text-sm font-medium mb-1">
+                  Confirm Password
+                </label>
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  placeholder="Re-enter your password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                  className="w-full p-2 bg-gray-700 rounded-md text-white outline-none focus:ring-2 focus:ring-green-500"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="role" className="block text-sm font-medium mb-1">
+                  Role
+                </label>
+                <select
+                  id="role"
+                  value={role}
+                  onChange={(e) => setRole(e.target.value)}
+                  required
+                  className="w-full p-2 bg-gray-700 rounded-md text-white outline-none focus:ring-2 focus:ring-green-500"
+                >
+                  <option value="student">Student</option>
+                  <option value="teacher">Teacher</option>
+                </select>
+              </div>
+              <button
+                type="submit"
+                className="w-full bg-green-600 hover:bg-green-500 text-white py-2 px-4 rounded-md font-bold transition"
+              >
+                Sign Up
+              </button>
+            </form>
+            <button
+              onClick={() => navigate("/")}
+              className="w-full bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-md font-bold transition"
+            >
+              Go to Home
+            </button>
           </div>
-        )}
 
-        <form onSubmit={handleSignup} className="space-y-4">
-          <div>
-            <label htmlFor="firstName" className="block text-sm font-medium mb-1">
-              First Name
-            </label>
-            <input
-              type="text"
-              id="firstName"
-              placeholder="Enter your first name"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              required
-              className="w-full p-2 bg-gray-700 rounded-md text-white outline-none focus:ring-2 focus:ring-green-500"
-            />
-          </div>
 
-          <div>
-            <label htmlFor="lastName" className="block text-sm font-medium mb-1">
-              Last Name
-            </label>
-            <input
-              type="text"
-              id="lastName"
-              placeholder="Enter your last name"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              required
-              className="w-full p-2 bg-gray-700 rounded-md text-white outline-none focus:ring-2 focus:ring-green-500"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium mb-1">
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full p-2 bg-gray-700 rounded-md text-white outline-none focus:ring-2 focus:ring-green-500"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium mb-1">
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full p-2 bg-gray-700 rounded-md text-white outline-none focus:ring-2 focus:ring-green-500"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-medium mb-1">
-              Confirm Password
-            </label>
-            <input
-              type="password"
-              id="confirmPassword"
-              placeholder="Re-enter your password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-              className="w-full p-2 bg-gray-700 rounded-md text-white outline-none focus:ring-2 focus:ring-green-500"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="lastName" className="block text-sm font-medium mb-1">
-              Role: 
-            </label>
-            <input
-              type="text"
-              id="role"
-              placeholder="student/teacher"
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-              required
-              className="w-full p-2 bg-gray-700 rounded-md text-white outline-none focus:ring-2 focus:ring-green-500"
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="w-full bg-green-600 hover:bg-green-500 text-white py-2 px-4 rounded-md font-bold transition"
-          >
-            Sign Up
-          </button>
-          <button
-            onClick={() => navigate("/")}
-            className="w-full bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-md font-bold transition"
-          >
-            Go to Home
-          </button>
-        </form>
-
-        <p className="mt-4 text-center text-sm">
-          Already a user?{" "}
-          <a href="/signin" className="text-green-400 hover:underline">
-            Sign In
-          </a>
-        </p>
+          <p className="mt-4 text-center text-sm">
+            Already a user?{" "}
+            <a href="/signin" className="text-green-400 hover:underline">
+              Sign In
+            </a>
+          </p>
+        </div>
+        {/* <ToastContainer position="top-center" autoClose={2500} /> */}
       </div>
-      {/* <ToastContainer position="top-center" autoClose={2500} /> */}
-    </div>
-    <Footer/>
+      <Footer />
     </div>
   );
 };

@@ -36,6 +36,7 @@ function CheckPlagiarism() {
   const [late, setLate] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [submissions, setSubmissions] = useState([]);
   const [columns, setColumns] = useState({
     CosineSimilarity: true,
     JaccardSimilarity: true,
@@ -71,18 +72,20 @@ function CheckPlagiarism() {
             },
           }
         );
+        console.log(response);
 
         if (response.data.success && response.data.mlResponse.results) {
           setPlagiarismData(response.data.mlResponse.results);
           setSubmitted(response.data.submitted);
           setNotSubmitted(response.data.notSubmitted);
           setLate(response.data.late);
+          setSubmissions(response.data.submissions);
           const toastId = "plagiarism-success";
           if (!toast.isActive(toastId)) {
-            toast.success("Plagiarism data fetched successfully.", { toastId});
+            toast.success("Data fetched successfully.", { toastId });
           }
         } else {
-          toast.error("Failed to fetch plagiarism data.");
+          toast.error("Failed to fetch data.");
         }
       } catch (err) {
         setError(err?.response?.data?.message || "An error occurred.");
@@ -389,7 +392,7 @@ function CheckPlagiarism() {
 
         <div className="overflow-x-auto mt-8 bg-gray-800 rounded-lg shadow-lg">
           <h2 className="text-xl sm:text-2xl font-bold text-gray-200 mb-4">Grading and Feedback</h2>
-          <Feedback assignmentId={assignmentId} />
+          <Feedback assignmentId={assignmentId} submissions={submissions} />
         </div>
       </div>
     </div>
