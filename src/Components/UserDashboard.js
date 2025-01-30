@@ -261,12 +261,20 @@ const UserDashboard = () => {
             <h1 className="text-3xl font-bold text-center md:text-left">
               Welcome, {user.firstName}!
             </h1>
-            <button
-              onClick={handleLogout}
-              className="bg-red-600 hover:bg-red-500 text-white font-bold py-2 px-4 rounded-lg w-auto"
-            >
-              Logout
-            </button>
+            <div className="flex gap-4">
+              <button
+                onClick={() => navigate("/notification")}
+                className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded-lg"
+              >
+                Notifications
+              </button>
+              <button
+                onClick={handleLogout}
+                className="bg-red-600 hover:bg-red-500 text-white font-bold py-2 px-4 rounded-lg w-auto"
+              >
+                Logout
+              </button>
+            </div>
           </div>
 
           <div className="mb-6">

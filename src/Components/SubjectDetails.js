@@ -146,6 +146,28 @@ function SubjectDetails() {
         if (emailInput.length !== 0) {
           toast.success('Students added successfully!'); // Success toast
         }
+
+        const senderId = userID; // The teacher/admin adding the student
+        response.data.students_id.forEach(async (studentId) => {
+          try {
+            await axios.post(
+              `${apiUrl}/notification/new`,
+              {
+                senderId,
+                receiverId: studentId,
+                content: `You have been added to the subject: ${subject.subject_name}`,
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  'Content-Type': 'application/json',
+                },
+              }
+            );
+          } catch (notifError) {
+            console.error('Error sending notification:', notifError);
+          }
+        });
       } else {
         toast.error(response.data.message);
       }
