@@ -100,7 +100,7 @@ function ChatContainer() {
           }
         );
         
-        console.clear();
+        // console.clear();
         console.log(response.data);
         // Update the receiver's profile state with the fetched data
         setReceiverProfile((prevProfile) => ({
