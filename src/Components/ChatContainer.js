@@ -173,39 +173,43 @@ function ChatContainer() {
         },
       });
   
+      // Emit the deleteMessage event to the server via WebSocket
+      if (socket) {
+        socket.emit("deleteMessage", { senderId, receiverId, messageId });
+      }
+  
       // Update the UI by filtering out the deleted message
       setMessages((prevMessages) => prevMessages.filter((msg) => msg._id !== messageId));
       setSelectedMessageId(null); // Clear the selected message ID
     } catch (error) {
-      // console.error("Error deleting message:", error.response || error.message);
       alert(`${error.response.data.error}`);
     }
   };
-   
-
 
   useEffect(() => {
     if (!socket) return; // Ensure the socket is available
 
     const handleNewMessage = (newMessage) => {
-      
-      // Only update the state if the new message is from the current receiver
-      if (newMessage.senderId === receiverId) {
-        // console.log('kya be sender:', senderId);
-        // console.log('haa tumhi to ho message:', newMessage);
-        setMessages((prevMessages) => [...prevMessages, newMessage]);
-      }
+        // Only update the state if the new message is from the current receiver
+        if (newMessage.senderId === receiverId) {
+            setMessages((prevMessages) => [...prevMessages, newMessage]);
+        }
     };
 
-    // Subscribe to new message event
+    const handleMessageDeleted = (messageId) => {
+        setMessages((prevMessages) => prevMessages.filter((msg) => msg._id !== messageId));
+    };
+
+    // Subscribe to new message and message deleted events
     socket.on('newMessage', handleNewMessage);
+    socket.on('messageDeleted', handleMessageDeleted);
 
     // Cleanup on unmount or receiver change
     return () => {
-      socket.off('newMessage', handleNewMessage);
+        socket.off('newMessage', handleNewMessage);
+        socket.off('messageDeleted', handleMessageDeleted);
     };
-  }, [socket, receiverId, messages]);
-
+}, [socket, receiverId]);
 
   
   return (
