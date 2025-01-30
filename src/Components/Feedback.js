@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import * as XLSX from 'xlsx';
 
 const Feedback = ({ assignmentId, submissions }) => {
     const navigate = useNavigate();
@@ -75,10 +76,31 @@ const Feedback = ({ assignmentId, submissions }) => {
             toast.error("Error in saving submission.");
         }
     };
-    
+
+    const handleDownload = () => {
+        
+        const data = submittedSubmissions.map(submission => ({
+            Name: `${submission.firstName} ${submission.lastName}`,
+            RollNo: submission.rollNo,
+            Marks: submission.marks,
+        }));
+        console.log(data);
+
+        const worksheet = XLSX.utils.json_to_sheet(data);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Submissions");
+
+        XLSX.writeFile(workbook, `Submissions_${assignmentId}.xlsx`);
+    };
 
     return (
         <div className="overflow-x-auto p-4">
+        <button
+                onClick={handleDownload}
+                className="bg-green-600 text-white py-1 px-4 rounded-lg hover:bg-green-500 mb-4"
+            >
+                Download Excel
+            </button>
             <table className="w-full text-left border-collapse border border-gray-700">
                 <thead>
                     <tr className="bg-gray-700 text-gray-200">
