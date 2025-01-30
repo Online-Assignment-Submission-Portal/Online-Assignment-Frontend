@@ -78,13 +78,13 @@ const Feedback = ({ assignmentId, submissions }) => {
     };
 
     const handleDownload = () => {
-        
-        const data = submittedSubmissions.map(submission => ({
-            Name: `${submission.firstName} ${submission.lastName}`,
-            RollNo: submission.rollNo,
-            Marks: submission.marks,
-        }));
-        console.log(data);
+        const data = submissions
+            .map(submission => ({
+                RollNo: submission.rollNo,
+                Name: `${submission.firstName} ${submission.lastName}`,
+                Marks: submission.grade,
+            }))
+            .sort((a, b) => a.RollNo - b.RollNo);
 
         const worksheet = XLSX.utils.json_to_sheet(data);
         const workbook = XLSX.utils.book_new();
