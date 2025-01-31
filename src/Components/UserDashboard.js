@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import io from "socket.io-client";
 import Footer from './Footer';
 import useStore from "../lib/useStore";
+import 'remixicon/fonts/remixicon.css';
 
 const UserDashboard = () => {
   const { id } = useParams();
@@ -265,8 +265,11 @@ const UserDashboard = () => {
               <button
                 onClick={() => navigate("/notification")}
                 className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg"
+
               >
-                Notifications
+                <span className="text-violet-600 mr-2 text-3xl text-center">
+                <i class="ri-notification-4-fill"></i>
+                </span>
               </button>
               <button
                 onClick={handleLogout}
