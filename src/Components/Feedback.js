@@ -135,7 +135,7 @@ const Feedback = ({ assignmentId, submissions }) => {
                                         value={
                                             editedSubmissions[submission.studentId]?.grade !== undefined
                                                 ? editedSubmissions[submission.studentId]?.grade
-                                                : submission.grade || ""
+                                                : (submission.grade !== undefined ? submission.grade : "")
                                         }
                                         onChange={(e) => handleInputChange(e, submission.studentId, "grade")}
                                         className="bg-gray-600 border border-gray-400 p-2 rounded-md focus:ring-2 focus:ring-blue-500 w-20"

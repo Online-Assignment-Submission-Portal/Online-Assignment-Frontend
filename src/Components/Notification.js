@@ -4,7 +4,6 @@ import useStore from "../lib/useStore";
 import { useNavigate } from "react-router-dom";
 
 
-
 const Notification = () => {
   const { notifications, fetchNotifications, listenForNotifications, deleteReadNotifications } = useNotificationStore();
   const { userId, socket, connectSocket } = useStore();
@@ -17,14 +16,14 @@ const Notification = () => {
     }
   }, [userId, socket]);
 
-    useEffect(() => {
-      if(!socket)
-        return;
-      socket.onclose = () => {
-        console.log("WebSocket disconnected, attempting to reconnect...");
-        setTimeout(connectSocket, 1000); // Retry connection after 1 second
-      };
-    },[socket])
+  useEffect(() => {
+    if (!socket)
+      return;
+    socket.onclose = () => {
+      console.log("WebSocket disconnected, attempting to reconnect...");
+      setTimeout(connectSocket, 1000); // Retry connection after 1 second
+    };
+  }, [socket])
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-200 py-4 sm:py-8">

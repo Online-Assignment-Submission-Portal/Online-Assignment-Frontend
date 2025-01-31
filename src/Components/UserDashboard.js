@@ -261,10 +261,11 @@ const UserDashboard = () => {
             <h1 className="text-3xl font-bold text-center md:text-left">
               Welcome, {user.firstName}!
             </h1>
-            <div className="flex gap-4">
+            <div className="flex flex-wrap justify-center sm:justify-end gap-4">
               <button
                 onClick={() => navigate("/notification")}
-                className=" hover:bg-blue-200 text-white font-bold py-2 px-2 flex items-center justify-center rounded-full"
+                className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg"
+
               >
                 <span className="text-violet-600 mr-2 text-3xl text-center">
                 <i class="ri-notification-4-fill"></i>
@@ -298,7 +299,7 @@ const UserDashboard = () => {
             </div>
           </div>
 
-          <div className="mb-4 flex justify-between sm:justify-start">
+          <div className="mb-4 flex justify-between sm:justify-start gap-2">
             <button
               onClick={() => handleProfile(userId)}
               className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg w-auto"
