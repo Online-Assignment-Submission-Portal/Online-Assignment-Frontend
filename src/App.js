@@ -30,6 +30,7 @@ import ChatContainer from "./Components/ChatContainer.js";
 import Grievance from "./Components/Grievance.js";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; 
+import Notification from "./Components/Notification.js";
 
 const App = () => {
   const { monitorSocketConnection } = useStore();
@@ -67,6 +68,7 @@ const App = () => {
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/chat-container" element={<ChatContainer />} />
         <Route path="/grievances" element={<Grievance />} />
+        <Route path="/notifications" element={<Notification />} />              
         <Route path="/*" element={<PageNotFound />} />
       </Routes>
     </Router>

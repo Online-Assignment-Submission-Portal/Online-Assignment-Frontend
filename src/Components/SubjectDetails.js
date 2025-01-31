@@ -142,10 +142,36 @@ function SubjectDetails() {
         setNotFoundEmails((prev) => [...prev, ...response.data.notFoundStudents]);
         setEmailInput('');
         setIsModalOpen(false);
-
+        if(emailInput.length === 0) {
+          return;
+        }
         if (emailInput.length !== 0) {
           toast.success('Students added successfully!'); // Success toast
         }
+
+        const senderId = userID; // The teacher/admin adding the student
+        // console.log(response.data.students_id);
+        response.data.addedStudents.forEach(async (studentId) => {
+          try {
+            await axios.post(
+              `${apiUrl}/notification/new`,
+              {
+                senderId,
+                receiverId: studentId,
+                content: `You have been added to the subject: ${subject.subject_name}`,
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  'Content-Type': 'application/json',
+                },
+              }
+            );
+          } catch (notifError) {
+            console.error('Error sending notification:', notifError);
+          }
+
+        });
       } else {
         toast.error(response.data.message);
       }
@@ -179,11 +205,32 @@ function SubjectDetails() {
       if (response.data.success) {
         setFoundStudents((prev) => prev.filter((student) => student._id !== studentId));
         toast.success('Student removed successfully!'); // Success toast
+        const senderId = userID; // The teacher/admin removing the student
+        response.data.removedStudents.forEach(async (studentId) => {
+          try {
+            await axios.post(
+              `${apiUrl}/notification/new`,
+              {
+                senderId,
+                receiverId: studentId,
+                content: `You have been removed from the subject: ${subject.subject_name}`,
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  'Content-Type': 'application/json',
+                },
+              }
+            );
+          } catch (notifError) {
+            console.error('Error sending notification:', notifError);
+          }
+        });
       } else {
         toast.error(response.data.message);
       }
     } catch (error) {
-      // console.error('Error removing student:', error);
+      console.error('Error removing student:', error);
       toast.error('Error removing student.'); // Error toast
     }
   };
