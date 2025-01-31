@@ -27,6 +27,7 @@ import AboutUs from './Components/AboutUs.js';
 import Services from './Components/Services.js';
 import ContactUs from "./Components/ContactUs.js";
 import ChatContainer from "./Components/ChatContainer.js";
+import Grievance from "./Components/Grievance.js";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; 
 
@@ -65,6 +66,7 @@ const App = () => {
         <Route path="/services" element={<Services />} />
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/chat-container" element={<ChatContainer />} />
+        <Route path="/grievances" element={<Grievance />} />
         <Route path="/*" element={<PageNotFound />} />
       </Routes>
     </Router>
