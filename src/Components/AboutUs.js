@@ -10,15 +10,13 @@ const AboutUs = () => {
 
   return (
     <div className="bg-gray-900  flex flex-col text-white min-h-screen py-12">
-      {/* Back Button at the bottom */}
-      <div className="mx-4 mt-4 flex justify-between">
+      <div className="flex flex-row justify-end mx-8 mt-2 mb-4">
         <button
           onClick={handleBack}
-          className="bg-yellow-400 text-black py-1 px-3 rounded-lg shadow-xl hover:bg-rose-500 transition duration-300 transform hover:scale-105 hover:font-semibold"
+          className="bg-yellow-400 text-black py-2 px-4 rounded-lg shadow-xl hover:bg-rose-500 font-semibold transition duration-200 transform hover:scale-[102%]"
         >
           Back
         </button>
-
       </div>
       <div className="container w-4/5 lg:w-3/5 mx-auto bg-gray-800 p-8 rounded-lg shadow-lg">
       

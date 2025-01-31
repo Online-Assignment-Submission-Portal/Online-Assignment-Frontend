@@ -11,7 +11,7 @@ const AdminDashboard = () => {
   const [selectedRoles, setSelectedRoles] = useState({});
   // const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
   const apiUrl = window.location.hostname === 'localhost'
-  ? "http://localhost:8000" : process.env.REACT_APP_BASE_URL;
+    ? "http://localhost:8000" : process.env.REACT_APP_BASE_URL;
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -153,119 +153,119 @@ const AdminDashboard = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
-    <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center py-10">
-      {/* <ToastContainer position="top-center" autoClose={1500} /> */}
-      <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-4xl">
-        <h2 className="text-2xl font-bold mb-6">Admin Dashboard</h2>
+      <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center py-10">
+        {/* <ToastContainer position="top-center" autoClose={1500} /> */}
+        <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-4xl">
+          <h2 className="text-2xl font-bold mb-6">Admin Dashboard</h2>
 
-        {error && (
-          <div className="bg-red-600 text-white py-2 px-4 rounded-md mb-4">
-            {error}
-          </div>
-        )}
+          {error && (
+            <div className="bg-red-600 text-white py-2 px-4 rounded-md mb-4">
+              {error}
+            </div>
+          )}
 
-        <h3 className="text-xl font-semibold mb-4">Pending Users</h3>
+          <h3 className="text-xl font-semibold mb-4">Pending Users</h3>
 
-        {pendingUsers.length === 0 ? (
-          <p className="text-center">No pending users.</p>
-        ) : (
-          <table className="table-auto w-full text-left text-sm bg-gray-700 rounded-lg overflow-hidden">
-            <thead className="bg-green-700">
-              <tr>
-                <th className="px-4 py-2 text-center">Name</th>
-                <th className="px-4 py-2 text-center">Email</th>
-                <th className="px-4 py-2 text-center">Role asked</th>
-                <th className="px-4 py-2 text-center">Set role</th>
-                <th className="px-4 py-2 text-center">Options</th>
-              </tr>
-            </thead>
-            <tbody>
-              {pendingUsers.map((user) => (
-                <tr key={user._id} className="odd:bg-gray-600 even:bg-gray-700 text-center">
-                  <td className="px-4 py-2">{`${user.firstName} ${user.lastName}`}</td>
-                  <td className="px-4 py-2">{user.email}</td>
-                  <td className="px-4 py-2">{user.role}</td>
-                  <td className="px-4 py-2">
-                    <div className="flex justify-between">
-                      <label className="flex items-center">
-                        <input
-                          type="radio"
-                          name={`role-${user._id}`}
-                          value="student"
-                          checked={selectedRoles[user._id] === "student"}
-                          onChange={() =>
-                            setSelectedRoles((prev) => ({
-                              ...prev,
-                              [user._id]: "student",
-                            }))
-                          }
-                          className="mr-2"
-                        />
-                        Student
-                      </label>
-                      <label className="flex items-center">
-                        <input
-                          type="radio"
-                          name={`role-${user._id}`}
-                          value="teacher"
-                          checked={selectedRoles[user._id] === "teacher"}
-                          onChange={() =>
-                            setSelectedRoles((prev) => ({
-                              ...prev,
-                              [user._id]: "teacher",
-                            }))
-                          }
-                          className="mr-2"
-                        />
-                        Teacher
-                      </label>
-                    </div>
-                  </td>
-                  <td className="px-4 py-2">
-                    <div className="flex justify-center gap-2">
-                      <button
-                        onClick={() => handleConfirmRole(user._id)}
-                        className="bg-green-600 text-white py-1 px-4 rounded-md hover:bg-green-500 transition"
-                      >
-                        Confirm role
-                      </button>
-                      <button
-                        onClick={() => handleDeleteUser(user._id)}
-                        className="bg-red-600 text-white py-1 px-4 rounded-md hover:bg-red-500 transition"
-                      >
-                        Delete user
-                      </button>
-                    </div>
-                  </td>
+          {pendingUsers.length === 0 ? (
+            <p className="text-center">No pending users.</p>
+          ) : (
+            <table className="table-auto w-full text-left text-sm bg-gray-700 rounded-lg overflow-hidden">
+              <thead className="bg-green-700">
+                <tr>
+                  <th className="px-4 py-2 text-center">Name</th>
+                  <th className="px-4 py-2 text-center">Email</th>
+                  <th className="px-4 py-2 text-center">Role asked</th>
+                  <th className="px-4 py-2 text-center">Set role</th>
+                  <th className="px-4 py-2 text-center">Options</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
+              </thead>
+              <tbody>
+                {pendingUsers.map((user) => (
+                  <tr key={user._id} className="odd:bg-gray-600 even:bg-gray-700 text-center">
+                    <td className="px-4 py-2">{`${user.firstName} ${user.lastName}`}</td>
+                    <td className="px-4 py-2">{user.email}</td>
+                    <td className="px-4 py-2">{user.role}</td>
+                    <td className="px-4 py-2">
+                      <div className="flex justify-between">
+                        <label className="flex items-center">
+                          <input
+                            type="radio"
+                            name={`role-${user._id}`}
+                            value="student"
+                            checked={selectedRoles[user._id] === "student"}
+                            onChange={() =>
+                              setSelectedRoles((prev) => ({
+                                ...prev,
+                                [user._id]: "student",
+                              }))
+                            }
+                            className="mr-2"
+                          />
+                          Student
+                        </label>
+                        <label className="flex items-center">
+                          <input
+                            type="radio"
+                            name={`role-${user._id}`}
+                            value="teacher"
+                            checked={selectedRoles[user._id] === "teacher"}
+                            onChange={() =>
+                              setSelectedRoles((prev) => ({
+                                ...prev,
+                                [user._id]: "teacher",
+                              }))
+                            }
+                            className="mr-2"
+                          />
+                          Teacher
+                        </label>
+                      </div>
+                    </td>
+                    <td className="px-4 py-2">
+                      <div className="flex justify-center gap-2">
+                        <button
+                          onClick={() => handleConfirmRole(user._id)}
+                          className="bg-green-600 text-white py-1 px-4 rounded-md hover:bg-green-500 transition"
+                        >
+                          Confirm role
+                        </button>
+                        <button
+                          onClick={() => handleDeleteUser(user._id)}
+                          className="bg-red-600 text-white py-1 px-4 rounded-md hover:bg-red-500 transition"
+                        >
+                          Delete user
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
 
-        <div className="flex justify-between mt-6">
-          <button
-            onClick={() => navigate("/existing-users")}
-            className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-500 transition"
-          >
-            See Existing Users
-          </button>
-          <button
-            onClick={() => navigate("/grievances")}
-            className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-500 transition"
-          >
-            See Feedbacks
-          </button>
-          <button
-            onClick={handleLogout}
-            className="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-rose-500 transition"
-          >
-            Logout
-          </button>
+          <div className="flex flex-row justify-between mt-6 gap-2">
+            <button
+              onClick={() => navigate("/existing-users")}
+              className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-500 transition"
+            >
+              See Existing Users
+            </button>
+            <button
+              onClick={() => navigate("/grievances")}
+              className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-500 transition"
+            >
+              See Feedbacks
+            </button>
+            <button
+              onClick={handleLogout}
+              className="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-rose-500 transition"
+            >
+              Logout
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-    <Footer/>
+      <Footer />
     </div>
   );
 };

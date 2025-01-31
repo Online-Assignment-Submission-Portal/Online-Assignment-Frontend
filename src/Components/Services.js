@@ -10,15 +10,14 @@ const Services = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white py-10">
-      {/* Back Button at the bottom */}
-      <div className="items-left mt-6 mx-6">
-          <button
-            onClick={handleBack}
-            className="bg-yellow-400 text-black py-1 px-3 hover:bg-rose-400 hover:font-semibold rounded-lg shadow-xl hover:bg-primary/80 transition duration-300 transform hover:scale-105"
-          >
-            Back
-          </button>
-        </div>
+      <div className="flex flex-row justify-end mx-8 mt-2 mb-4">
+        <button
+          onClick={handleBack}
+          className="bg-yellow-400 text-black py-2 px-4 rounded-lg shadow-xl hover:bg-rose-500 font-semibold transition duration-200 transform hover:scale-[102%]"
+        >
+          Back
+        </button>
+      </div>
       <div className="container mx-auto px-4">
         <h1 className="text-4xl font-bold text-center text-primary mb-8">Our Services</h1>
 
