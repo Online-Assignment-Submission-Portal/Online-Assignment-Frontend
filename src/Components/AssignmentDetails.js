@@ -280,16 +280,12 @@ function AssignmentDetails() {
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-200 py-8">
-      {/* <ToastContainer position="top-center" autoClose={1500} /> */}
       <div className="container mx-auto bg-gray-800 p-8 rounded-lg shadow-lg max-w-4xl">
-        {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-          {/* Title */}
           <h1 className="text-2xl sm:text-3xl font-bold text-center sm:text-left">
             Assignment Details
           </h1>
 
-          {/* Action Buttons */}
           <div className="flex flex-wrap justify-center sm:justify-end gap-4">
             {userRole === 'teacher' && (
               <button
