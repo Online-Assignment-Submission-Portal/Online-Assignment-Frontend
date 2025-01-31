@@ -206,7 +206,7 @@ const ExistingUsers = () => {
     <div className="sm:w-full min-h-screen bg-gray-900 text-white lg:flex lg:flex-col lg:items-center py-10">
       {/* <ToastContainer position="top-center" autoClose={1500} /> */}
       <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full mx-auto">
-        <div className="flex flex-row justify-between mb-4 font-semibold">
+        <div className="flex flex-row justify-between mb-4 font-semibold gap-2">
           <button
             onClick={() => navigate("/admin-dashboard")}
             className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-500 transition mb-2 sm:mb-0"
