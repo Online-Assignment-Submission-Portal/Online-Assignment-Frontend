@@ -68,7 +68,7 @@ const App = () => {
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/chat-container" element={<ChatContainer />} />
         <Route path="/grievances" element={<Grievance />} />
-        <Route path="/notifications" element={<Notification />} />              
+        <Route path="/notification" element={<Notification />} />              
         <Route path="/*" element={<PageNotFound />} />
       </Routes>
     </Router>
