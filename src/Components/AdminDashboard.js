@@ -250,7 +250,12 @@ const AdminDashboard = () => {
           >
             See Existing Users
           </button>
-
+          <button
+            onClick={() => navigate("/grievances")}
+            className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-500 transition"
+          >
+            See Feedbacks
+          </button>
           <button
             onClick={handleLogout}
             className="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-rose-500 transition"
