@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import io from "socket.io-client";
 import Footer from './Footer';
 import useStore from "../lib/useStore";
+import 'remixicon/fonts/remixicon.css';
 
 const UserDashboard = () => {
   const { id } = useParams();
@@ -264,9 +264,11 @@ const UserDashboard = () => {
             <div className="flex gap-4">
               <button
                 onClick={() => navigate("/notification")}
-                className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded-lg"
+                className=" hover:bg-blue-200 text-white font-bold py-2 px-2 flex items-center justify-center rounded-full"
               >
-                Notifications
+                <span className="text-violet-600 mr-2 text-3xl text-center">
+                <i class="ri-notification-4-fill"></i>
+                </span>
               </button>
               <button
                 onClick={handleLogout}
