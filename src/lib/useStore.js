@@ -10,17 +10,17 @@ export const useStore = create((set,get) => ({
   socket: null,
   userId: localStorage.getItem('userId') || null,
   setUserId: (id) => {
-    console.log("Setting userId:", id);
+    // console.log("Setting userId:", id);
     localStorage.setItem('userId', id);
     set({ userId: id });
   },
   connectSocket: () => {
     const userId = get().userId;
     if (!userId) {
-      console.log("userId is null, cannot connect socket");
+      // console.log("userId is null, cannot connect socket");
       return;
     }
-    console.log("Connecting socket with userId:", userId);
+    // console.log("Connecting socket with userId:", userId);
     if(get().socket?.connected) return;
     const socket = io(`${apiUrl}`,{
       query:{
@@ -33,7 +33,7 @@ export const useStore = create((set,get) => ({
       set({ onlineUsers: userIds })
     })
     socket.on("disconnect", () => {
-      console.log("WebSocket disconnected, attempting to reconnect...");
+      // console.log("WebSocket disconnected, attempting to reconnect...");
       get().handleSocketDisconnect();
     });
   },
@@ -42,19 +42,19 @@ export const useStore = create((set,get) => ({
   },
   handleSocketDisconnect: () => {
     setTimeout(() => {
-      console.log("Reconnecting WebSocket...");
+      // console.log("Reconnecting WebSocket...");
       get().connectSocket();
     }, 1000); // Retry connection after 1 second
   },
   monitorSocketConnection: () => {
     setInterval(() => {
       const userId = get().userId;
-      console.log("Monitoring socket connection, userId:", userId);
+      // console.log("Monitoring socket connection, userId:", userId);
       if (!get().socket?.connected && userId) {
-        console.log("WebSocket not connected, attempting to reconnect...");
+        // console.log("WebSocket not connected, attempting to reconnect...");
         get().connectSocket();
       }
-      console.log(get().socket?.connected ? "WebSocket connected" : "WebSocket not connected");
+      // console.log(get().socket?.connected ? "WebSocket connected" : "WebSocket not connected");
     }, 2000); // Check connection every 5 seconds
   },
 }));
