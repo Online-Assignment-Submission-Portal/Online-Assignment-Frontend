@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Footer from './Footer';
 import Header from './UserHeader'
 import useStore from "../lib/useStore";
+import notificationStore from "../lib/notificationStore";
 import 'remixicon/fonts/remixicon.css';
 
 const UserDashboard = () => {
@@ -23,10 +24,42 @@ const UserDashboard = () => {
   const [joinMessage, setJoinMessage] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [notification, setNotification] = useState([]);
-  const { disconnectSocket } = useStore();
+  const { disconnectSocket, socket } = useStore();
+  const { notifications } = notificationStore();
   const userId = id.toString();
   let userData;
 
+
+  useEffect(() => {
+    const fetchUnreadNotifications = async () => {
+      console.log("Fetching notifications...");
+      try {
+        const token = document.cookie
+          .split('; ')
+          .find((row) => row.startsWith('token='))
+          ?.split('=')[1];
+        const response = await axios.get(`${apiUrl}/notification/unread/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          }
+        )
+        console.log(response.data);
+        if (response.data.success) {
+          setNotification(response.data.notifications);
+        }
+      } catch (error) {
+        console.error("Error fetching notifications: ", error);
+      }
+
+      const interval = setInterval(fetchUnreadNotifications, 10000);
+      return () => clearInterval(interval);
+    }
+    fetchUnreadNotifications();
+    // fetchUnreadNotifications();
+  }, [userId, apiUrl, notifications]);
   const fetchUserData = async (id) => {
     try {
       const token = document.cookie
@@ -267,9 +300,15 @@ const UserDashboard = () => {
                 className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg"
 
               >
-                <span className="text-white text-2xl text-center">
-                <i class="ri-notification-4-fill"></i>
+                <span className="text-white mr-2 text-3xl text-center flex flex-row gap-1">
+                {notification !== undefined && notification.length > 0 && (
+                  <span className="bg-green-500 w-2 h-2 p-1 rounded-full"></span>
+                )}
+                  <i className="ri-notification-4-fill"></i>
+
                 </span>
+
+                {/* Green dot if there are unread notifications */}
               </button>
               <button
                 onClick={handleLogout}

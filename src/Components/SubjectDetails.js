@@ -435,6 +435,27 @@ function SubjectDetails() {
               </p>
             </div>
           </div>
+
+        )}
+        <div className="mt-6">
+          <div className="flex flex-col lg:flex-row lg:gap-6 ">
+            <div className="lg:w-1/2 mt-6 lg:mt-0">
+              <div className="flex justify-between items-center mb-4 gap-2">
+                <h2 className="text-2xl font-semibold text-gray-200">Assignments</h2>
+                <div className="flex gap-2">
+                  {userRole === "teacher" && (
+                    <button
+                      onClick={() =>
+                        navigate("/new-assignment", {
+                          state: { subject, userID, userRole, subjectID, foundStudents },
+                        })
+                      }
+                      className="px-4 py-2 text-sm md:px-6 md:py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-500 transition"
+                    >
+                      + New Assignment
+                    </button>
+                  )}
+
           {isModalOpen && (
             <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50">
               <div className="bg-gray-300 p-8 rounded-lg shadow-lg w-[90%] md:w-[50%]">
