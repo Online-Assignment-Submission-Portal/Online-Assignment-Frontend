@@ -11,7 +11,7 @@ const Notification = () => {
       fetchNotifications();
       listenForNotifications();
     }
-  }, [userId]);
+  }, [userId,socket]);
 
     useEffect(() => {
       if(!socket)
