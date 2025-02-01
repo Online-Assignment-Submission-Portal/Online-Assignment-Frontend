@@ -166,7 +166,7 @@ function UpdateAssignment() {
             </div>
           </div>
 
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center gap-2">
             <button
               type="button"
               onClick={() => navigate(`/assignment/${assignmentId}`, { state: { assignment_details: assignment, assignment_id: assignmentId, userRole, userID, subjectID } })}
