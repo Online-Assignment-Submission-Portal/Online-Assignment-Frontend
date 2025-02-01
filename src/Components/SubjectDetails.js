@@ -470,7 +470,7 @@ function SubjectDetails() {
                     <button
                       onClick={() =>
                         navigate("/new-assignment", {
-                          state: { subject, userID, userRole, subjectID },
+                          state: { subject, userID, userRole, subjectID, foundStudents },
                         })
                       }
                       className="px-4 py-2 text-sm md:px-6 md:py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-500 transition"
