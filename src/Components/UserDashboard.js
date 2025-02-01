@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import Footer from './Footer';
+import Header from './UserHeader'
 import useStore from "../lib/useStore";
 import 'remixicon/fonts/remixicon.css';
 
@@ -207,9 +208,6 @@ const UserDashboard = () => {
         toast.error('Please sign in.');
         return navigate('/signin');
       }
-
-
-
       const response = await axios.get(
         `${apiUrl}/user/profile/${userId}`,
         {
@@ -253,6 +251,8 @@ const UserDashboard = () => {
   }
 
   return (
+    <>
+      <Header/>
     <div className="min-h-screen flex flex-col">
       <div className="min-h-screen bg-gray-900 text-gray-200">
         {/* <ToastContainer position="top-center" autoClose={1500} /> */}
@@ -267,7 +267,7 @@ const UserDashboard = () => {
                 className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg"
 
               >
-                <span className="text-violet-600 mr-2 text-3xl text-center">
+                <span className="text-white text-2xl text-center">
                 <i class="ri-notification-4-fill"></i>
                 </span>
               </button>
@@ -294,7 +294,11 @@ const UserDashboard = () => {
               </p>
               <p>
                 <span className="font-semibold text-gray-100">Member Since:</span>{" "}
-                {new Date(user.createdAt).toLocaleDateString()}
+                {new Date(user.createdAt).toLocaleDateString('en-GB', {
+                                day: '2-digit',
+                                month: '2-digit',
+                                year: 'numeric',
+                              })}
               </p>
             </div>
           </div>
@@ -415,7 +419,7 @@ const UserDashboard = () => {
       </div>
       <Footer />
     </div>
-
+</>
   );
 };
 

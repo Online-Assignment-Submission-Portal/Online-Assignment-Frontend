@@ -5,6 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loding from "../partials/Loding";
 import { Line } from 'react-chartjs-2';
+import Header from './UserHeader';
 
 function AssignmentDetails() {
   const location = useLocation();
@@ -279,6 +280,8 @@ function AssignmentDetails() {
   }
 
   return (
+    <>
+    <Header />
     <div className="min-h-screen bg-gray-900 text-gray-200 py-8">
       <div className="container mx-auto bg-gray-800 p-8 rounded-lg shadow-lg max-w-4xl">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
@@ -321,7 +324,14 @@ function AssignmentDetails() {
           </div>
           <div>
             <p className="text-gray-400 font-medium">Deadline:</p>
-            <p>{new Date(assignmentDetails.deadline).toLocaleString()}</p>
+            <p>{new Date(assignmentDetails.deadline).toLocaleString('en-GB', {
+                                day: '2-digit',
+                                month: '2-digit',
+                                year: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                hour12: true
+                              })}</p>
           </div>
           <div>
             <p className="text-gray-400 font-medium">Description:</p>
@@ -368,7 +378,14 @@ function AssignmentDetails() {
                 <p className="text-gray-400 font-medium">Submitted At:</p>
                 <p>
                   {assignmentDetails.submittedAt
-                    ? new Date(assignmentDetails.submittedAt).toLocaleString()
+                    ? new Date(assignmentDetails.submittedAt).toLocaleString('en-GB', {
+                                day: '2-digit',
+                                month: '2-digit',
+                                year: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                hour12: true
+                              })
                     : 'Not submitted yet'}
                 </p>
               </div>
@@ -541,6 +558,7 @@ function AssignmentDetails() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 
