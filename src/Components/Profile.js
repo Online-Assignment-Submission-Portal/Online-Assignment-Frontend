@@ -4,6 +4,7 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Footer from './Footer';
+import Header from './UserHeader';
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -150,6 +151,8 @@ const Profile = () => {
   };
 
   return (
+    <>
+      <Header />
     <div className="min-h-screen flex flex-col">
       <div className="min-h-screen bg-gray-900 text-gray-200">
         {/* <ToastContainer position="top-center" autoClose={1500} /> */}
@@ -325,7 +328,7 @@ const Profile = () => {
       </div>
       <Footer />
     </div>
-
+</>
   );
 };
 
