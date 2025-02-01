@@ -25,7 +25,7 @@ function ChatContainer() {
   
   console.log("Location State:", location.state);
   const [receiverProfile, setReceiverProfile] = useState({
-    name: 'John Doe', // Default placeholder name
+    name: 'Loading...', // Default placeholder name
     avatar: null, // Default avatar
     status: 'Offline', // Default status
   });

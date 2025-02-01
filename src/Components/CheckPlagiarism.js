@@ -6,6 +6,7 @@ import { Bar, Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import Loding from "../partials/Loding";
 import "react-toastify/dist/ReactToastify.css";
+import Feedback from './Feedback'
 import {
   Chart,
   BarElement,
@@ -13,7 +14,7 @@ import {
   LinearScale,
   BarController,
 } from 'chart.js';
-import Feedback from "./Feedback";
+import Header from "./UserHeader";
 
 // Register required components
 Chart.register(BarElement, CategoryScale, LinearScale, BarController);
@@ -188,6 +189,8 @@ function CheckPlagiarism() {
     },
   };
   return (
+    <>
+    <Header />
     <div className="min-h-screen bg-gray-900 text-gray-200 py-4 sm:py-8">
       {/* <ToastContainer position="top-center" autoClose={1500} /> */}
 
@@ -396,6 +399,7 @@ function CheckPlagiarism() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 
