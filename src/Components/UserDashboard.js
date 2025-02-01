@@ -301,10 +301,11 @@ const UserDashboard = () => {
 
               >
                 <span className="text-white mr-2 text-3xl text-center flex flex-row gap-1">
-                {notification !== undefined && notification.length > 0 && (
-                  <span className="bg-green-500 w-2 h-2 p-1 rounded-full"></span>
-                )}
+                
                   <i className="ri-notification-4-fill"></i>
+                  {notification !== undefined && notification.length > 0 && (
+                  <span className="bg-green-500 w-3 h-3 rounded-full"></span>
+                )}
 
                 </span>
 
