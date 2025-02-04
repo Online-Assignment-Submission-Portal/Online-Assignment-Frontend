@@ -32,7 +32,7 @@ const UserDashboard = () => {
 
   useEffect(() => {
     const fetchUnreadNotifications = async () => {
-      console.log("Fetching notifications...");
+      // console.log("Fetching notifications...");
       try {
         const token = document.cookie
           .split('; ')
@@ -46,7 +46,7 @@ const UserDashboard = () => {
             },
           }
         )
-        console.log(response.data);
+        // console.log(response.data);
         if (response.data.success) {
           setNotification(response.data.notifications);
         }
@@ -100,15 +100,6 @@ const UserDashboard = () => {
     fetchUserData(id);
   }, [id, navigate]);
 
-  // useEffect(() => {
-  //   socket.on('notification', (notification) => {
-  //     console.log(notification.message); // Handle the notification (e.g., show an alert or update UI)
-  //   });
-
-  //   return () => {
-  //     socket.off('notification'); // Clean up socket listeners
-  //   };
-  // }, []);
 
 
   const handleLogout = async () => {
@@ -230,34 +221,6 @@ const UserDashboard = () => {
     }
   };
 
-  const handleProfile = async (userId) => {
-    try {
-      const token = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("token="))
-        ?.split("=")[1];
-
-      if (!token) {
-        toast.error('Please sign in.');
-        return navigate('/signin');
-      }
-      const response = await axios.get(
-        `${apiUrl}/user/profile/${userId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      if (response.data.success) {
-        navigate(`/profile/${userId}`, { state: { profile: response.data, userID: userId, userRole: user.role } });
-      } else {
-        toast.error("Failed to fetch profile data.");
-      }
-    } catch (err) {
-      toast.error(err.response?.data?.message || "An error occurred during Profile view.");
-    }
-  }
 
   if (error) {
     return (
@@ -297,7 +260,7 @@ const UserDashboard = () => {
             <div className="flex flex-wrap justify-center sm:justify-end gap-4">
               <button
                 onClick={() => navigate("/notification")}
-                className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg"
+                className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-2 rounded-lg"
 
               >
                 <span className="text-white mr-2 text-3xl text-center flex flex-row gap-1">
@@ -320,7 +283,7 @@ const UserDashboard = () => {
             </div>
           </div>
 
-          <div className="mb-6">
+          <div className="mb-6 w-1/3">
             <h2 className="text-xl font-semibold mb-4">Your Details</h2>
             <div className="bg-gray-800 p-4 rounded-lg shadow-lg">
               <p>
@@ -344,12 +307,6 @@ const UserDashboard = () => {
           </div>
 
           <div className="mb-4 flex justify-between sm:justify-start gap-2">
-            <button
-              onClick={() => handleProfile(userId)}
-              className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg w-auto"
-            >
-              View Profile
-            </button>
             {user?.role === "student" && (
               // <div className="mb-4 text-center sm:text-right">
               <button
