@@ -48,12 +48,12 @@ const Feedback = ({ assignmentId, submissions }) => {
                 .split("; ")
                 .find((row) => row.startsWith("token="))
                 ?.split("=")[1];
-    
+
             if (!token) {
                 toast.error("Please sign in to save submissions.");
                 return navigate("/signin");
             }
-    
+
             const response = await axios.post(
                 `${apiUrl}/assignment/submission/save/${studentId}/${assignmentId}`,
                 {
@@ -66,7 +66,7 @@ const Feedback = ({ assignmentId, submissions }) => {
                     },
                 }
             );
-    
+
             if (response.data.success) {
                 toast.success("Submission saved successfully!");
             } else {
@@ -94,101 +94,107 @@ const Feedback = ({ assignmentId, submissions }) => {
     };
 
     return (
-        <div className="overflow-x-auto p-4">
-        <button
-                onClick={handleDownload}
-                className="bg-green-600 text-white py-1 px-4 rounded-lg hover:bg-green-500 mb-4"
-            >
-                Download Excel
-            </button>
-            <table className="w-full text-left border-collapse border border-gray-700">
-                <thead>
-                    <tr className="bg-gray-700 text-gray-200">
-                        <th className="px-4 py-2 border border-gray-600">Name</th>
-                        <th className="px-4 py-2 border border-gray-600">Roll No</th>
-                        <th className="px-4 py-2 border border-gray-600">Status</th>
-                        <th className="px-4 py-2 border border-gray-600">Marks</th>
-                        <th className="px-4 py-2 border border-gray-600">Feedback</th>
-                        <th className="px-4 py-2 border border-gray-600">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {submissions.length > 0 ? (
-                        submissions.map((submission, index) => (
-                            <tr
-                                key={submission.studentId}
-                                className={`${index % 2 === 0 ? "bg-gray-800" : "bg-gray-700"} hover:bg-gray-600`}
-                            >
-                                <td className="border-b border-gray-600 px-4 py-2">
-                                    {submission.firstName} {submission.lastName}
-                                </td>
-                                <td className="border-b border-gray-600 px-4 py-2">
-                                    {submission.rollNo}
-                                </td>
-                                <td className="border-b border-gray-600 px-4 py-2">
-                                    {submission.status === 'late' ? 'Late' : 'On Time'}
-                                </td>
+        <div className="overflow-x-auto mt-8 bg-gray-800 rounded-lg shadow-lg">
+            <div className="flex justify-between items-center mb-4 gap-2">
 
-                                <td className="border-b border-gray-600 px-4 py-2">
-                                    <input
-                                        type="number"
-                                        value={
-                                            editedSubmissions[submission.studentId]?.grade !== undefined
-                                                ? editedSubmissions[submission.studentId]?.grade
-                                                : (submission.grade !== undefined ? submission.grade : "")
-                                        }
-                                        onChange={(e) => handleInputChange(e, submission.studentId, "grade")}
-                                        className="bg-gray-600 border border-gray-400 p-2 rounded-md focus:ring-2 focus:ring-blue-500 w-20"
-                                    />
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-200 mb-4">Grading and Feedback</h2>
+                <button
+                    onClick={handleDownload}
+                    className="px-4 py-2 text-sm md:px-6 md:py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-500 transition"
+                >
+                    Download Marks
+                </button>
+            </div>
+            <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse border border-gray-700">
+                    <thead>
+                        <tr className="bg-gray-700 text-gray-200">
+                            <th className="px-4 py-2 border border-gray-600">Name</th>
+                            <th className="px-4 py-2 border border-gray-600">Roll No</th>
+                            <th className="px-4 py-2 border border-gray-600">Status</th>
+                            <th className="px-4 py-2 border border-gray-600">Marks</th>
+                            <th className="px-4 py-2 border border-gray-600">Feedback</th>
+                            <th className="px-4 py-2 border border-gray-600">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {submissions.length > 0 ? (
+                            submissions.map((submission, index) => (
+                                <tr
+                                    key={submission.studentId}
+                                    className={`${index % 2 === 0 ? "bg-gray-800" : "bg-gray-700"} hover:bg-gray-600`}
+                                >
+                                    <td className="border-b border-gray-600 px-4 py-2">
+                                        {submission.firstName} {submission.lastName}
+                                    </td>
+                                    <td className="border-b border-gray-600 px-4 py-2">
+                                        {submission.rollNo}
+                                    </td>
+                                    <td className="border-b border-gray-600 px-4 py-2">
+                                        {submission.status === 'late' ? 'Late' : 'On Time'}
+                                    </td>
 
-                                </td>
-                                <td className="border-b border-gray-600 px-4 py-2">
-                                    <input
-                                        type="text"
-                                        value={
-                                            editedSubmissions[submission.studentId]?.feedback !== undefined
-                                                ? editedSubmissions[submission.studentId]?.feedback
-                                                : submission.feedback || ""
-                                        }
-                                        onChange={(e) => handleInputChange(e, submission.studentId, "feedback")}
-                                        className="bg-gray-600 border border-gray-400 p-2 rounded-md focus:ring-2 focus:ring-blue-500 w-full"
-                                    />
+                                    <td className="border-b border-gray-600 px-4 py-2">
+                                        <input
+                                            type="number"
+                                            value={
+                                                editedSubmissions[submission.studentId]?.grade !== undefined
+                                                    ? editedSubmissions[submission.studentId]?.grade
+                                                    : (submission.grade !== undefined ? submission.grade : "")
+                                            }
+                                            onChange={(e) => handleInputChange(e, submission.studentId, "grade")}
+                                            className="bg-gray-600 border border-gray-400 p-2 rounded-md focus:ring-2 focus:ring-blue-500 w-20"
+                                        />
 
-                                </td>
-                                <td className="border-b border-gray-600 px-4 py-2 text-center">
-                                    <button
-                                        onClick={() => handleSave(submission.studentId)}
-                                        disabled={
-                                            !editedSubmissions[submission.studentId] ||
-                                            editedSubmissions[submission.studentId]?.grade === ""
-                                        }
-                                        className={`py-1 px-4 rounded-lg ${!editedSubmissions[submission.studentId] ||
-                                            editedSubmissions[submission.studentId]?.grade === ""
-                                            ? "bg-gray-500 cursor-not-allowed"
-                                            : "bg-blue-600 hover:bg-blue-500 text-white"
-                                            }`}
-                                        title={`${!editedSubmissions[submission.studentId] ||
-                                            editedSubmissions[submission.studentId]?.grade === ""
-                                            ? "Make a change to enable the Save button."
-                                            : ""
-                                            }`}
-                                    >
-                                        Save
-                                    </button>
+                                    </td>
+                                    <td className="border-b border-gray-600 px-4 py-2">
+                                        <input
+                                            type="text"
+                                            value={
+                                                editedSubmissions[submission.studentId]?.feedback !== undefined
+                                                    ? editedSubmissions[submission.studentId]?.feedback
+                                                    : submission.feedback || ""
+                                            }
+                                            onChange={(e) => handleInputChange(e, submission.studentId, "feedback")}
+                                            className="bg-gray-600 border border-gray-400 p-2 rounded-md focus:ring-2 focus:ring-blue-500 w-full"
+                                        />
+
+                                    </td>
+                                    <td className="border-b border-gray-600 px-4 py-2 text-center">
+                                        <button
+                                            onClick={() => handleSave(submission.studentId)}
+                                            disabled={
+                                                !editedSubmissions[submission.studentId] ||
+                                                editedSubmissions[submission.studentId]?.grade === ""
+                                            }
+                                            className={`py-1 px-4 rounded-lg ${!editedSubmissions[submission.studentId] ||
+                                                editedSubmissions[submission.studentId]?.grade === ""
+                                                ? "bg-gray-500 cursor-not-allowed"
+                                                : "bg-blue-600 hover:bg-blue-500 text-white"
+                                                }`}
+                                            title={`${!editedSubmissions[submission.studentId] ||
+                                                editedSubmissions[submission.studentId]?.grade === ""
+                                                ? "Make a change to enable the Save button."
+                                                : ""
+                                                }`}
+                                        >
+                                            Save
+                                        </button>
 
 
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="6" className="text-center text-gray-400 px-4 py-2">
+                                    No submissions found.
                                 </td>
                             </tr>
-                        ))
-                    ) : (
-                        <tr>
-                            <td colSpan="6" className="text-center text-gray-400 px-4 py-2">
-                                No submissions found.
-                            </td>
-                        </tr>
-                    )}
-                </tbody>
-            </table>
+                        )}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 };

@@ -5,6 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Footer from './Footer';
 import useStore from "../lib/useStore";
+import Header from "./Header";
 
 
 const Signin = () => {
@@ -41,6 +42,8 @@ const Signin = () => {
   };
 
   return (
+    <>
+    <Header />
     <div className="min-h-screen flex flex-col">
       <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white" style={{
         backgroundImage: "url('https://images.shiksha.com/mediadata/images/1687787632phpNV53Hq.jpeg')",
@@ -117,6 +120,7 @@ const Signin = () => {
       </div>
       <Footer />
     </div>
+    </>
   );
 };
 

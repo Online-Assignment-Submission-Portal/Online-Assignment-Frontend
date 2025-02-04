@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Footer from './Footer';
+import Header from "./Header";
 
 const Signup = () => {
   const [firstName, setFirstName] = useState("");
@@ -50,6 +51,8 @@ const Signup = () => {
   };
 
   return (
+    <>
+    <Header />
     <div className="min-h-screen flex flex-col">
       <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white"
         style={{
@@ -57,7 +60,7 @@ const Signup = () => {
           backgroundSize: "cover",
           backgroundPosition: "top"
         }}>
-        <div className="bg-gray-800 mt-3 mb-3 p-6 rounded-lg shadow-lg w-full max-w-md">
+        <div className="bg-gray-800 mt-6 mb-6 p-6 rounded-lg shadow-lg w-full max-w-md">
           <h2 className="text-2xl font-bold text-center mb-6">Sign Up</h2>
           {error && (
             <div className="bg-red-600 text-white text-center py-2 px-4 mb-4 rounded-md">
@@ -185,6 +188,7 @@ const Signup = () => {
       </div>
       <Footer />
     </div>
+    </>
   );
 };
 
