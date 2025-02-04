@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Footer from './Footer';
+import Header from "./Header";
 
 const AdminSignin = () => {
   const [email, setEmail] = useState("");
@@ -38,6 +39,8 @@ const AdminSignin = () => {
   };
 
   return (
+    <>
+    <Header />
     <div className="min-h-screen flex flex-col">
       <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white"
         style={{
@@ -104,6 +107,7 @@ const AdminSignin = () => {
       </div>
       <Footer />
     </div>
+    </>
   );
 };
 

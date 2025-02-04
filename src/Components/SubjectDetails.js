@@ -29,9 +29,9 @@ function SubjectDetails() {
     const fetchUnreadMessages = async () => {
       try {
         const token = document.cookie
-        .split('; ')
-        .find((row) => row.startsWith('token='))
-        ?.split('=')[1];
+          .split('; ')
+          .find((row) => row.startsWith('token='))
+          ?.split('=')[1];
 
         const response = await axios.get(`${apiUrl}/message/read/${userID}`, {
           headers: {
@@ -83,7 +83,7 @@ function SubjectDetails() {
         ?.split('=')[1];
 
       await axios.post(
-        `${apiUrl}/message/markread`, 
+        `${apiUrl}/message/markread`,
         { senderId: receiverId },  // Pass the senderId (the current student)
         {
           headers: {
@@ -92,13 +92,13 @@ function SubjectDetails() {
           },
         }
       );
-  
+
       // Optionally update the unreadMessages state locally to reflect the changes
       setUnreadMessages((prev) => ({
         ...prev,
         [receiverId]: 0, // Set unread count for this sender to 0
       }));
-  
+
       // Navigate to the chat container with the sender and receiver IDs
       navigate('/chat-container', {
         state: {
@@ -110,7 +110,7 @@ function SubjectDetails() {
       console.error("Error marking messages as read:", error);
     }
   };
-  
+
 
   useEffect(() => {
     // console.log("Unread Messages State:", unreadMessages);
@@ -143,7 +143,7 @@ function SubjectDetails() {
         setNotFoundEmails((prev) => [...prev, ...response.data.notFoundStudents]);
         setEmailInput('');
         setIsModalOpen(false);
-        if(emailInput.length === 0) {
+        if (emailInput.length === 0) {
           return;
         }
         if (emailInput.length !== 0) {
@@ -380,228 +380,237 @@ function SubjectDetails() {
 
   return (
     <>
-    <Header />
-    <div className="min-h-screen bg-gray-900 py-8 flex flex-col">
-      {/* <ToastContainer position="top-center" autoClose={1500} /> */}
-      <div className="container mx-auto bg-gray-800 p-8 rounded-lg shadow-lg">
-        <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-200 text-center w-full sm:w-auto">
-            Subject Name: {subject.subject_name}
-          </h1>
-          <div className="flex gap-4">
-            {userRole === 'teacher' && (
+      <Header />
+      <div className="min-h-screen bg-gray-900 py-8 flex flex-col">
+        {/* <ToastContainer position="top-center" autoClose={1500} /> */}
+        <div className="container mx-auto bg-gray-800 p-8 rounded-lg shadow-lg">
+          <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-200 text-center w-full sm:w-auto">
+              Subject Name: {subject.subject_name}
+            </h1>
+            <div className="flex gap-4">
+              {userRole === 'teacher' && (
+                <button
+                  onClick={confirmDeleteSubject}
+                  className="px-4 py-2 sm:px-6 sm:py-2 bg-red-600 hover:bg-red-500 text-white font-bold rounded-lg transition"
+                >
+                  Delete Subject
+                </button>
+              )}
               <button
-                onClick={confirmDeleteSubject}
-                className="px-4 py-2 sm:px-6 sm:py-2 bg-red-600 hover:bg-red-500 text-white font-bold rounded-lg transition"
+                onClick={() => navigate(`/dashboard/${userID}`)}
+                className="px-4 py-2 sm:px-6 sm:py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition"
               >
-                Delete Subject
+                Back to Dashboard
               </button>
-            )}
-            <button
-              onClick={() => navigate(`/dashboard/${userID}`)}
-              className="px-4 py-2 sm:px-6 sm:py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition"
-            >
-              Back to Dashboard
-            </button>
-          </div>
-        </div>
-        <div className="space-y-2 text-sm sm:text-base">
-          <div>
-            <p className="flex flex-row text-gray-300 space-x-5 items-baseline">
-              <div>
-                Teacher Name:{" "}
-                <span className="font-medium text-gray-100">{subject.teacher_name}</span>
-              </div>
-              {userRole === "student" && (
-                <button
-                  onClick={() => navigateToChat(subject.teacher_id)}
-                  className="px-2 py-1 bg-blue-600 text-white hover:bg-blue-500 font-semibold rounded-lg transition"
-                >
-                  Chat with Teacher
-                </button>
-              )}
-            </p>
-          </div>
-          <div>
-            <p className="text-gray-300">
-              Number of Students:{" "}
-              <span className="font-medium text-gray-100">{foundStudents.length}</span>
-            </p>
-          </div>
-          <div>
-            <p className="text-gray-300">
-              Subject Code:{" "}
-              <span className="font-medium text-gray-100">{subject.subject_code}</span>
-            </p>
-          </div>
-        </div>
-        {isModalOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50">
-            <div className="bg-gray-300 p-8 rounded-lg shadow-lg w-[90%] md:w-[50%]">
-              <h2 className="text-xl font-semibold mb-4 text-gray-800">Add Students</h2>
-              <textarea
-                value={emailInput}
-                onChange={(e) => setEmailInput(e.target.value)}
-                className="w-full p-2 border border-gray-400 rounded mb-4 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
-                placeholder="Enter emails, separated by commas"
-                rows={5}
-              />
-              <div className="flex justify-end">
-                <button
-                  onClick={() => setIsModalOpen(false)}
-                  className="mr-2 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleAddStudents}
-                  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500 transition"
-                >
-                  Submit
-                </button>
-              </div>
             </div>
           </div>
-        )}
-        <div className="mt-6">
-          <div className="flex flex-col lg:flex-row lg:gap-6 ">
-            <div className="lg:w-1/2 mt-6 lg:mt-0">
-              <div className="flex justify-between items-center mb-4 gap-2">
-                <h2 className="text-2xl font-semibold text-gray-200">Assignments</h2>
-                <div className="flex gap-2">
-                  {userRole === "teacher" && (
-                    <button
-                      onClick={() =>
-                        navigate("/new-assignment", {
-                          state: { subject, userID, userRole, subjectID, foundStudents },
-                        })
-                      }
-                      className="px-4 py-2 text-sm md:px-6 md:py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-500 transition"
-                    >
-                      + New Assignment
-                    </button>
-                  )}
+          <div className="space-y-2 text-sm sm:text-base">
+            <div>
+              <p className="flex flex-row text-gray-300 space-x-5 items-baseline">
+                <div>
+                  Teacher Name:{" "}
+                  <span className="font-medium text-gray-100">{subject.teacher_name}</span>
+                </div>
+                {userRole === "student" && (
+                  <button
+                    onClick={() => navigateToChat(subject.teacher_id)}
+                    className="px-2 py-1 bg-blue-600 text-white hover:bg-blue-500 font-semibold rounded-lg transition"
+                  >
+                    Chat with Teacher
+                  </button>
+                )}
+              </p>
+            </div>
+            <div>
+              <p className="text-gray-300">
+                Number of Students:{" "}
+                <span className="font-medium text-gray-100">{foundStudents.length}</span>
+              </p>
+            </div>
+            <div>
+              <p className="text-gray-300">
+                Subject Code:{" "}
+                <span className="font-medium text-gray-100">{subject.subject_code}</span>
+              </p>
+            </div>
+          </div>
+          {isModalOpen && (
+            <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50">
+              <div className="bg-gray-300 p-8 rounded-lg shadow-lg w-[90%] md:w-[50%]">
+                <h2 className="text-xl font-semibold mb-4 text-gray-800">Add Students</h2>
+                <textarea
+                  value={emailInput}
+                  onChange={(e) => setEmailInput(e.target.value)}
+                  className="w-full p-2 border border-gray-400 rounded mb-4 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  placeholder="Enter emails, separated by commas"
+                  rows={5}
+                />
+                <div className="flex justify-end">
+                  <button
+                    onClick={() => setIsModalOpen(false)}
+                    className="mr-2 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleAddStudents}
+                    className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500 transition"
+                  >
+                    Submit
+                  </button>
                 </div>
               </div>
-              {assignments.length > 0 ? (
-                <div className="max-h-96 overflow-auto scrollbar-none">
-                  <table className="table-auto min-w-full bg-gray-800 text-gray-200 rounded-lg">
-                    <thead>
-                      <tr className="bg-violet-800">
-                        <th className="px-4 py-2 text-center">Assignment Name</th>
-                        <th className="px-4 py-2 text-center">Deadline</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {assignments.map((assignment) => (
-                        <tr
-                          key={assignment._id}
-                          className="hover:bg-gray-700 transition text-center"
-                          onClick={() =>
-                            navigate(`/assignment/${assignment._id}`, {
-                              state: { assignment_id: assignment._id, userRole, userID, subjectID },
-                            })
-                          }
-                        >
-                          <td className="border-b border-gray-600 px-4 py-2 max-w-[150px] overflow-auto scrollbar-none">{assignment.title}</td>
-                          <td className="border-b border-gray-600 px-4 py-2 max-w-[150px] overflow-auto scrollbar-none">{new Date(assignment.deadline).toLocaleDateString('en-GB', {
-                                day: '2-digit',
-                                month: '2-digit',
-                                year: 'numeric',
-                                hour: '2-digit',
-                                minute: '2-digit',
-                                hour12: true
-                              })}</td>
+            </div>
+          )}
+          <div className="mt-6">
+            <div className="flex flex-col lg:flex-row lg:gap-6 ">
+              <div className="lg:w-1/2 mt-6 lg:mt-0">
+                <div className="flex justify-between items-center mb-4 gap-2">
+                  <h2 className="text-2xl font-semibold text-gray-200">Assignments</h2>
+                  <div className="flex gap-2">
+                    {userRole === "teacher" && (
+                      <button
+                        onClick={() =>
+                          navigate("/new-assignment", {
+                            state: { subject, userID, userRole, subjectID, foundStudents },
+                          })
+                        }
+                        className="px-4 py-2 text-sm md:px-6 md:py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-500 transition"
+                      >
+                        + New Assignment
+                      </button>
+                    )}
+                  </div>
+                </div>
+                {assignments.length > 0 ? (
+                  <div className="max-h-96 overflow-auto scrollbar-none">
+                    <table className="table-auto min-w-full bg-gray-800 text-gray-200 rounded-lg">
+                      <thead>
+                        <tr className="bg-violet-800">
+                          <th className="px-4 py-2 text-center">Assignment Name</th>
+                          <th className="px-4 py-2 text-center">Deadline</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              ) : (
-                <p className="text-gray-400 text-center">No assignments found.</p>
-              )}
-            </div>
-            <div className="lg:w-1/2 mt-8 lg:mt-0">
-              <div className="flex justify-between items-center mb-4 gap-2">
-                <h2 className="text-2xl font-semibold text-gray-200">Students</h2>
-                <div className="flex gap-2">
-                  {userRole === "teacher" && (
-                    <>
-                      <button
-                        onClick={() => setIsModalOpen(true)}
-                        className="px-4 py-2 text-sm md:px-6 md:py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-500 transition"
-                      >
-                        + Add Students
-                      </button>
-                      <button
-                        onClick={downloadStudentList}
-                        className="px-4 py-2 text-sm md:px-6 md:py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-500 transition"
-                      >
-                        Download Student List
-                      </button>
-                    </>
-                  )}
-                </div>
-              </div>
-              {foundStudents.length > 0 ? (
-                <div className="max-h-96 overflow-auto scrollbar-none">
-                  <table className="table-auto min-w-full bg-gray-800 text-gray-200 rounded-lg">
-                    <thead>
-                      <tr className="bg-violet-800">
-                        <th className="px-4 py-2 text-center">Name</th>
-                        <th className="px-4 py-2 text-center">Email</th>
-                        {userRole === "teacher" && (
-                          <>
-                            <th className="px-4 py-2 text-center">Chat</th>
-                            <th className="px-4 py-2 text-center">Remove</th>
-                          </>
-                        )}
-                      </tr>
-                    </thead>
-                    <tbody>
-                    {foundStudents.map(student => renderStudentRow(student))}
-                    </tbody>
-                  </table>
-                </div>
-              ) : (
-                <p className="text-gray-400 text-center">No students found.</p>
-              )}
-            </div>
-          </div>
-        </div>
+                      </thead>
+                      <tbody>
+                        {[...assignments]
+                          .sort((a, b) => new Date(a.deadline) - new Date(b.deadline))
+                          .map((assignment) => (
+                            <tr
+                              key={assignment._id}
+                              className="hover:bg-gray-700 transition text-center"
+                              onClick={() =>
+                                navigate(`/assignment/${assignment._id}`, {
+                                  state: { assignment_id: assignment._id, userRole, userID, subjectID },
+                                })
+                              }
+                            >
+                              <td className="border-b border-gray-600 px-4 py-2 max-w-[150px] overflow-auto scrollbar-none">
+                                {assignment.title}
+                              </td>
+                              <td className="border-b border-gray-600 px-4 py-2 max-w-[150px] overflow-auto scrollbar-none">
+                                {new Date(assignment.deadline).toLocaleDateString("en-GB", {
+                                  day: "2-digit",
+                                  month: "2-digit",
+                                  year: "numeric",
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                  hour12: true,
+                                })}
+                              </td>
+                            </tr>
+                          ))}
 
-        {notFoundEmails.length > 0 && (
-          <div className="mt-8">
-            <h2 className="text-2xl font-semibold text-gray-200">Emails Not Found</h2>
-            <div className="max-h-96 overflow-auto mt-4 scrollbar-none ">
-              <table className="table-auto min-w-full bg-gray-800 text-gray-200 rounded-lg">
-                <thead>
-                  <tr className="bg-gray-700">
-                    <th className="px-4 py-2 text-center">Email</th>
-                    <th className="px-4 py-2 text-center">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {notFoundEmails.map((email, index) => (
-                    <tr key={index} className="hover:bg-gray-700 transition text-center">
-                      <td className="border-b border-gray-600 px-4 py-2 overflow-auto scrollbar-none">{email}</td>
-                      <td className="border-b border-gray-600 px-4 py-2 overflow-auto scrollbar-none">
+                      </tbody>
+                    </table>
+                  </div>
+                ) : (
+                  <p className="text-gray-400 text-center">No assignments found.</p>
+                )}
+              </div>
+              <div className="lg:w-1/2 mt-8 lg:mt-0">
+                <div className="flex justify-between items-center mb-4 gap-2">
+                  <h2 className="text-2xl font-semibold text-gray-200">Students</h2>
+                  <div className="flex gap-2">
+                    {userRole === "teacher" && (
+                      <>
                         <button
-                          onClick={() => removeNotFoundEmail(email)}
-                          className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition"
+                          onClick={() => setIsModalOpen(true)}
+                          className="px-4 py-2 text-sm md:px-6 md:py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-500 transition"
                         >
-                          ✕
+                          + Add Students
                         </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                        <button
+                          onClick={downloadStudentList}
+                          className="px-4 py-2 text-sm md:px-6 md:py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-500 transition"
+                        >
+                          Download Student List
+                        </button>
+                      </>
+                    )}
+                  </div>
+                </div>
+                {foundStudents.length > 0 ? (
+                  <div className="max-h-96 overflow-auto scrollbar-none">
+                    <table className="table-auto min-w-full bg-gray-800 text-gray-200 rounded-lg">
+                      <thead>
+                        <tr className="bg-violet-800">
+                          <th className="px-4 py-2 text-center">Name</th>
+                          <th className="px-4 py-2 text-center">Email</th>
+                          {userRole === "teacher" && (
+                            <>
+                              <th className="px-4 py-2 text-center">Chat</th>
+                              <th className="px-4 py-2 text-center">Remove</th>
+                            </>
+                          )}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {[...foundStudents]
+                          .sort((a, b) => a.email.localeCompare(b.email))
+                          .map(student => renderStudentRow(student))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : (
+                  <p className="text-gray-400 text-center">No students found.</p>
+                )}
+              </div>
             </div>
           </div>
-        )}
+
+          {notFoundEmails.length > 0 && (
+            <div className="mt-8">
+              <h2 className="text-2xl font-semibold text-gray-200">Emails Not Found</h2>
+              <div className="max-h-96 overflow-auto mt-4 scrollbar-none ">
+                <table className="table-auto min-w-full bg-gray-800 text-gray-200 rounded-lg">
+                  <thead>
+                    <tr className="bg-gray-700">
+                      <th className="px-4 py-2 text-center">Email</th>
+                      <th className="px-4 py-2 text-center">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {notFoundEmails.map((email, index) => (
+                      <tr key={index} className="hover:bg-gray-700 transition text-center">
+                        <td className="border-b border-gray-600 px-4 py-2 overflow-auto scrollbar-none">{email}</td>
+                        <td className="border-b border-gray-600 px-4 py-2 overflow-auto scrollbar-none">
+                          <button
+                            onClick={() => removeNotFoundEmail(email)}
+                            className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition"
+                          >
+                            ✕
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
     </>
   );
 }

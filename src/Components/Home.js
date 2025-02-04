@@ -18,7 +18,7 @@ const Home = () => {
 
       <div className="relative z-10 text-center px-6">
         <h1 className="text-5xl font-bold text-blue-400  mb-6">
-          Welcome to the Online Assignment Submission Portal!
+          Welcome to CollegeHub!
         </h1>
         <p className="text-xl text-gray-200 mt-28 mb-8">
           This site allows you to submit your assignments online with ease. <br />

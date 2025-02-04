@@ -166,7 +166,7 @@ function UpdateAssignment() {
             </div>
           </div>
 
-          <div className="flex justify-between items-center gap-2">
+          <div className="flex justify-between items-center gap-2 font-semibold">
             <button
               type="button"
               onClick={() => navigate(`/assignment/${assignmentId}`, { state: { assignment_details: assignment, assignment_id: assignmentId, userRole, userID, subjectID } })}
@@ -180,7 +180,7 @@ function UpdateAssignment() {
               className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition"
               disabled={loading}
             >
-             {loading ? "Updating..." : "Update Assignment"}
+             {loading ? "Updating..." : "Update"}
             </button>
           </div>
         </form>
