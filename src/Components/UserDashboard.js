@@ -263,7 +263,7 @@ const UserDashboard = () => {
                 className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-2 rounded-lg"
 
               >
-                <span className="text-white mr-2 text-3xl text-center flex flex-row gap-1">
+                <span className="text-white mx-1 text-3xl text-center flex flex-row gap-1">
                 
                   <i className="ri-notification-4-fill"></i>
                   {notification !== undefined && notification.length > 0 && (
@@ -283,7 +283,7 @@ const UserDashboard = () => {
             </div>
           </div>
 
-          <div className="mb-6 w-1/3">
+          <div className="mb-6 w-[40%]">
             <h2 className="text-xl font-semibold mb-4">Your Details</h2>
             <div className="bg-gray-800 p-4 rounded-lg shadow-lg">
               <p>

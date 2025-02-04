@@ -27,6 +27,7 @@ function AssignmentDetails() {
   const apiUrl = window.location.hostname === 'localhost'
   ? "http://localhost:8000" : process.env.REACT_APP_BASE_URL;
   const [submission, setSubmission] = useState(null);
+  const [feedbackDetails, setFeedbackDetails] = useState();
   const [isSubmissionModalOpen, setIsSubmissionModalOpen] = useState(false);
   const [submit, setSubmit] = useState(false);
 
@@ -81,9 +82,10 @@ function AssignmentDetails() {
           Authorization: `Bearer ${token}`,
         },
       });
-
+      console.log(response);
       if (response.data.success) {
         setSubmission(response.data.fileURL);
+        setFeedbackDetails(response.data)
         toast.success('Submission found! ');
       } else {
         toast.error('No submission found.');
@@ -320,11 +322,11 @@ function AssignmentDetails() {
         <div className="space-y-6">
           <div>
             <p className="text-gray-400 font-medium">Title:</p>
-            <p>{assignmentDetails.title}</p>
+            <p>{assignmentDetails?.title}</p>
           </div>
           <div>
             <p className="text-gray-400 font-medium">Deadline:</p>
-            <p>{new Date(assignmentDetails.deadline).toLocaleString('en-GB', {
+            <p>{new Date(assignmentDetails?.deadline).toLocaleString('en-GB', {
                                 day: '2-digit',
                                 month: '2-digit',
                                 year: 'numeric',
@@ -335,13 +337,13 @@ function AssignmentDetails() {
           </div>
           <div>
             <p className="text-gray-400 font-medium">Description:</p>
-            <p>{assignmentDetails.description}</p>
+            <p>{assignmentDetails?.description.length !== 0 ? assignmentDetails?.description : "No description available"}</p>
           </div>
-          {assignmentDetails.fileLink && (
+          {assignmentDetails?.fileLink && (
             <div>
               <p className="text-gray-400 font-medium">Attachment:</p>
               <a
-                href={`${assignmentDetails.fileLink}`}
+                href={`${assignmentDetails?.fileLink}`}
                 download
                 target="_blank"
                 rel="noopener noreferrer"
@@ -358,16 +360,24 @@ function AssignmentDetails() {
                 <div>
                   <p className="text-gray-400 font-medium">Marks Obtained:</p>
                   <p>
-                    {assignmentDetails.marksObtained !== undefined
-                      ? assignmentDetails.marksObtained
+                    {feedbackDetails?.grade !== undefined
+                      ? feedbackDetails?.grade
                       : 'Not graded yet'}
+                  </p>
+                  </div>
+                  <div>
+                  <p className="text-gray-400 font-medium">Teacher Feedback:</p>
+                  <p>
+                    {(feedbackDetails?.feedback !== undefined && feedbackDetails?.feedback.len > 0)
+                      ? feedbackDetails?.feedback
+                      : 'No feedback given'}
                   </p>
                 </div>
                 <div>
                   <p className="text-gray-400 font-medium">Max Marks:</p>
                   <p>
-                    {assignmentDetails.maxVal !== undefined
-                      ? assignmentDetails.maxVal
+                    {assignmentDetails?.maxVal !== undefined
+                      ? assignmentDetails?.maxVal
                       : 'Not available'}
                   </p>
                 </div>
@@ -375,18 +385,10 @@ function AssignmentDetails() {
 
               {/* Submission Information */}
               <div className="mt-6">
-                <p className="text-gray-400 font-medium">Submitted At:</p>
+                <p className="text-gray-400 font-medium">Status:</p>
                 <p>
-                  {assignmentDetails.submittedAt
-                    ? new Date(assignmentDetails.submittedAt).toLocaleString('en-GB', {
-                                day: '2-digit',
-                                month: '2-digit',
-                                year: 'numeric',
-                                hour: '2-digit',
-                                minute: '2-digit',
-                                hour12: true
-                              })
-                    : 'Not submitted yet'}
+                  {feedbackDetails?.status !== undefined ?
+                    feedbackDetails?.status : 'Not submitted yet'}
                 </p>
               </div>
 
@@ -509,16 +511,16 @@ function AssignmentDetails() {
                 <div>
                   <p className="text-gray-400 font-medium">Min Marks:</p>
                   <p>
-                    {assignmentDetails.minVal !== undefined
-                      ? assignmentDetails.minVal
+                    {assignmentDetails?.minVal !== undefined
+                      ? assignmentDetails?.minVal
                       : 'Not graded yet'}
                   </p>
                 </div>
                 <div>
                   <p className="text-gray-400 font-medium">Max Marks:</p>
                   <p>
-                    {assignmentDetails.maxVal !== undefined
-                      ? assignmentDetails.maxVal
+                    {assignmentDetails?.maxVal !== undefined
+                      ? assignmentDetails?.maxVal
                       : 'Not available'}
                   </p>
                 </div>
