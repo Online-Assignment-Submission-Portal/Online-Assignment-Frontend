@@ -113,7 +113,7 @@ function SubjectDetails() {
   
 
   useEffect(() => {
-    console.log("Unread Messages State:", unreadMessages);
+    // console.log("Unread Messages State:", unreadMessages);
   }, [unreadMessages]);
 
   const handleAddStudents = async () => {
@@ -137,7 +137,7 @@ function SubjectDetails() {
           },
         }
       );
-      console.log(response);
+      // console.log(response);
       if (response.data.success) {
         setFoundStudents(response.data.students_id);
         setNotFoundEmails((prev) => [...prev, ...response.data.notFoundStudents]);

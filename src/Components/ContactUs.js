@@ -40,7 +40,7 @@ const ContactUs = () => {
 
   return (
     <div className="bg-gray-900 text-white min-h-screen py-4">
-      <div className="flex flex-row justify-end mx-8 mt-2 mb-4">
+      <div className="flex flex-row mx-8 mt-2 mb-4">
         <button
           onClick={handleBack}
           className="bg-yellow-400 text-black py-2 px-4 rounded-lg shadow-xl hover:bg-rose-500 font-semibold transition duration-200 transform hover:scale-[102%]"

@@ -156,7 +156,27 @@ const AdminDashboard = () => {
       <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center py-10">
         {/* <ToastContainer position="top-center" autoClose={1500} /> */}
         <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-4xl">
-          <h2 className="text-2xl font-bold mb-6">Admin Dashboard</h2>
+          <h2 className="text-3xl text-center italic font-bold mb-6">Admin Dashboard</h2>
+          <div className="flex flex-row justify-between mt-6 gap-2">
+            <button
+              onClick={() => navigate("/existing-users")}
+              className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-500 transition"
+            >
+              See Existing Users
+            </button>
+            <button
+              onClick={() => navigate("/grievances")}
+              className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-500 transition"
+            >
+              See Feedbacks
+            </button>
+            <button
+              onClick={handleLogout}
+              className="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-rose-500 transition"
+            >
+              Logout
+            </button>
+          </div>
 
           {error && (
             <div className="bg-red-600 text-white py-2 px-4 rounded-md mb-4">
@@ -242,27 +262,6 @@ const AdminDashboard = () => {
               </tbody>
             </table>
           )}
-
-          <div className="flex flex-row justify-between mt-6 gap-2">
-            <button
-              onClick={() => navigate("/existing-users")}
-              className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-500 transition"
-            >
-              See Existing Users
-            </button>
-            <button
-              onClick={() => navigate("/grievances")}
-              className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-500 transition"
-            >
-              See Feedbacks
-            </button>
-            <button
-              onClick={handleLogout}
-              className="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-rose-500 transition"
-            >
-              Logout
-            </button>
-          </div>
         </div>
       </div>
       <Footer />
