@@ -368,7 +368,7 @@ function AssignmentDetails() {
                   <div>
                   <p className="text-gray-400 font-medium">Teacher Feedback:</p>
                   <p>
-                    {(feedbackDetails?.feedback !== undefined && feedbackDetails?.feedback.len > 0)
+                    {(feedbackDetails?.feedback !== undefined && feedbackDetails?.feedback.length > 0)
                       ? feedbackDetails?.feedback
                       : 'No feedback given'}
                   </p>
