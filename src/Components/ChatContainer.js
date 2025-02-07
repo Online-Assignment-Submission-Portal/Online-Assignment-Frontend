@@ -146,7 +146,27 @@ function ChatContainer() {
         }
       );
       
-  
+      try {
+        const senderResponse = await axios.get(`${apiUrl}/user/getProfile/${senderId}`, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+    
+     // This should have firstName and lastName
+    
+        await axios.post(`${apiUrl}/notification/new`, {
+            senderId,
+            receiverId,
+            content: `You have a new message from ${senderResponse.data.name}`,
+        }, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+    } catch (notifError) {
+        console.error('Error sending notification:', notifError);
+    }
+
       setMessages([...messages, response.data]);
       setNewMessage('');  // Reset the message input field
     } catch (error) {
