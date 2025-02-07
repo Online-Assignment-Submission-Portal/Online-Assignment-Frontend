@@ -30,6 +30,7 @@ function AssignmentDetails() {
   const [feedbackDetails, setFeedbackDetails] = useState();
   const [isSubmissionModalOpen, setIsSubmissionModalOpen] = useState(false);
   const [submit, setSubmit] = useState(false);
+  const [status, setStatus] = useState(true);
 
   const handleBack = async () => {
     try {
@@ -114,6 +115,7 @@ function AssignmentDetails() {
             Authorization: `Bearer ${token}`,
           },
         });
+        console.log(response);
 
         if (response.data.success) {
           setAssignmentDetails(response.data.assignment);
@@ -133,6 +135,42 @@ function AssignmentDetails() {
     fetchAssignmentDetails();
     if (userRole === 'student') fetchMySubmission();
   }, [assignmentId, navigate]);
+
+
+  const handleStatusChange = async () => {
+    try {
+      const token = document.cookie
+        .split('; ')
+        .find((row) => row.startsWith('token='))
+        ?.split('=')[1];
+  
+      if (!token) {
+        return navigate('/signin');
+      }
+  
+      const response = await axios.put(
+        `${apiUrl}/assignment/${assignmentDetails._id}`,
+        {}, // Empty body
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response);
+  
+      if (response.data.success) {
+        setAssignmentDetails((data) => ({ ...data, status: !data.status }));
+        setStatus(assignmentDetails.status);
+      } else {
+        toast.error('Failed to change assignment status.');
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error('An error occurred while changing assignment status.');
+    }
+  };
+  
 
   const handleFileUpload = (e) => {
     const uploadedFile = e.target.files[0];
@@ -186,9 +224,12 @@ function AssignmentDetails() {
         // setData({ ...data, : response.data.data.image });
         closeModal();
         closeViewModal();
+      } else {
+        toast.error(response.data.message);
       }
     } catch (err) {
       // setError('An error occurred while submitting assignment');
+      console.log(err);
       toast.error('An error occurred while submitting the assignment.');
     } finally {
       setIsUploading(false)
@@ -211,14 +252,6 @@ function AssignmentDetails() {
         });
       if (response.data.success) {
         console.log(response.data);
-        // const plagiarismResponse = await axios.post(`http://localhost:8501/checkplagiarism/${assignmentId}`, 
-        // {data: response.data.fileDetails}, 
-        // {
-        //   headers:{ 
-        //     'Content-Type': 'application/json', // Ensure Content-Type is set
-        //   }
-        //   })
-        // console.log(plagiarismResponse);
       }
     } catch (err) {
       toast.error('An error occurred while checking Plagiarism.');
@@ -252,20 +285,6 @@ function AssignmentDetails() {
     return fileExtension;
   }
 
-  // const handleDownload = async (fileLink, fileName) => {
-  //   const fileUrl = fileLink;
-  //   console.log('File URL:', fileUrl);
-  //   console.log('File Name:', fileName);
-  //   const link = document.createElement('a');
-  //   link.href = fileUrl;
-  //   link.target="_blank"
-  //   link.rel="noopener noreferrer"
-  //   link.setAttribute('download', fileName);
-  //   document.body.appendChild(link);
-  //   link.click();
-  //   document.body.removeChild(link);
-
-  // }
 
   if (loading) {
     return (
@@ -293,6 +312,16 @@ function AssignmentDetails() {
 
           <div className="flex flex-wrap justify-center sm:justify-end gap-4">
             {userRole === 'teacher' && (
+              <div className='flex justify-center md:justify-end gap-4'>
+                <div className="flex justify-center md:justify-end">
+                  <button
+                    onClick={ handleStatusChange                    
+                    }
+                    className={`px-6 py-2 ${assignmentDetails.status ? "bg-red-600 hover:bg-red-500" : "bg-green-600 hover:bg-green-500"} text-white font-bold rounded-lg transition`}
+                  >
+                    {assignmentDetails.status ? "Close Assignment" : "Open Assignment"}
+                  </button>
+                </div>
               <button
                 className="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition"
                 onClick={() =>
@@ -309,6 +338,7 @@ function AssignmentDetails() {
               >
                 Update Details
               </button>
+              </div>
             )}
             <button
               onClick={handleBack}
@@ -552,6 +582,7 @@ function AssignmentDetails() {
                     Check for Plagiarism
                   </button>
                 </div>
+                
               </div>
             </div>
 
