@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as XLSX from "xlsx"; // Import XLSX library
+import useStore from "../lib/useStore";
 
 const ExistingUsers = () => {
   const [students, setStudents] = useState([]);
@@ -15,6 +16,7 @@ const ExistingUsers = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const navigate = useNavigate();
+  const { disconnectSocket, resetStore } = useStore();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -170,38 +172,42 @@ const ExistingUsers = () => {
 
   const handleLogout = async () => {
     try {
-      const token = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("adminToken="))
-        ?.split("=")[1];
+        const token = document.cookie
+            .split("; ")
+            .find((row) => row.startsWith("token="))
+            ?.split("=")[1];
 
-      if (!token) {
-        toast.error("Unauthorized access. Please log in.");
-        navigate("/admin-signin");
-        return;
-      }
-
-      const response = await axios.post(
-        `${apiUrl}/admin/logout`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+        if (!token) {
+            toast.error('Please sign in.');
+            return navigate('/signin');
         }
-      );
 
-      if (response.data.success) {
-        document.cookie = "adminToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-        toast.success("Logged out successfully!");
-        navigate("/admin-signin");
-      }
+        const response = await axios.post(
+            `${apiUrl}/user/logout`,
+            {},
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+
+        if (response.status === 200) {
+            document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+            localStorage.clear();
+            resetStore();
+            toast.success("Logout Successful");
+            disconnectSocket();
+            setTimeout(() => navigate(`/signin`), 1500);
+            // setTimeout(() => navigate(`/dashboard/${user._id}`), 1500); // Redirect after 2 seconds
+
+        } else {
+            toast.error(response.data.message || "Logout failed.");
+        }
     } catch (err) {
-      toast.error("Unauthorized or session expired.");
-      navigate("/admin-signin");
+        toast.error(err.response?.data?.message || "An error occurred during logout.");
     }
-  };
-
+};
   return (
     <div className="sm:w-full min-h-screen bg-gray-900 text-white lg:flex lg:flex-col lg:items-center py-10">
       {/* <ToastContainer position="top-center" autoClose={1500} /> */}

@@ -33,11 +33,14 @@ import "react-toastify/dist/ReactToastify.css";
 import Notification from "./Components/Notification.js";
 
 const App = () => {
-  const { monitorSocketConnection } = useStore();
+  const { monitorSocketConnection, userId } = useStore();
 
   useEffect(() => {
+    if(userId){
+    console.log("Montioring socket connection");
     monitorSocketConnection();
-  }, [monitorSocketConnection]);
+    }
+  }, [monitorSocketConnection, userId]);
 
   return (
     <Router>

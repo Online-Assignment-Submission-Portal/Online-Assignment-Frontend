@@ -11,7 +11,7 @@ const Header = () => {
     const apiUrl = window.location.hostname === 'localhost'
         ? "http://localhost:8000" : process.env.REACT_APP_BASE_URL;
     const navigate = useNavigate();
-    const { disconnectSocket } = useStore();
+    const { disconnectSocket, setUserId, resetStore } = useStore();
     const userId = useStore((state) => state.userId);
     const [isOpen, setIsOpen] = useState(false);
 
@@ -104,7 +104,9 @@ const Header = () => {
 
             if (response.status === 200) {
                 document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-                toast.success("Logout Successful")
+                localStorage.clear();
+                resetStore(); // Reset entire Zustand store state (userId, socket, etc.)
+                toast.success("Logout Successful");
                 disconnectSocket();
                 setTimeout(() => navigate(`/signin`), 1500);
                 // setTimeout(() => navigate(`/dashboard/${user._id}`), 1500); // Redirect after 2 seconds
