@@ -24,7 +24,7 @@ const UserDashboard = () => {
   const [joinMessage, setJoinMessage] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [notification, setNotification] = useState([]);
-  const { disconnectSocket, socket } = useStore();
+  const { disconnectSocket, resetStore } = useStore();
   const { notifications } = notificationStore();
   const userId = id.toString();
   let userData;
@@ -106,40 +106,42 @@ const UserDashboard = () => {
 
   const handleLogout = async () => {
     try {
-      const token = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("token="))
-        ?.split("=")[1];
+        const token = document.cookie
+            .split("; ")
+            .find((row) => row.startsWith("token="))
+            ?.split("=")[1];
 
-      if (!token) {
-        toast.error('Please sign in.');
-        return navigate('/signin');
-      }
-
-      const response = await axios.post(
-        `${apiUrl}/user/logout`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+        if (!token) {
+            toast.error('Please sign in.');
+            return navigate('/signin');
         }
-      );
 
-      if (response.status === 200) {
-        document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-        toast.success("Logout Successful")
-        disconnectSocket();
-        setTimeout(() => navigate(`/signin`), 1500);
-        // setTimeout(() => navigate(`/dashboard/${user._id}`), 1500); // Redirect after 2 seconds
+        const response = await axios.post(
+            `${apiUrl}/user/logout`,
+            {},
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
 
-      } else {
-        toast.error(response.data.message || "Logout failed.");
-      }
+        if (response.status === 200) {
+            document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+            localStorage.clear();
+            resetStore();
+            toast.success("Logout Successful");
+            disconnectSocket();
+            setTimeout(() => navigate(`/signin`), 1500);
+            // setTimeout(() => navigate(`/dashboard/${user._id}`), 1500); // Redirect after 2 seconds
+
+        } else {
+            toast.error(response.data.message || "Logout failed.");
+        }
     } catch (err) {
-      toast.error(err.response?.data?.message || "An error occurred during logout.");
+        toast.error(err.response?.data?.message || "An error occurred during logout.");
     }
-  };
+};
 
   const handleJoinSubject = async () => {
     try {

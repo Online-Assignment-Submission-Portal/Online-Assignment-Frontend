@@ -4,44 +4,53 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import useStore from "../lib/useStore";
+import axios from "axios";
 
 const BlankPage = () => {
   const navigate = useNavigate();
   // const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
   const apiUrl = window.location.hostname === 'localhost'
   ? "http://localhost:8000" : process.env.REACT_APP_BASE_URL;
+  const { disconnectSocket, resetStore } = useStore();
   const handleLogout = async () => {
     try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        toast.error("No token available for logout.");
-        navigate("/signin");
-        return;
-      }
+        const token = document.cookie
+            .split("; ")
+            .find((row) => row.startsWith("token="))
+            ?.split("=")[1];
 
-      const response = await fetch(`${apiUrl}/user/logout`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+        if (!token) {
+            toast.error('Please sign in.');
+            return navigate('/signin');
+        }
 
-      const data = await response.json();
+        const response = await axios.post(
+            `${apiUrl}/user/logout`,
+            {},
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
 
-      if (response.ok) {
-        toast.success(data.message || "Logged out successfully.");
-        localStorage.clear();
-        navigate("/signin");
-      } else {
-        toast.error(data.message || "Failed to log out.");
-      }
-    } catch (error) {
-      toast.error("An error occurred during logout.");
-      // console.error("Error during logout:", error);
+        if (response.status === 200) {
+            document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+            localStorage.clear();
+            resetStore();
+            toast.success("Logout Successful");
+            disconnectSocket();
+            setTimeout(() => navigate(`/signin`), 1500);
+            // setTimeout(() => navigate(`/dashboard/${user._id}`), 1500); // Redirect after 2 seconds
+
+        } else {
+            toast.error(response.data.message || "Logout failed.");
+        }
+    } catch (err) {
+        toast.error(err.response?.data?.message || "An error occurred during logout.");
     }
-  };
+};
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">

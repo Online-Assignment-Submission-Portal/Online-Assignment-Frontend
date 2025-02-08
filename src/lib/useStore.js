@@ -14,6 +14,11 @@ export const useStore = create((set,get) => ({
     localStorage.setItem('userId', id);
     set({ userId: id });
   },
+  resetStore: () => {
+    localStorage.clear();
+    get().disconnectSocket();
+    set({ userId: null,onlineUsers: [],socket: null });
+  },
   connectSocket: () => {
     const userId = get().userId;
     if (!userId) {

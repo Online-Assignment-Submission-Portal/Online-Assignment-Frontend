@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Footer from './Footer';
+import useStore from "../lib/useStore";
 
 const AdminDashboard = () => {
   const [pendingUsers, setPendingUsers] = useState([]);
@@ -13,6 +14,7 @@ const AdminDashboard = () => {
   const apiUrl = window.location.hostname === 'localhost'
     ? "http://localhost:8000" : process.env.REACT_APP_BASE_URL;
   const navigate = useNavigate();
+  const { disconnectSocket, resetStore } = useStore();
 
   useEffect(() => {
     const fetchPendingUsers = async () => {
@@ -47,37 +49,42 @@ const AdminDashboard = () => {
 
   const handleLogout = async () => {
     try {
-      const token = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("adminToken="))
-        ?.split("=")[1];
+        const token = document.cookie
+            .split("; ")
+            .find((row) => row.startsWith("token="))
+            ?.split("=")[1];
 
-      if (!token) {
-        toast.error("Please sign in.");
-        setTimeout(() => navigate("/admin-signin"), 1500);
-        return;
-      }
-
-      const response = await axios.post(
-        `${apiUrl}/admin/logout`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+        if (!token) {
+            toast.error('Please sign in.');
+            return navigate('/signin');
         }
-      );
 
-      if (response.data.success) {
-        document.cookie = "adminToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-        toast.success("Logout successful!");
-        setTimeout(() => navigate("/admin-signin"), 1500);
-      }
+        const response = await axios.post(
+            `${apiUrl}/user/logout`,
+            {},
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+
+        if (response.status === 200) {
+            document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+            localStorage.clear();
+            resetStore();
+            toast.success("Logout Successful");
+            disconnectSocket();
+            setTimeout(() => navigate(`/signin`), 1500);
+            // setTimeout(() => navigate(`/dashboard/${user._id}`), 1500); // Redirect after 2 seconds
+
+        } else {
+            toast.error(response.data.message || "Logout failed.");
+        }
     } catch (err) {
-      toast.error("Failed to log out. Please try again.");
-      navigate("/admin-signin");
+        toast.error(err.response?.data?.message || "An error occurred during logout.");
     }
-  };
+};
 
   const handleConfirmRole = async (userId) => {
     const token = document.cookie

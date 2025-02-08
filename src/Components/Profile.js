@@ -5,6 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Footer from './Footer';
 import Header from './UserHeader';
+import useStore from '../lib/useStore';
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ const Profile = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const { disconnectSocket, resetStore } = useStore();
 
   useEffect(() => {
     setData({ ...data, data: profileData });
@@ -81,67 +82,42 @@ const Profile = () => {
 
   const handleLogout = async () => {
     try {
-      if (userRole !== 'admin') {
         const token = document.cookie
-          .split('; ')
-          .find((row) => row.startsWith('token='))?.split('=')[1];
+            .split("; ")
+            .find((row) => row.startsWith("token="))
+            ?.split("=")[1];
 
         if (!token) {
-          navigate('/signin');
-          return;
+            toast.error('Please sign in.');
+            return navigate('/signin');
         }
 
         const response = await axios.post(
-          `${apiUrl}/user/logout`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+            `${apiUrl}/user/logout`,
+            {},
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
         );
 
         if (response.status === 200) {
-          document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
-          toast.success("Logout Successful");
-          setTimeout(() => navigate(`/signin`), 1500);
+            document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+            localStorage.clear();
+            resetStore();
+            toast.success("Logout Successful");
+            disconnectSocket();
+            setTimeout(() => navigate(`/signin`), 1500);
+            // setTimeout(() => navigate(`/dashboard/${user._id}`), 1500); // Redirect after 2 seconds
+
         } else {
-          // setError(response.data.message || 'Logout failed.');
-          toast.error(response.data.message || 'Logout failed.');
+            toast.error(response.data.message || "Logout failed.");
         }
-      }
-      else {
-        const token = document.cookie
-          .split("; ")
-          .find((row) => row.startsWith("adminToken="))
-          ?.split("=")[1];
-
-        if (!token) {
-          toast.error("Please sign in.");
-          setTimeout(() => navigate("/admin-signin"), 1500);
-          return;
-        }
-
-        const response = await axios.post(
-          `${apiUrl}/admin/logout`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (response.data.success) {
-          document.cookie = "adminToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-          toast.success("Logout successful!");
-          setTimeout(() => navigate("/admin-signin"), 1500);
-        }
-      }
     } catch (err) {
-      toast.error(err.response?.data?.message || 'An error occurred during logout.');
+        toast.error(err.response?.data?.message || "An error occurred during logout.");
     }
-  };
+};
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => {
