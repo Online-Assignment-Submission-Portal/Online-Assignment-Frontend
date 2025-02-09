@@ -5,6 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';  // Import Toastify
 import 'react-toastify/dist/ReactToastify.css';  // Import styles for Toastify
 import * as XLSX from 'xlsx'; // Import XLSX for Excel export
 import Header from './UserHeader'
+import NoticeBoard from './NoticeBoard';
 
 function SubjectDetails() {
   const location = useLocation();
@@ -22,6 +23,7 @@ function SubjectDetails() {
   const [notFoundEmails, setNotFoundEmails] = useState([]);
   const [assignments, setAssignments] = useState([]);
   const [unreadMessages, setUnreadMessages] = useState({});
+  console.log(subject);
   // console.log(location.state, " there ");
 
 
@@ -609,6 +611,7 @@ function SubjectDetails() {
               </div>
             </div>
           )}
+          <NoticeBoard userRole={userRole} subject={subject} notice={subject.notices}/>
         </div>
       </div>
     </>
