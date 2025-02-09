@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
-import { FaUpload, FaClock, FaChalkboardTeacher, FaStar, FaSearch } from "react-icons/fa";
+import { FaUpload, FaClock, FaChalkboardTeacher, FaStar, FaSearch, FaFacebookMessenger, FaUserLock} from "react-icons/fa";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -78,7 +78,9 @@ const Home = () => {
             { icon: <FaUpload className="text-blue-400 text-5xl mb-4 animate-bounce" />, title: "Easy Uploads", desc: "Submit assignments quickly with our intuitive interface." },
             { icon: <FaClock className="text-yellow-400 text-5xl mb-4 animate-bounce" />, title: "Deadline Tracking", desc: "Stay on top of assignments with automated deadline reminders." },
             { icon: <FaChalkboardTeacher className="text-green-400 text-5xl mb-4 animate-bounce" />, title: "Teacher Feedback", desc: "Receive feedback and improve your work with real-time grading." },
-            { icon: <FaSearch className="text-green-400 text-5xl mb-4 animate-bounce" />, title: "Plagiarism Check", desc: "Check for plagiarism between different files submitted in the assignment." }
+            { icon: <FaSearch className="text-green-400 text-5xl mb-4 animate-bounce" />, title: "Plagiarism Check", desc: "Check for plagiarism between different files submitted in the assignment." },
+            { icon: <FaFacebookMessenger className="text-green-400 text-5xl mb-4 animate-bounce" />, title: "Realtime Chat", desc: "Real time chat between students and teachers." },
+            { icon: <FaUserLock className="text-green-400 text-5xl mb-4 animate-bounce" />, title: "Secure Environment", desc: "Easy and secure acess to data." }
           ].map((feature, index) => (
             <div key={index} className="flex flex-col items-center p-6 bg-gray-800 bg-opacity-90 rounded-lg shadow-lg transition transform hover:scale-105 hover:shadow-2xl duration-500">
               {feature.icon}
