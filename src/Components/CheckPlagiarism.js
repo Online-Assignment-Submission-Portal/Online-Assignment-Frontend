@@ -15,6 +15,7 @@ import {
   BarController,
 } from 'chart.js';
 import Header from "./UserHeader";
+import Rubrics from "./Rubrics";
 
 // Register required components
 Chart.register(BarElement, CategoryScale, LinearScale, BarController);
@@ -38,6 +39,7 @@ function CheckPlagiarism() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [submissions, setSubmissions] = useState([]);
+  const [rubrics, setRubrics] = useState([])
   const [columns, setColumns] = useState({
     CosineSimilarity: true,
     JaccardSimilarity: true,
@@ -81,6 +83,7 @@ function CheckPlagiarism() {
           setNotSubmitted(response.data.notSubmitted);
           setLate(response.data.late);
           setSubmissions(response.data.submissions);
+          setRubrics(response.data.mlResponse.rubricResults)
           const toastId = "plagiarism-success";
           if (!toast.isActive(toastId)) {
             toast.success("Data fetched successfully.", { toastId });
@@ -192,12 +195,11 @@ function CheckPlagiarism() {
     <>
       <Header />
       <div className="min-h-screen bg-gray-900 text-gray-200 py-4 sm:py-8">
-        {/* <ToastContainer position="top-center" autoClose={1500} /> */}
 
         <div className="container mx-auto bg-gray-800 p-4 sm:p-8 rounded-lg shadow-lg md:max-w-6xl">
           <div className="flex flex-col sm:flex-row justify-between items-center mb-4 sm:mb-8">
             <h1 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-0">
-              Plagiarism Check
+              Submission Details
             </h1>
             <button
               onClick={() => navigate(-1)}
@@ -256,8 +258,8 @@ function CheckPlagiarism() {
 
 
           <div className="overflow-x-auto">
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-200 mb-4">Plagiarism Report</h2>
-            <div className="mb-4 flex flex-row justify-end gap-2 ">
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-200">Plagiarism Report</h2>
+            <div className="mb-4 flex flex-row justify-between sm:justify-end gap-3 mt-2">
               <label className="inline-flex items-center select-none">
                 <input
                   type="checkbox"
@@ -392,7 +394,7 @@ function CheckPlagiarism() {
               </tbody>
             </table>
           </div>
-
+          <Rubrics rubricResults={rubrics}/>
           <Feedback assignmentId={assignmentId} submissions={submissions} />
         </div>
       </div>
