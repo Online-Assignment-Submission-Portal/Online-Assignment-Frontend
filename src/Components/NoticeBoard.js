@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { FaTrash } from "react-icons/fa";
 
 const NoticeBoard = ({ userRole, subject, notice }) => {
   const [messages, setMessages] = useState(notice);
@@ -12,15 +13,18 @@ const NoticeBoard = ({ userRole, subject, notice }) => {
       ? "http://localhost:8000"
       : process.env.REACT_APP_BASE_URL;
 
-  const handlePostMessage = async () => {
-    if (!newMessage.trim()) return;
-
-    // Retrieve token from cookies
-    const token = document.cookie
+  // Retrieve token from cookies
+  const getToken = () =>
+    document.cookie
       .split("; ")
       .find((row) => row.startsWith("token="))
       ?.split("=")[1];
 
+  // Handle posting a new notice
+  const handlePostMessage = async () => {
+    if (!newMessage.trim()) return;
+
+    const token = getToken();
     if (!token) {
       toast.error("Please sign in.");
       return navigate("/signin");
@@ -31,25 +35,52 @@ const NoticeBoard = ({ userRole, subject, notice }) => {
         `${apiUrl}/subject/notice`,
         {
           message: newMessage,
-          subjectId: subject.subject_id, // Ensure subjectId is sent
+          subjectId: subject.subject_id,
         },
         {
-          headers: {
-            Authorization: `Bearer ${token}`, // Include token in headers
-          },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
 
-      // Update UI with the new message and sort messages by latest timestamp
+      // Update messages list with new notice
       setMessages((prevMessages) =>
         [...prevMessages, response.data.notice].sort(
           (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
         )
       );
-      setNewMessage(""); // Clear input field
+      setNewMessage("");
+      toast.success("Notice posted successfully.");
+
     } catch (error) {
-      console.error("Error posting message:", error);
       toast.error("Failed to post notice. Please try again.");
+    }
+  };
+
+  // Handle deleting a notice
+  const handleDeleteMessage = async (noticeId) => {
+    const token = getToken();
+    if (!token) {
+      toast.error("Please sign in.");
+      return navigate("/signin");
+    }
+
+    if (!window.confirm("Are you sure you want to delete this notice?")) {
+      return;
+    }
+
+    try {
+      await axios.delete(`${apiUrl}/subject/notice/${noticeId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      // Remove deleted notice from UI
+      setMessages((prevMessages) =>
+        prevMessages.filter((msg) => msg._id !== noticeId)
+      );
+      toast.success("Notice deleted successfully.");
+    } catch (error) {
+      console.error("Error deleting notice:", error);
+      toast.error("Failed to delete notice. Please try again.");
     }
   };
 
@@ -65,25 +96,37 @@ const NoticeBoard = ({ userRole, subject, notice }) => {
       {/* Messages Display Area */}
       <div className="bg-gray-700 rounded-lg max-h-64 overflow-y-auto scrollbar-none">
         {messages.length > 0 ? (
-          [...messages]
-            .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)) // Sort latest first
-            .map((msg, index) => (
+          messages
+            .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+            .map((msg) => (
               <div
-                key={index}
+                key={msg._id}
                 className="p-3 border-b border-gray-600 text-gray-200 flex justify-between items-center hover:bg-gray-800 duration-100 ease-in-out"
               >
                 <span>{msg.message}</span>
-                <span className="text-sm text-gray-400">
-                  {new Date(msg.lastUpdatedAt).toLocaleString("en-GB", {
-                    day: "2-digit",
-                    month: "2-digit",
-                    year: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    hour12: true,
-                  })}{" "}
-                  {/* Local time format */}
-                </span>
+                <div className="flex items-center gap-3">
+                  <span className="text-sm text-gray-400">
+                    {new Date(msg.lastUpdatedAt).toLocaleString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      second: "2-digit",
+                      hour12: true,
+                    })}
+                  </span>
+
+                  {/* Delete Icon (Visible only for teachers) */}
+                  {userRole === "teacher" && (
+                    <button
+                      onClick={() => handleDeleteMessage(msg._id)}
+                      className="text-red-500 hover:text-red-400 transition"
+                    >
+                      <FaTrash size={16} />
+                    </button>
+                  )}
+                </div>
               </div>
             ))
         ) : (
@@ -104,7 +147,7 @@ const NoticeBoard = ({ userRole, subject, notice }) => {
           <div className="flex flex-row items-right sm:justify-end justify-center">
             <button
               onClick={handlePostMessage}
-              className=" mt-3 px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition "
+              className="mt-3 px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition"
             >
               Post Notice
             </button>
