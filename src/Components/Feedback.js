@@ -97,7 +97,7 @@ const Feedback = ({ assignmentId, submissions }) => {
         <div className="overflow-x-auto mt-8 bg-gray-800 rounded-lg shadow-lg">
             <div className="flex justify-between items-center mb-4 gap-2">
 
-                <h2 className="text-xl sm:text-2xl font-bold text-gray-200 mb-4">Grading and Feedback</h2>
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-200">Grading and Feedback</h2>
                 <button
                     onClick={handleDownload}
                     className="px-4 py-2 text-sm md:px-6 md:py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-500 transition"
