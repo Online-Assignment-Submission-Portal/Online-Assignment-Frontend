@@ -10,6 +10,8 @@ const Rubrics = ({ rubricResults }) => {
         FinalRubricScore: true,
     });
 
+    console.log(rubricResults);
+
     // Toggle column visibility
     const handleFieldToggle = (column) => {
         setColumns((prevColumns) => ({
@@ -110,27 +112,27 @@ const Rubrics = ({ rubricResults }) => {
                                     </td>
                                     {columns.CompletenessScore && (
                                         <td className="px-2 sm:px-4 py-2 border border-gray-600">
-                                            {entry["Completeness Score"]}
+                                            {entry.CompletenessScore}
                                         </td>
                                     )}
                                     {columns.GrammarScore && (
                                         <td className="px-2 sm:px-4 py-2 border border-gray-600">
-                                            {entry["Grammar Score"]}
+                                            {entry.GrammarScore}
                                         </td>
                                     )}
                                     {columns.OriginalityScore && (
                                         <td className="px-2 sm:px-4 py-2 border border-gray-600">
-                                            {entry["Originality Score"]}
+                                            {entry.OriginalityScore}
                                         </td>
                                     )}
                                     {columns.StructureScore && (
                                         <td className="px-2 sm:px-4 py-2 border border-gray-600">
-                                            {entry["Structure Score"]}
+                                            {entry.StructureScore}
                                         </td>
                                     )}
                                     {columns.FinalRubricScore && (
                                         <td className="px-2 sm:px-4 py-2 border border-gray-600">
-                                            {entry["Final Rubric Score (%)"]}%
+                                            {entry.FinalRubricScore}%
                                         </td>
                                     )}
                                 </tr>
