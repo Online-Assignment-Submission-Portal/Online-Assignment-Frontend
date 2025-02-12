@@ -45,7 +45,9 @@ const Rubrics = ({ rubricResults }) => {
                 <table className="w-full text-left border-collapse border border-gray-700">
                     <thead>
                         <tr className="bg-gray-700 text-gray-200">
-                            <th className="px-2 sm:px-4 py-2 border border-gray-600">Assignment
+                            <th className="px-2 sm:px-4 py-2 border border-gray-600">Name
+                            </th>
+                            <th className="px-2 sm:px-4 py-2 border border-gray-600">Roll No
                             </th>
 
                             {columns.CompletenessScore && (
@@ -108,7 +110,17 @@ const Rubrics = ({ rubricResults }) => {
                                     className={`${index % 2 === 0 ? "bg-gray-800" : "bg-gray-700"} hover:bg-gray-600`}
                                 >
                                     <td className="px-2 sm:px-4 py-2 border border-gray-600">
-                                        {decodeURIComponent(entry.Assignment)}
+                                        <a
+                                            href={`https://docs.google.com/gview?url=${entry.studentId.fileUrl}&embedded=true`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-blue-400 hover:underline"
+                                        >
+                                            {entry.studentId.name}
+                                        </a>
+                                    </td>
+                                    <td className="px-2 sm:px-4 py-2 border border-gray-600">
+                                        {entry.studentId.rollNo}
                                     </td>
                                     {columns.CompletenessScore && (
                                         <td className="px-2 sm:px-4 py-2 border border-gray-600">
