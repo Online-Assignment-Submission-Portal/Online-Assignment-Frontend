@@ -257,7 +257,7 @@ function CheckPlagiarism() {
           </div>
 
 
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto mt-8 bg-gray-800 rounded-lg shadow-lg">
             <h2 className="text-xl sm:text-2xl font-bold text-gray-200">Plagiarism Report</h2>
             <div className="mb-4 flex flex-row justify-between sm:justify-end gap-3 mt-2">
               <label className="inline-flex items-center select-none">
