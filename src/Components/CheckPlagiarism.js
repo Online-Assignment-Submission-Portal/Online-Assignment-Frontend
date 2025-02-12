@@ -39,7 +39,6 @@ function CheckPlagiarism() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [submissions, setSubmissions] = useState([]);
-  const [rubrics, setRubrics] = useState([])
   const [columns, setColumns] = useState({
     CosineSimilarity: true,
     JaccardSimilarity: true,
@@ -52,6 +51,36 @@ function CheckPlagiarism() {
       [column]: !prevColumns[column],
     }));
   }
+
+  const mergeData = (mlResponse, submissions) => {
+    if (!mlResponse?.rubricResults || !Array.isArray(mlResponse.rubricResults)) {
+      console.error("Invalid mlResponse or rubricResults is not an array:", mlResponse);
+      return [];
+    }
+  
+    if (!submissions || !Array.isArray(submissions)) {
+      console.error("Invalid submissions or submissions is not an array:", submissions);
+      return [];
+    }
+    const rubricMap = mlResponse.rubricResults.reduce((acc, item) => {
+      const studentId = item?.studentId?.id;
+      if (studentId !== undefined) {
+        acc[String(studentId)] = item; 
+      }
+      return acc;
+    }, {});
+    const mergedData = submissions.map(submission => {
+      const submissionId = String(submission.studentId);
+      const matchingRubric = rubricMap[submissionId]; 
+      return {
+        ...submission, 
+        ...(matchingRubric || {}), 
+        studentId: matchingRubric ? matchingRubric.studentId : { id: submission.studentId }
+      };
+    });
+    return mergedData;
+  };
+  
 
   useEffect(() => {
     const fetchPlagiarismData = async () => {
@@ -82,8 +111,11 @@ function CheckPlagiarism() {
           setSubmitted(response.data.submitted);
           setNotSubmitted(response.data.notSubmitted);
           setLate(response.data.late);
-          setSubmissions(response.data.submissions);
-          setRubrics(response.data.mlResponse.rubricResults)
+          const mergedData = mergeData(response.data.mlResponse, response.data.submissions);
+          console.log(mergedData);
+          setSubmissions(mergedData);
+          // setSubmissions(response.data.submissions);
+          // setRubrics(response.data.mlResponse.rubricResults)
           const toastId = "plagiarism-success";
           if (!toast.isActive(toastId)) {
             toast.success("Data fetched successfully.", { toastId });
@@ -394,7 +426,7 @@ function CheckPlagiarism() {
               </tbody>
             </table>
           </div>
-          <Rubrics rubricResults={rubrics}/>
+          {/* <Rubrics rubricResults={rubrics}/> */}
           <Feedback assignmentId={assignmentId} submissions={submissions} />
         </div>
       </div>
