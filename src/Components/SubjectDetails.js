@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';  // Import styles for Toastify
 import * as XLSX from 'xlsx'; // Import XLSX for Excel export
 import Header from './UserHeader'
 import NoticeBoard from './NoticeBoard';
+import useStore from '../lib/useStore';
 
 function SubjectDetails() {
   const location = useLocation();
@@ -23,9 +24,10 @@ function SubjectDetails() {
   const [notFoundEmails, setNotFoundEmails] = useState([]);
   const [assignments, setAssignments] = useState([]);
   const [unreadMessages, setUnreadMessages] = useState({});
+
   console.log(subject);
   // console.log(location.state, " there ");
-
+  const {socket} = useStore();
 
   useEffect(() => {
     const fetchUnreadMessages = async () => {
@@ -55,11 +57,23 @@ function SubjectDetails() {
     };
 
     fetchUnreadMessages();
+   
+    if(!socket){
+      return;
+    }
+    socket.on("newMessage", (newMessage) => {
+      if (newMessage.receiverId === userID) {
+        setUnreadMessages((prev) => ({
+          ...prev,
+          [newMessage.senderId]: (prev[newMessage.senderId] || 0) + 1,
+        }));
+      }
+    });
 
-    const interval = setInterval(fetchUnreadMessages, 10000);
+    // const interval = setInterval(fetchUnreadMessages, 10000);
 
-    // Cleanup interval on component unmount
-    return () => clearInterval(interval);
+    // // Cleanup interval on component unmount
+    // return () => clearInterval(interval);
   }, [userID, apiUrl]);
 
 
