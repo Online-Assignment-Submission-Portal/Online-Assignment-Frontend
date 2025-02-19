@@ -89,53 +89,54 @@ const NoticeBoard = ({ userRole, subject, notice }) => {
     }
   };
 
-  const handleEditMessage = async (noticeId) => {
-    if (!editedText.trim()) return;
+const handleEditMessage = async (noticeId) => {
+  if (!editedText.trim()) return;
 
-    const token = getToken();
-    if (!token) {
-      toast.error("Please sign in.");
-      return navigate("/signin");
-    }
+  const token = getToken();
+  if (!token) {
+    toast.error("Please sign in.");
+    return navigate("/signin");
+  }
 
-    try {
-      await axios.put(
-        `${apiUrl}/subject/notice`,
-        { noticeId, message: editedText },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+  try {
+    await axios.put(
+      `${apiUrl}/subject/notice`,
+      { noticeId, message: editedText },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
 
-      setMessages((prev) =>
-        prev.map((msg) =>
-          msg._id === noticeId
-            ? {
-                ...msg,
-                message: editedText,
-                lastUpdatedAt: new Date().toISOString(),
-              }
-            : msg
-        )
-      );
-      setEditingMessage(null);
-      setShowOptions(null);
-      setEditedText("");
-      toast.success("Notice updated successfully.");
-    } catch (error) {
-      toast.error("Failed to update notice. Please try again.");
-    }
-  };
+    setMessages((prev) =>
+      prev.map((msg) =>
+        msg._id === noticeId
+          ? {
+              ...msg,
+              message: editedText,
+              lastUpdatedAt: new Date().toISOString(),
+            }
+          : msg
+      )
+    );
+    setEditingMessage(null);
+    setShowOptions(null);
+    setEditedText("");
+    toast.success("Notice updated successfully.");
+  } catch (error) {
+    toast.error("Failed to update notice. Please try again.");
+  }
+};
+
 
   return (
     <div className="mt-6">
       <h1 className="text-2xl font-semibold text-gray-200">
         📢 Notice Board - {subject?.subject_name}
       </h1>
-      <div className="bg-gray-700 rounded-lg max-h-64 overflow-y-auto scrollbar-none">
+      <div className="bg-gray-700 rounded-lg max-h-64 overflow-y-auto scrollbar-none m-8">
         {messages.length > 0 ? (
           [...messages].map((msg) => (
             <div
               key={msg._id}
-              className="p-3 border-b border-gray-600 text-gray-200 flex justify-between items-center hover:bg-gray-800"
+              className="p-3 border-b border-gray-600 text-gray-200 flex justify-between items-center hover:bg-gray-800 max-w-screen"
             >
               {editingMessage === msg._id ? (
                 <input
@@ -145,9 +146,9 @@ const NoticeBoard = ({ userRole, subject, notice }) => {
                   className="w-full p-2 bg-gray-600 text-white rounded"
                 />
               ) : (
-                <span>{msg.message}</span>
+                <span className="max-w-screen break-words scrollbar-none overflow-x-scroll mr-3">{msg.message}</span>
               )}
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-5 mt-2">
                 <span className="text-sm text-gray-400">
                   {new Date(msg.lastUpdatedAt).toLocaleString()}
                 </span>
