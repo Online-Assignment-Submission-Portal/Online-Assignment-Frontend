@@ -23,7 +23,7 @@ function SubjectDetails() {
   const [notFoundEmails, setNotFoundEmails] = useState([]);
   const [assignments, setAssignments] = useState([]);
   const [unreadMessages, setUnreadMessages] = useState({});
-  console.log(subject);
+  // console.log(subject);
   // console.log(location.state, " there ");
 
 

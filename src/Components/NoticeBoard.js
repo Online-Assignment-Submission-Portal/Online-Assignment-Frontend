@@ -43,9 +43,12 @@ const NoticeBoard = ({ userRole, subject, notice }) => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-
+       const transformedNotice = {
+         ...response.data.notice,
+         _id: response.data.notice.id,
+       };
       setMessages((prev) =>
-        [...prev, response.data.notice].sort(
+        [...prev, transformedNotice].sort(
           (a, b) => new Date(b.lastUpdatedAt) - new Date(a.lastUpdatedAt)
         )
       );
@@ -56,36 +59,35 @@ const NoticeBoard = ({ userRole, subject, notice }) => {
     }
   };
 
-const handleDeleteMessage = async (noticeId) => {
-  const token = getToken();
-  if (!token) {
-    toast.error("Please sign in.");
-    return navigate("/signin");
-  }
+  const handleDeleteMessage = async (noticeId) => {
+    const token = getToken();
+    if (!token) {
+      toast.error("Please sign in.");
+      return navigate("/signin");
+    }
 
-  // Confirmation alert before deleting
-  if (!window.confirm("Are you sure you want to delete this notice?")) return;
+    // Confirmation alert before deleting
+    if (!window.confirm("Are you sure you want to delete this notice?")) return;
+    console.log(noticeId, ' there ');
+    try {
+      await axios.delete(`${apiUrl}/subject/notice/${noticeId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
-  try {
-    await axios.delete(`${apiUrl}/subject/notice/${noticeId}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+      // Remove the deleted notice from the state
+      setMessages((prevMessages) =>
+        prevMessages.filter((msg) => msg._id !== noticeId)
+      );
 
-    // Remove the deleted notice from the state
-    setMessages((prevMessages) =>
-      prevMessages.filter((msg) => msg._id !== noticeId)
-    );
+      // ✅ Automatically close edit/delete options after deleting
+      setShowOptions(null);
 
-    // ✅ Automatically close edit/delete options after deleting
-    setShowOptions(null);
-
-    toast.success("Notice deleted successfully.");
-  } catch (error) {
-    console.error("Error deleting notice:", error);
-    toast.error("Failed to delete notice. Please try again.");
-  }
-};
-
+      toast.success("Notice deleted successfully.");
+    } catch (error) {
+      console.error("Error deleting notice:", error);
+      toast.error("Failed to delete notice. Please try again.");
+    }
+  };
 
   const handleEditMessage = async (noticeId) => {
     if (!editedText.trim()) return;
@@ -130,7 +132,7 @@ const handleDeleteMessage = async (noticeId) => {
       </h1>
       <div className="bg-gray-700 rounded-lg max-h-64 overflow-y-auto scrollbar-none">
         {messages.length > 0 ? (
-          [...messages].reverse().map((msg) => (
+          [...messages].map((msg) => (
             <div
               key={msg._id}
               className="p-3 border-b border-gray-600 text-gray-200 flex justify-between items-center hover:bg-gray-800"
