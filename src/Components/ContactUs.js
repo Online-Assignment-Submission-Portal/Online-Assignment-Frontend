@@ -89,7 +89,7 @@ const ContactUs = () => {
             {loading ? 'Submitting...' : 'Submit'}
           </button>
         </form>
-        <p className="text-lg leading-relaxed mt-6">
+        <p className="leading-relaxed mt-6 sm:text-lg">
           You can also reach out to us at assignmentportal2024@gmail.com!
         </p>
       </div>

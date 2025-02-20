@@ -128,7 +128,7 @@ const Profile = () => {
 
   return (
     <>
-      <Header />
+    {userRole !== 'admin' && <Header />}
     <div className="min-h-screen flex flex-col">
       <div className="min-h-screen bg-gray-900 text-gray-200">
         {/* <ToastContainer position="top-center" autoClose={1500} /> */}
