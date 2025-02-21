@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState , useCallback} from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -23,6 +23,38 @@ const NoticeBoard = ({ userRole, subject, notice }) => {
       .find((row) => row.startsWith("token="))
       ?.split("=")[1];
 
+const [loaded, setLoaded] = useState(false); // Prevents multiple fetches
+
+const fetchNotices = useCallback(async () => {
+  const token = getToken();
+  if (!token) {
+    toast.error("Please sign in.");
+    navigate("/signin");
+    return;
+  }
+
+  try {
+    const response = await axios.get(
+      `${apiUrl}/subject/notice/${subject.subject_id}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    console.log(response.data.notices);
+    setMessages(response.data.notices);
+    setLoaded(true); // Mark as loaded
+  } catch (error) {
+    console.error("Error fetching notices:", error);
+    toast.error("Failed to load notices.");
+  }
+}, [apiUrl, subject.subject_id, getToken, navigate, setMessages]);
+
+useEffect(() => {
+  if (!loaded && subject.subject_id) {
+    fetchNotices();
+  }
+}, [fetchNotices, loaded, subject.subject_id , messages , setMessages]);
+
   const handlePostMessage = async () => {
     if (!newMessage.trim()) return;
 
@@ -43,15 +75,16 @@ const NoticeBoard = ({ userRole, subject, notice }) => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-       const transformedNotice = {
-         ...response.data.notice,
-         _id: response.data.notice.id,
-       };
+      const transformedNotice = {
+        ...response.data.notice,
+        _id: response.data.notice.id,
+      };
       setMessages((prev) =>
         [...prev, transformedNotice].sort(
           (a, b) => new Date(b.lastUpdatedAt) - new Date(a.lastUpdatedAt)
         )
       );
+      console.log(messages);
       setNewMessage("");
       toast.success("Notice posted successfully.");
     } catch (error) {
@@ -68,7 +101,7 @@ const NoticeBoard = ({ userRole, subject, notice }) => {
 
     // Confirmation alert before deleting
     if (!window.confirm("Are you sure you want to delete this notice?")) return;
-    console.log(noticeId, ' there ');
+    console.log(noticeId, " there ");
     try {
       await axios.delete(`${apiUrl}/subject/notice/${noticeId}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -89,42 +122,41 @@ const NoticeBoard = ({ userRole, subject, notice }) => {
     }
   };
 
-const handleEditMessage = async (noticeId) => {
-  if (!editedText.trim()) return;
+  const handleEditMessage = async (noticeId) => {
+    if (!editedText.trim()) return;
 
-  const token = getToken();
-  if (!token) {
-    toast.error("Please sign in.");
-    return navigate("/signin");
-  }
+    const token = getToken();
+    if (!token) {
+      toast.error("Please sign in.");
+      return navigate("/signin");
+    }
 
-  try {
-    await axios.put(
-      `${apiUrl}/subject/notice`,
-      { noticeId, message: editedText },
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+    try {
+      await axios.put(
+        `${apiUrl}/subject/notice`,
+        { noticeId, message: editedText },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
-    setMessages((prev) =>
-      prev.map((msg) =>
-        msg._id === noticeId
-          ? {
-              ...msg,
-              message: editedText,
-              lastUpdatedAt: new Date().toISOString(),
-            }
-          : msg
-      )
-    );
-    setEditingMessage(null);
-    setShowOptions(null);
-    setEditedText("");
-    toast.success("Notice updated successfully.");
-  } catch (error) {
-    toast.error("Failed to update notice. Please try again.");
-  }
-};
-
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg._id === noticeId
+            ? {
+                ...msg,
+                message: editedText,
+                lastUpdatedAt: new Date().toISOString(),
+              }
+            : msg
+        )
+      );
+      setEditingMessage(null);
+      setShowOptions(null);
+      setEditedText("");
+      toast.success("Notice updated successfully.");
+    } catch (error) {
+      toast.error("Failed to update notice. Please try again.");
+    }
+  };
 
   return (
     <div className="mt-6">
@@ -146,11 +178,20 @@ const handleEditMessage = async (noticeId) => {
                   className="w-full p-2 bg-gray-600 text-white rounded"
                 />
               ) : (
-                <span className="max-w-screen break-words scrollbar-none overflow-x-scroll mr-3">{msg.message}</span>
+                <span className="max-w-screen break-words scrollbar-none overflow-x-scroll mr-3">
+                  {msg.message}
+                </span>
               )}
               <div className="flex items-center gap-5 mt-2">
                 <span className="text-sm text-gray-400">
-                  {new Date(msg.lastUpdatedAt).toLocaleString()}
+                  {new Date(msg.lastUpdatedAt).toLocaleString("en-GB", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: true,
+                  })}
                 </span>
                 {userRole === "teacher" && (
                   <div className="relative flex items-center">
