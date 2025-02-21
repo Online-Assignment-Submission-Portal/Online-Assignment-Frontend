@@ -52,6 +52,10 @@ function CheckPlagiarism() {
     }));
   }
 
+  const handleUpdateSubmissions = (updatedSubmissions) => {
+    setSubmissions(updatedSubmissions);
+  };
+
   const mergeData = (mlResponse, submissions) => {
     if (!mlResponse?.rubricResults || !Array.isArray(mlResponse.rubricResults)) {
       console.error("Invalid mlResponse or rubricResults is not an array:", mlResponse);
@@ -426,8 +430,7 @@ function CheckPlagiarism() {
               </tbody>
             </table>
           </div>
-          {/* <Rubrics rubricResults={rubrics}/> */}
-          <Feedback assignmentId={assignmentId} submissions={submissions} />
+          <Feedback assignmentId={assignmentId} submissions={submissions} onUpdateSubmissions={handleUpdateSubmissions}/>
         </div>
       </div>
     </>
