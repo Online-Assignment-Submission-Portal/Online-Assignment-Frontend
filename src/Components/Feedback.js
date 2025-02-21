@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as XLSX from 'xlsx';
 
-const Feedback = ({ assignmentId, submissions }) => {
+const Feedback = ({ assignmentId, submissions, onUpdateSubmissions }) => {
     const [columns, setColumns] = useState({
         CompletenessScore: false,
         GrammarScore: false,
@@ -28,6 +28,7 @@ const Feedback = ({ assignmentId, submissions }) => {
 
     const [editedSubmissions, setEditedSubmissions] = useState({});
 
+
     const handleInputChange = (e, studentId, field) => {
         let { value } = e.target;
 
@@ -48,64 +49,73 @@ const Feedback = ({ assignmentId, submissions }) => {
     };
 
 
-    const handleSave = async (studentId) => {
-        const submissionData = editedSubmissions[studentId];
-        const originalSubmission = submissions.find(submission => submission.studentId.id === studentId);
-        const grade = submissionData?.grade !== undefined ? submissionData.grade : originalSubmission?.grade;
-        const feedback = submissionData?.feedback !== undefined ? submissionData.feedback : originalSubmission?.feedback;
-        if (grade === undefined || grade === "") {
-            toast.error("Marks cannot be empty.");
-            return;
+const handleSave = async (studentId) => {
+    const submissionData = editedSubmissions[studentId];
+    const originalSubmission = submissions.find(submission => submission.studentId.id === studentId);
+    const grade = submissionData?.grade !== undefined ? submissionData.grade : originalSubmission?.grade;
+    const feedback = submissionData?.feedback !== undefined ? submissionData.feedback : originalSubmission?.feedback;
+
+    if (grade === undefined || grade === "") {
+        toast.error("Marks cannot be empty.");
+        return;
+    }
+
+    try {
+        const token = document.cookie
+            .split("; ")
+            .find((row) => row.startsWith("token="))
+            ?.split("=")[1];
+
+        if (!token) {
+            toast.error("Please sign in to save submissions.");
+            return navigate("/signin");
         }
-        try {
-            const token = document.cookie
-                .split("; ")
-                .find((row) => row.startsWith("token="))
-                ?.split("=")[1];
 
-            if (!token) {
-                toast.error("Please sign in to save submissions.");
-                return navigate("/signin");
-            }
+        const response = await axios.post(
+            `${apiUrl}/assignment/submission/save/${studentId}/${assignmentId}`,
+            { grade, feedback },
+            { headers: { Authorization: `Bearer ${token}` } }
+        );
 
-            const response = await axios.post(
-                `${apiUrl}/assignment/submission/save/${studentId}/${assignmentId}`,
-                {
-                    grade: grade,
-                    feedback: feedback,
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
+        if (response.data.success) {
+            toast.success("Submission saved successfully!");
+
+            const updatedSubmissions = submissions.map((submission) =>
+                submission.studentId.id === studentId
+                    ? { ...submission, grade, feedback }
+                    : submission
             );
+            onUpdateSubmissions(updatedSubmissions);
 
-            if (response.data.success) {
-                toast.success("Submission saved successfully!");
-            } else {
-                toast.error("Failed to save submission.");
-            }
-        } catch (err) {
-            toast.error("Error in saving submission.");
+            setEditedSubmissions((prev) => {
+                const updatedEdits = { ...prev };
+                delete updatedEdits[studentId];
+                return updatedEdits;
+            });
+        } else {
+            toast.error("Failed to save submission.");
         }
-    };
+    } catch (err) {
+        toast.error("Error in saving submission.");
+    }
+};
+
 
     const handleDownload = () => {
-        const data = submissions
-            .map(submission => ({
-                RollNo: submission.rollNo,
-                Name: `${submission.firstName} ${submission.lastName}`,
-                Marks: submission.grade,
-            }))
+        const updatedData = submissions.map(submission => ({
+            RollNo: submission.rollNo,
+            Name: `${submission.firstName} ${submission.lastName}`,
+            Marks: submission.grade,
+        }))
             .sort((a, b) => a.RollNo - b.RollNo);
 
-        const worksheet = XLSX.utils.json_to_sheet(data);
+        const worksheet = XLSX.utils.json_to_sheet(updatedData);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Submissions");
 
         XLSX.writeFile(workbook, `Submissions_${assignmentId}.xlsx`);
     };
+
 
     return (
         <div className="overflow-x-auto mt-8 bg-gray-800 rounded-lg shadow-lg">

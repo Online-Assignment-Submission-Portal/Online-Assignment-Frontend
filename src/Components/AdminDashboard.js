@@ -49,42 +49,43 @@ const AdminDashboard = () => {
 
   const handleLogout = async () => {
     try {
-        const token = document.cookie
-            .split("; ")
-            .find((row) => row.startsWith("token="))
-            ?.split("=")[1];
+      const token = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("adminToken="))
+        ?.split("=")[1];
 
-        if (!token) {
-            toast.error('Please sign in.');
-            return navigate('/signin');
+      if (!token) {
+        toast.error('Please sign in.');
+        return navigate('/signin');
+      }
+
+      const response = await axios.post(
+        `${apiUrl}/user/logout`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
+      );
+      console.log(response);
 
-        const response = await axios.post(
-            `${apiUrl}/user/logout`,
-            {},
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            }
-        );
+      if (response.status === 200) {
+        document.cookie = "adminToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+        localStorage.clear();
+        resetStore();
+        toast.success("Logout Successful");
+        disconnectSocket();
+        setTimeout(() => navigate(`/admin-signin`), 1500);
+        // setTimeout(() => navigate(`/dashboard/${user._id}`), 1500); // Redirect after 2 seconds
 
-        if (response.status === 200) {
-            document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-            localStorage.clear();
-            resetStore();
-            toast.success("Logout Successful");
-            disconnectSocket();
-            setTimeout(() => navigate(`/signin`), 1500);
-            // setTimeout(() => navigate(`/dashboard/${user._id}`), 1500); // Redirect after 2 seconds
-
-        } else {
-            toast.error(response.data.message || "Logout failed.");
-        }
+      } else {
+        toast.error(response.data.message || "Logout failed.");
+      }
     } catch (err) {
-        toast.error(err.response?.data?.message || "An error occurred during logout.");
+      toast.error(err.response?.data?.message || "An error occurred during logout.");
     }
-};
+  };
 
   const handleConfirmRole = async (userId) => {
     const token = document.cookie
@@ -164,7 +165,7 @@ const AdminDashboard = () => {
         {/* <ToastContainer position="top-center" autoClose={1500} /> */}
         <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-4xl">
           <h2 className="text-3xl text-center italic font-bold mb-6">Admin Dashboard</h2>
-          <div className="flex flex-row justify-between mt-6 gap-2">
+          <div className="flex flex-row justify-between mt-6 gap-2 font-semibold">
             <button
               onClick={() => navigate("/existing-users")}
               className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-500 transition"
@@ -191,83 +192,86 @@ const AdminDashboard = () => {
             </div>
           )}
 
-          <h3 className="text-xl font-semibold mb-4">Pending Users</h3>
+          <h3 className="text-xl font-semibold mb-4 mt-4">Pending Users</h3>
 
           {pendingUsers.length === 0 ? (
             <p className="text-center">No pending users.</p>
           ) : (
-            <table className="table-auto w-full text-left text-sm bg-gray-700 rounded-lg overflow-hidden">
-              <thead className="bg-green-700">
-                <tr>
-                  <th className="px-4 py-2 text-center">Name</th>
-                  <th className="px-4 py-2 text-center">Email</th>
-                  <th className="px-4 py-2 text-center">Role asked</th>
-                  <th className="px-4 py-2 text-center">Set role</th>
-                  <th className="px-4 py-2 text-center">Options</th>
-                </tr>
-              </thead>
-              <tbody>
-                {pendingUsers.map((user) => (
-                  <tr key={user._id} className="odd:bg-gray-600 even:bg-gray-700 text-center">
-                    <td className="px-4 py-2">{`${user.firstName} ${user.lastName}`}</td>
-                    <td className="px-4 py-2">{user.email}</td>
-                    <td className="px-4 py-2">{user.role}</td>
-                    <td className="px-4 py-2">
-                      <div className="flex justify-between">
-                        <label className="flex items-center">
-                          <input
-                            type="radio"
-                            name={`role-${user._id}`}
-                            value="student"
-                            checked={selectedRoles[user._id] === "student"}
-                            onChange={() =>
-                              setSelectedRoles((prev) => ({
-                                ...prev,
-                                [user._id]: "student",
-                              }))
-                            }
-                            className="mr-2"
-                          />
-                          Student
-                        </label>
-                        <label className="flex items-center">
-                          <input
-                            type="radio"
-                            name={`role-${user._id}`}
-                            value="teacher"
-                            checked={selectedRoles[user._id] === "teacher"}
-                            onChange={() =>
-                              setSelectedRoles((prev) => ({
-                                ...prev,
-                                [user._id]: "teacher",
-                              }))
-                            }
-                            className="mr-2"
-                          />
-                          Teacher
-                        </label>
-                      </div>
-                    </td>
-                    <td className="px-4 py-2">
-                      <div className="flex justify-center gap-2">
-                        <button
-                          onClick={() => handleConfirmRole(user._id)}
-                          className="bg-green-600 text-white py-1 px-4 rounded-md hover:bg-green-500 transition"
-                        >
-                          Confirm role
-                        </button>
-                        <button
-                          onClick={() => handleDeleteUser(user._id)}
-                          className="bg-red-600 text-white py-1 px-4 rounded-md hover:bg-red-500 transition"
-                        >
-                          Delete user
-                        </button>
-                      </div>
-                    </td>
+            <div className="w-full overflow-auto">
+              <table className="table-auto w-full text-left text-sm bg-gray-700 rounded-lg max-w-full">
+                <thead className="bg-green-700">
+                  <tr>
+                    <th className="px-4 py-2 text-center">Name</th>
+                    <th className="px-4 py-2 text-center">Email</th>
+                    <th className="px-4 py-2 text-center">Role asked</th>
+                    <th className="px-4 py-2 text-center">Set role</th>
+                    <th className="px-4 py-2 text-center">Options</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {pendingUsers.map((user) => (
+                    <tr key={user._id} className="odd:bg-gray-600 even:bg-gray-700 text-center">
+                      <td className="px-4 py-2">{`${user.firstName} ${user.lastName}`}</td>
+                      <td className="px-4 py-2">{user.email}</td>
+                      <td className="px-4 py-2">{user.role}</td>
+                      <td className="px-4 py-2">
+                        <div className="flex justify-between">
+                          <label className="flex items-center">
+                            <input
+                              type="radio"
+                              name={`role-${user._id}`}
+                              value="student"
+                              checked={selectedRoles[user._id] === "student"}
+                              onChange={() =>
+                                setSelectedRoles((prev) => ({
+                                  ...prev,
+                                  [user._id]: "student",
+                                }))
+                              }
+                              className="mx-2"
+                            />
+                            Student
+                          </label>
+                          <label className="flex items-center">
+                            <input
+                              type="radio"
+                              name={`role-${user._id}`}
+                              value="teacher"
+                              checked={selectedRoles[user._id] === "teacher"}
+                              onChange={() =>
+                                setSelectedRoles((prev) => ({
+                                  ...prev,
+                                  [user._id]: "teacher",
+                                }))
+                              }
+                              className="mx-2"
+                            />
+                            Teacher
+                          </label>
+                        </div>
+                      </td>
+                      <td className="px-4 py-2">
+                        <div className="flex justify-center gap-1">
+                          <button
+                            onClick={() => handleConfirmRole(user._id)}
+                            className="bg-green-600 text-white py-1 px-4 rounded-md hover:bg-green-500 transition"
+                          >
+                            Confirm role
+                          </button>
+                          <button
+                            onClick={() => handleDeleteUser(user._id)}
+                            className="bg-red-600 text-white py-1 px-4 rounded-md hover:bg-red-500 transition"
+                          >
+                            Delete user
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
           )}
         </div>
       </div>

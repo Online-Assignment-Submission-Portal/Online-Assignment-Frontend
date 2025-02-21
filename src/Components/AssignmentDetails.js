@@ -579,7 +579,7 @@ function AssignmentDetails() {
                     }
                     className="px-6 py-2 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-lg transition"
                   >
-                    View Submission Details
+                    Check Plagiarism
                   </button>
                 </div>
                 

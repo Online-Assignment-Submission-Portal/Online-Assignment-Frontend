@@ -174,12 +174,12 @@ const ExistingUsers = () => {
     try {
         const token = document.cookie
             .split("; ")
-            .find((row) => row.startsWith("token="))
+            .find((row) => row.startsWith("adminToken="))
             ?.split("=")[1];
 
         if (!token) {
             toast.error('Please sign in.');
-            return navigate('/signin');
+            return navigate('/admin-signin');
         }
 
         const response = await axios.post(
@@ -193,12 +193,12 @@ const ExistingUsers = () => {
         );
 
         if (response.status === 200) {
-            document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+            document.cookie = "adminToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
             localStorage.clear();
             resetStore();
             toast.success("Logout Successful");
             disconnectSocket();
-            setTimeout(() => navigate(`/signin`), 1500);
+            setTimeout(() => navigate(`/admin-signin`), 1500);
             // setTimeout(() => navigate(`/dashboard/${user._id}`), 1500); // Redirect after 2 seconds
 
         } else {
