@@ -5,19 +5,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Loding from "../partials/Loding";
 import "react-toastify/dist/ReactToastify.css";
-import { Bar, Pie } from "react-chartjs-2";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import {
-  Chart,
-  BarElement,
-  CategoryScale,
-  LinearScale,
-  BarController,
-} from 'chart.js';
+import PieChart from './Partials/PieChart';
 import Header from './UserHeader';
 
-// Register required components
-Chart.register(BarElement, CategoryScale, LinearScale, BarController);
 
 function ViewSubmission() {
   // const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
@@ -104,41 +94,7 @@ function ViewSubmission() {
     );
   }
 
-  const pieData = {
-    labels: ["Submitted", "Not Submitted", "Late"],
-    datasets: [
-      {
-        label: "Assignment Status",
-        data: [submitted, notSubmitted, late],
-        backgroundColor: ["#4caf50", "#f44336", "#ff9800"],
-        borderColor: ["#4caf50", "#f44336", "#ff9800"],
-        borderWidth: 1,
-        hoverOffset: 20,
-      },
-    ],
-  };
-
-  const pieOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    layout: {
-      padding: 10
-    },
-    plugins: {
-      legend: {
-        position: "top",
-      },
-      tooltip: {
-        callbacks: {
-          label: (tooltipItem) =>
-            `${tooltipItem.label}: ${tooltipItem.raw} (${(
-              (tooltipItem.raw / (submitted + notSubmitted + late)) *
-              100
-            ).toFixed(2)}%)`,
-        },
-      },
-    },
-  };
+ 
 
   return (
     <>
@@ -159,12 +115,7 @@ function ViewSubmission() {
         </div>
 
         <div className="flex justify-center items-center bg-gray-800 rounded-lg shadow-md mb-10 overflow-visible">
-            <div className="w-full md:w-1/2 lg:w-1/3 h-[400px] overflow-visible">
-                <Pie
-                  data={pieData}
-                  options={pieOptions}
-                />
-              </div>
+        <PieChart submitted={submitted} notSubmitted={notSubmitted} late={late} />
           </div>
 
         {/* Submitted Submissions Table */}

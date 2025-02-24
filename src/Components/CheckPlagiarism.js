@@ -2,26 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { Bar, Pie } from "react-chartjs-2";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import Loding from "../partials/Loding";
 import "react-toastify/dist/ReactToastify.css";
-import Feedback from './Feedback'
-import {
-  Chart,
-  BarElement,
-  CategoryScale,
-  LinearScale,
-  BarController,
-} from 'chart.js';
+import Feedback from './Feedback';
+import PieChart from "./Partials/PieChart";
+import BarGraph from "./Partials/BarGraph";
 import Header from "./UserHeader";
-import Rubrics from "./Rubrics";
 
-// Register required components
-Chart.register(BarElement, CategoryScale, LinearScale, BarController);
-
-
-ChartJS.register(ArcElement, Tooltip, Legend);
 
 function CheckPlagiarism() {
   const location = useLocation();
@@ -118,8 +105,6 @@ function CheckPlagiarism() {
           const mergedData = mergeData(response.data.mlResponse, response.data.submissions);
           console.log(mergedData);
           setSubmissions(mergedData);
-          // setSubmissions(response.data.submissions);
-          // setRubrics(response.data.mlResponse.rubricResults)
           const toastId = "plagiarism-success";
           if (!toast.isActive(toastId)) {
             toast.success("Data fetched successfully.", { toastId });
@@ -149,84 +134,12 @@ function CheckPlagiarism() {
     );
   }
 
-  const ranges = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
-
-  const aggregateCounts = (key) => {
-    return ranges.slice(0, -1).map((rangeStart, index) => {
-      const rangeEnd = ranges[index + 1];
-      return plagiarismData.filter(
-        (entry) =>
-          entry[key] >= rangeStart && entry[key] < rangeEnd
-      ).length;
-    });
-  };
-
-  const chartData = {
-    labels: ranges.slice(0, -1).map(
-      (rangeStart, index) => `${rangeStart}-${ranges[index + 1] - 1}%`
-    ),
-    datasets: [
-      {
-        label: "Combined Similarity (%)",
-        data: aggregateCounts("CombinedSimilarity"),
-        backgroundColor: "rgba(75, 192, 192, 0.6)",
-        borderColor: "rgba(75, 192, 192, 1)",
-        borderWidth: 2,
-      },
-      {
-        label: "Cosine Similarity (%)",
-        data: aggregateCounts("CosineSimilarity"),
-        backgroundColor: "rgba(54, 162, 235, 0.6)",
-        borderColor: "rgba(54, 162, 235, 1)",
-        borderWidth: 2,
-      },
-      {
-        label: "Jaccard Similarity (%)",
-        data: aggregateCounts("JaccardSimilarity"),
-        backgroundColor: "rgba(255, 99, 132, 0.6)",
-        borderColor: "rgba(255, 99, 132, 1)",
-        borderWidth: 2,
-      },
-    ],
-  };
+  
 
 
 
-  const pieData = {
-    labels: ["Submitted", "Not Submitted", "Late"],
-    datasets: [
-      {
-        label: "Assignment Status",
-        data: [submitted, notSubmitted, late],
-        backgroundColor: ["#4caf50", "#f44336", "#ff9800"],
-        borderColor: ["#4caf50", "#f44336", "#ff9800"],
-        borderWidth: 1,
-        hoverOffset: 20,
-      },
-    ],
-  };
 
-  const pieOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    layout: {
-      padding: 10
-    },
-    plugins: {
-      legend: {
-        position: "top",
-      },
-      tooltip: {
-        callbacks: {
-          label: (tooltipItem) =>
-            `${tooltipItem.label}: ${tooltipItem.raw} (${(
-              (tooltipItem.raw / (submitted + notSubmitted + late)) *
-              100
-            ).toFixed(2)}%)`,
-        },
-      },
-    },
-  };
+
   return (
     <>
       <Header />
@@ -248,48 +161,12 @@ function CheckPlagiarism() {
 
           <h2 className="text-xl sm:text-2xl font-bold text-gray-200 mb-4">Plagiarism Statistics</h2>
           <div className="container mx-auto mb-4 sm:mb-8 bg-gray-300 rounded-md overflow-hidden">
-            <div className="h-[250px] sm:h-[300px] md:h-[400px] lg:h-[500px] w-full">
-              <Bar
-                data={chartData}
-                options={{
-                  responsive: true,
-                  maintainAspectRatio: false,
-                  plugins: {
-                    legend: { position: "top" },
-                    title: {
-                      display: true,
-                      text: "Similarity Distribution",
-                    },
-                  },
-                  scales: {
-                    x: {
-                      title: {
-                        display: true,
-                        text: "Similarity Percentage",
-                        font: { size: 14 },
-                      },
-                    },
-                    y: {
-                      title: {
-                        display: true,
-                        text: "Number of Comparisons",
-                        font: { size: 14 },
-                      },
-                    },
-                  },
-                }}
-              />
-            </div>
+            <BarGraph plagiarismData={plagiarismData} />
           </div>
 
           <h2 className="text-xl sm:text-2xl font-bold text-gray-200 mb-4">Submission Statistics</h2>
           <div className="flex justify-center items-center bg-gray-800 rounded-lg shadow-md mb-10 overflow-visible">
-            <div className="w-full md:w-1/2 lg:w-1/3 h-[400px] overflow-visible">
-              <Pie
-                data={pieData}
-                options={pieOptions}
-              />
-            </div>
+            <PieChart submitted={submitted} notSubmitted={notSubmitted} late={late} />
           </div>
 
 
