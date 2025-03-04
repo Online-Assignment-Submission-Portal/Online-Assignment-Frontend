@@ -87,7 +87,6 @@ const ExistingUsers = () => {
     XLSX.writeFile(workbook, "Students_List.xlsx");
   };
 
-
   const handleDownloadTeachersExcel = () => {
     const teacherData = teachers.map((user) => ({
       Type: "Teacher",
@@ -207,7 +206,7 @@ const ExistingUsers = () => {
     } catch (err) {
         toast.error(err.response?.data?.message || "An error occurred during logout.");
     }
-};
+  };
   return (
     <div className="sm:w-full min-h-screen bg-gray-900 text-white lg:flex lg:flex-col lg:items-center py-10">
       {/* <ToastContainer position="top-center" autoClose={1500} /> */}
@@ -226,7 +225,6 @@ const ExistingUsers = () => {
             Logout
           </button>
         </div>
-
 
         {/* Search bar */}
         <div className="mb-6 w-full max-w-md mx-auto relative">
@@ -253,7 +251,6 @@ const ExistingUsers = () => {
             )}
           </form>
         </div>
-
 
         <h2 className="text-3xl font-bold text-center mb-6">Existing Users</h2>
 
@@ -364,8 +361,6 @@ const ExistingUsers = () => {
             )}
           </div>
         </div>
-
-
       </div>
     </div>
   );

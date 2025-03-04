@@ -12,8 +12,10 @@ const ResetPassword = () => {
   const [error, setError] = useState("");
   const { state } = useLocation();
   // const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
-  const apiUrl = window.location.hostname === 'localhost'
-  ? "http://localhost:8000" : process.env.REACT_APP_BASE_URL;
+  const apiUrl =
+    window.location.hostname === "localhost"
+      ? "http://localhost:8000"
+      : process.env.REACT_APP_BASE_URL;
   const navigate = useNavigate();
 
   const handleResetSubmit = async (e) => {
@@ -30,7 +32,7 @@ const ResetPassword = () => {
         email: state.email,
         otp,
         password: newPassword,
-        confirmPassword
+        confirmPassword,
       });
       if (response.data.success) {
         toast.success("Reset Successful");
@@ -38,7 +40,10 @@ const ResetPassword = () => {
         setTimeout(() => navigate(`/signin/`), 1500);
       }
     } catch (err) {
-      toast.error(err.response?.data?.message || "Error resetting password. Please try again.");
+      toast.error(
+        err.response?.data?.message ||
+          "Error resetting password. Please try again."
+      );
     }
   };
 
@@ -46,10 +51,16 @@ const ResetPassword = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
       <div className="bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold text-center mb-6">Reset Password</h2>
-        {error && <div className="bg-red-600 text-white py-2 px-4 mb-4 rounded-md">{error}</div>}
+        {error && (
+          <div className="bg-red-600 text-white py-2 px-4 mb-4 rounded-md">
+            {error}
+          </div>
+        )}
         <form onSubmit={handleResetSubmit} className="space-y-4">
           <div>
-            <label htmlFor="otp" className="block text-sm font-medium mb-1">OTP</label>
+            <label htmlFor="otp" className="block text-sm font-medium mb-1">
+              OTP
+            </label>
             <input
               type="text"
               id="otp"
@@ -61,7 +72,12 @@ const ResetPassword = () => {
             />
           </div>
           <div>
-            <label htmlFor="newPassword" className="block text-sm font-medium mb-1">New Password</label>
+            <label
+              htmlFor="newPassword"
+              className="block text-sm font-medium mb-1"
+            >
+              New Password
+            </label>
             <input
               type="password"
               id="newPassword"
@@ -73,7 +89,12 @@ const ResetPassword = () => {
             />
           </div>
           <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-medium mb-1">Confirm Password</label>
+            <label
+              htmlFor="confirmPassword"
+              className="block text-sm font-medium mb-1"
+            >
+              Confirm Password
+            </label>
             <input
               type="password"
               id="confirmPassword"

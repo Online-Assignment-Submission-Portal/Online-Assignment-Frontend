@@ -9,8 +9,10 @@ const AddSubject = () => {
   const navigate = useNavigate();
   const teacherId = location.state?.teacherId || null; // Retrieve the teacherId from state
   // const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
-  const apiUrl = window.location.hostname === 'localhost'
-  ? "http://localhost:8000" : process.env.REACT_APP_BASE_URL;
+  const apiUrl =
+    window.location.hostname === "localhost"
+      ? "http://localhost:8000"
+      : process.env.REACT_APP_BASE_URL;
   const [subjectName, setSubjectName] = useState("");
   const [error, setError] = useState("");
 
@@ -75,9 +77,11 @@ const AddSubject = () => {
         >
           Create
         </button>
-        <button className="w-full bg-blue-600 hover:bg-blue-500 text-white py-2 px-4 rounded-md 
-          font-bold transition mt-5" onClick={() => navigate(-1)}>
-            Back To Dashboard
+        <button
+          className="w-full bg-blue-600 hover:bg-blue-500 text-white py-2 px-4 rounded-md font-bold transition mt-5"
+          onClick={() => navigate(-1)}
+        >
+          Back To Dashboard
         </button>
       </div>
     </div>

@@ -25,7 +25,7 @@ function AssignmentDetails() {
   const [file, setFile] = useState(null);
   // const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
   const apiUrl = window.location.hostname === 'localhost'
-  ? "http://localhost:8000" : process.env.REACT_APP_BASE_URL;
+    ? "http://localhost:8000" : process.env.REACT_APP_BASE_URL;
   const [submission, setSubmission] = useState(null);
   const [feedbackDetails, setFeedbackDetails] = useState();
   const [isSubmissionModalOpen, setIsSubmissionModalOpen] = useState(false);
@@ -95,8 +95,6 @@ function AssignmentDetails() {
       toast.error(err?.response?.data?.message || 'An error occurred while fetching your submission.');
     }
   };
-
-
 
   useEffect(() => {
     const fetchAssignmentDetails = async () => {

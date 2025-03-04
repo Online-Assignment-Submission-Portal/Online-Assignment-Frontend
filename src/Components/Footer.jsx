@@ -70,7 +70,7 @@ const Footer = () => {
                 <span className="text-violet-600 mr-2">
                   <i className="ri-instagram-line"></i>
                 </span>
-                 Instagram
+                Instagram
               </a>
             </li>
           </ul>

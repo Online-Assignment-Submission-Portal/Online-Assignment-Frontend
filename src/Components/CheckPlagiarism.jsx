@@ -4,11 +4,10 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import Loding from "../partials/Loding";
 import "react-toastify/dist/ReactToastify.css";
-import Feedback from './Feedback';
+import Feedback from "./Feedback";
 import PieChart from "./Partials/PieChart";
 import BarGraph from "./Partials/BarGraph";
 import Header from "./UserHeader";
-
 
 function CheckPlagiarism() {
   const location = useLocation();
@@ -37,7 +36,7 @@ function CheckPlagiarism() {
       ...prevColumns,
       [column]: !prevColumns[column],
     }));
-  }
+  };
 
   const handleUpdateSubmissions = (updatedSubmissions) => {
     setSubmissions(updatedSubmissions);
@@ -134,17 +133,10 @@ function CheckPlagiarism() {
     );
   }
 
-  
-
-
-
-
-
   return (
     <>
       <Header />
       <div className="min-h-screen bg-gray-900 text-gray-200 py-4 sm:py-8">
-
         <div className="container mx-auto bg-gray-800 p-4 sm:p-8 rounded-lg shadow-lg md:max-w-6xl">
           <div className="flex flex-col sm:flex-row justify-between items-center mb-4 sm:mb-8">
             <h1 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-0">
@@ -157,19 +149,14 @@ function CheckPlagiarism() {
               Back
             </button>
           </div>
-
-
           <h2 className="text-xl sm:text-2xl font-bold text-gray-200 mb-4">Plagiarism Statistics</h2>
           <div className="container mx-auto mb-4 sm:mb-8 bg-gray-300 rounded-md overflow-hidden">
             <BarGraph plagiarismData={plagiarismData} />
           </div>
-
           <h2 className="text-xl sm:text-2xl font-bold text-gray-200 mb-4">Submission Statistics</h2>
           <div className="flex justify-center items-center bg-gray-800 rounded-lg shadow-md mb-10 overflow-visible">
             <PieChart submitted={submitted} notSubmitted={notSubmitted} late={late} />
           </div>
-
-
           <div className="overflow-x-auto mt-8 bg-gray-800 rounded-lg shadow-lg">
             <h2 className="text-xl sm:text-2xl font-bold text-gray-200">Plagiarism Report</h2>
             <div className="mb-4 flex flex-row justify-between sm:justify-end gap-3 mt-2">
@@ -220,7 +207,6 @@ function CheckPlagiarism() {
                     </th>
                   )}
                   {columns.JaccardSimilarity && (
-
                     <th
                       className="px-2 sm:px-4 py-2 border border-gray-600 relative group"
                       title="Measures similarity by comparing the overlap of unique words between two documents."
@@ -230,7 +216,6 @@ function CheckPlagiarism() {
                     </th>
                   )}
                   {columns.CombinedSimilarity && (
-
                     <th
                       className="px-2 sm:px-4 py-2 border border-gray-600 relative group"
                       title="Combines Cosine and Jaccard similarity for a more balanced score."
@@ -251,7 +236,7 @@ function CheckPlagiarism() {
                     >
                       <td
                         className="px-2 sm:px-4 py-2 border border-gray-600"
-                        title={'Assignment 1'}
+                        title={"Assignment 1"}
                       >
                         <a
                           href={`https://docs.google.com/gview?url=${entry.studentId1.fileUrl}&embedded=true`}
@@ -267,7 +252,9 @@ function CheckPlagiarism() {
                         title={"Assignment 2"}
                       >
                         <a
-                          href={`https://docs.google.com/gview?url=${encodeURIComponent(entry.studentId2.fileUrl)}&embedded=true`}
+                          href={`https://docs.google.com/gview?url=${encodeURIComponent(
+                            entry.studentId2.fileUrl
+                          )}&embedded=true`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-blue-400 hover:underline"
@@ -281,13 +268,11 @@ function CheckPlagiarism() {
                         </td>
                       )}
                       {columns.JaccardSimilarity && (
-
                         <td className="px-2 sm:px-4 py-2 border border-gray-600">
                           {entry.JaccardSimilarity.toFixed(2)}%
                         </td>
                       )}
                       {columns.CombinedSimilarity && (
-
                         <td className="px-2 sm:px-4 py-2 border border-gray-600">
                           {entry.CombinedSimilarity.toFixed(2)}%
                         </td>
@@ -307,7 +292,7 @@ function CheckPlagiarism() {
               </tbody>
             </table>
           </div>
-          <Feedback assignmentId={assignmentId} submissions={submissions} onUpdateSubmissions={handleUpdateSubmissions}/>
+          <Feedback assignmentId={assignmentId} submissions={submissions} onUpdateSubmissions={handleUpdateSubmissions} />
         </div>
       </div>
     </>

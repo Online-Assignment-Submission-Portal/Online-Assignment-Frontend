@@ -1,4 +1,4 @@
-import React, { useState,useRef  } from "react";
+import React, { useState, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
@@ -27,7 +27,7 @@ const Signin = () => {
     e.preventDefault();
     setError("");
 
-    const userDetails = { email, password, recaptchaToken: captchaValue, failedAttempts};
+    const userDetails = { email, password, recaptchaToken: captchaValue, failedAttempts };
     if (failedAttempts >= 3 && !captchaValue) {
       toast.error("Please complete the CAPTCHA verification.");
       return;
@@ -46,7 +46,7 @@ const Signin = () => {
         }, 1500);
       }
     } catch (err) {
-      setFailedAttempts((prev) => prev + 1); 
+      setFailedAttempts((prev) => prev + 1);
       setCaptchaValue(null);
       if (recaptchaRef.current) {
         recaptchaRef.current.reset();
@@ -109,19 +109,19 @@ const Signin = () => {
 
                 {failedAttempts >= 3 && (
                   <div className="flex justify-center">
-                  <ReCAPTCHA
-                    sitekey="6Ld2NdAqAAAAABxR2yY2qN3U4KofslxMySM3XNmW"
-                    ref={recaptchaRef}
-                    onChange={(value) => {
-                      setCaptchaValue(value);
-                    }}
-                    onExpired={() => {
-                      setCaptchaValue(null);
-                    }}
-                    onErrored={() => {
-                      setCaptchaValue(null);
-                    }}
-                  />
+                    <ReCAPTCHA
+                      sitekey="6Ld2NdAqAAAAABxR2yY2qN3U4KofslxMySM3XNmW"
+                      ref={recaptchaRef}
+                      onChange={(value) => {
+                        setCaptchaValue(value);
+                      }}
+                      onExpired={() => {
+                        setCaptchaValue(null);
+                      }}
+                      onErrored={() => {
+                        setCaptchaValue(null);
+                      }}
+                    />
                   </div>
                 )}
 
