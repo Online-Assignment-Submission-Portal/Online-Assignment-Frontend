@@ -49,56 +49,56 @@ const Feedback = ({ assignmentId, submissions, onUpdateSubmissions }) => {
     };
 
 
-const handleSave = async (studentId) => {
-    const submissionData = editedSubmissions[studentId];
-    const originalSubmission = submissions.find(submission => submission.studentId.id === studentId);
-    const grade = submissionData?.grade !== undefined ? submissionData.grade : originalSubmission?.grade;
-    const feedback = submissionData?.feedback !== undefined ? submissionData.feedback : originalSubmission?.feedback;
+    const handleSave = async (studentId) => {
+        const submissionData = editedSubmissions[studentId];
+        const originalSubmission = submissions.find(submission => submission.studentId.id === studentId);
+        const grade = submissionData?.grade !== undefined ? submissionData.grade : originalSubmission?.grade;
+        const feedback = submissionData?.feedback !== undefined ? submissionData.feedback : originalSubmission?.feedback;
 
-    if (grade === undefined || grade === "") {
-        toast.error("Marks cannot be empty.");
-        return;
-    }
-
-    try {
-        const token = document.cookie
-            .split("; ")
-            .find((row) => row.startsWith("token="))
-            ?.split("=")[1];
-
-        if (!token) {
-            toast.error("Please sign in to save submissions.");
-            return navigate("/signin");
+        if (grade === undefined || grade === "") {
+            toast.error("Marks cannot be empty.");
+            return;
         }
 
-        const response = await axios.post(
-            `${apiUrl}/assignment/submission/save/${studentId}/${assignmentId}`,
-            { grade, feedback },
-            { headers: { Authorization: `Bearer ${token}` } }
-        );
+        try {
+            const token = document.cookie
+                .split("; ")
+                .find((row) => row.startsWith("token="))
+                ?.split("=")[1];
 
-        if (response.data.success) {
-            toast.success("Submission saved successfully!");
+            if (!token) {
+                toast.error("Please sign in to save submissions.");
+                return navigate("/signin");
+            }
 
-            const updatedSubmissions = submissions.map((submission) =>
-                submission.studentId.id === studentId
-                    ? { ...submission, grade, feedback }
-                    : submission
+            const response = await axios.post(
+                `${apiUrl}/assignment/submission/save/${studentId}/${assignmentId}`,
+                { grade, feedback },
+                { headers: { Authorization: `Bearer ${token}` } }
             );
-            onUpdateSubmissions(updatedSubmissions);
 
-            setEditedSubmissions((prev) => {
-                const updatedEdits = { ...prev };
-                delete updatedEdits[studentId];
-                return updatedEdits;
-            });
-        } else {
-            toast.error("Failed to save submission.");
+            if (response.data.success) {
+                toast.success("Submission saved successfully!");
+
+                const updatedSubmissions = submissions.map((submission) =>
+                    submission.studentId.id === studentId
+                        ? { ...submission, grade, feedback }
+                        : submission
+                );
+                onUpdateSubmissions(updatedSubmissions);
+
+                setEditedSubmissions((prev) => {
+                    const updatedEdits = { ...prev };
+                    delete updatedEdits[studentId];
+                    return updatedEdits;
+                });
+            } else {
+                toast.error("Failed to save submission.");
+            }
+        } catch (err) {
+            toast.error("Error in saving submission.");
         }
-    } catch (err) {
-        toast.error("Error in saving submission.");
-    }
-};
+    };
 
 
     const handleDownload = () => {
@@ -265,7 +265,6 @@ const handleSave = async (studentId) => {
                                             onChange={(e) => handleInputChange(e, submission.studentId.id, "grade")}
                                             className="bg-gray-600 border border-gray-400 p-2 rounded-md focus:ring-2 focus:ring-blue-500 w-20"
                                         />
-
                                     </td>
                                     <td className="border-b border-gray-600 px-4 py-2">
                                         <input
@@ -278,7 +277,6 @@ const handleSave = async (studentId) => {
                                             onChange={(e) => handleInputChange(e, submission.studentId.id, "feedback")}
                                             className="bg-gray-600 border border-gray-400 p-2 rounded-md focus:ring-2 focus:ring-blue-500 w-full"
                                         />
-
                                     </td>
                                     <td className="border-b border-gray-600 px-4 py-2 text-center">
                                         <button
@@ -300,8 +298,6 @@ const handleSave = async (studentId) => {
                                         >
                                             Save
                                         </button>
-
-
                                     </td>
                                 </tr>
                             ))

@@ -1,4 +1,4 @@
-import React, { useEffect, useState , useCallback} from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -23,37 +23,37 @@ const NoticeBoard = ({ userRole, subject, notice }) => {
       .find((row) => row.startsWith("token="))
       ?.split("=")[1];
 
-const [loaded, setLoaded] = useState(false); // Prevents multiple fetches
+  const [loaded, setLoaded] = useState(false); // Prevents multiple fetches
 
-const fetchNotices = useCallback(async () => {
-  const token = getToken();
-  if (!token) {
-    toast.error("Please sign in.");
-    navigate("/signin");
-    return;
-  }
+  const fetchNotices = useCallback(async () => {
+    const token = getToken();
+    if (!token) {
+      toast.error("Please sign in.");
+      navigate("/signin");
+      return;
+    }
 
-  try {
-    const response = await axios.get(
-      `${apiUrl}/subject/notice/${subject.subject_id}`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
-    console.log(response.data.notices);
-    setMessages(response.data.notices);
-    setLoaded(true); // Mark as loaded
-  } catch (error) {
-    console.error("Error fetching notices:", error);
-    toast.error("Failed to load notices.");
-  }
-}, [apiUrl, subject.subject_id, getToken, navigate, setMessages]);
+    try {
+      const response = await axios.get(
+        `${apiUrl}/subject/notice/${subject.subject_id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      console.log(response.data.notices);
+      setMessages(response.data.notices);
+      setLoaded(true); // Mark as loaded
+    } catch (error) {
+      console.error("Error fetching notices:", error);
+      toast.error("Failed to load notices.");
+    }
+  }, [apiUrl, subject.subject_id, getToken, navigate, setMessages]);
 
-useEffect(() => {
-  if (!loaded && subject.subject_id) {
-    fetchNotices();
-  }
-}, [fetchNotices, loaded, subject.subject_id , messages , setMessages]);
+  useEffect(() => {
+    if (!loaded && subject.subject_id) {
+      fetchNotices();
+    }
+  }, [fetchNotices, loaded, subject.subject_id, messages, setMessages]);
 
   const handlePostMessage = async () => {
     if (!newMessage.trim()) return;

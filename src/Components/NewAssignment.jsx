@@ -13,7 +13,7 @@ function NewAssignment() {
   const foundStudents = location.state?.foundStudents;
   // const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
   const apiUrl = window.location.hostname === 'localhost'
-  ? "http://localhost:8000" : process.env.REACT_APP_BASE_URL;
+    ? "http://localhost:8000" : process.env.REACT_APP_BASE_URL;
   // const subjectID = location.state?.subject.subject_id
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -23,7 +23,6 @@ function NewAssignment() {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false); // Add loading state
   
-
 
   const handleFileUpload = (e) => {
     const uploadedFile = e.target.files[0];
@@ -82,7 +81,7 @@ function NewAssignment() {
           },
         }
       );
-   const senderId = userID;
+      const senderId = userID;
       if (response.data.success) {
         toast.success('Assignment created successfully!');
         foundStudents.forEach(async (studentId) => {
@@ -102,10 +101,10 @@ function NewAssignment() {
                 },
               }
             );
-        } catch (error) {
-          console.error('Error sending notification:', error);
-        }
-      });
+          } catch (error) {
+            console.error('Error sending notification:', error);
+          }
+        });
         const response2 = await axios.get(
           `${apiUrl}/user/getsubject/${subject.subject_id}`,
           {

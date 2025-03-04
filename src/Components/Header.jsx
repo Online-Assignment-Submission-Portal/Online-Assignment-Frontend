@@ -44,8 +44,7 @@ const Header = () => {
       </div>
 
       <div
-        className={`md:hidden absolute top-full left-0 w-full bg-gradient-to-r from-blue-700 to-indigo-800 transition-all duration-500 overflow-hidden ${isMenuOpen ? "max-h-80 opacity-100" : "max-h-0 opacity-0"
-          }`}
+        className={`md:hidden absolute top-full left-0 w-full bg-gradient-to-r from-blue-700 to-indigo-800 transition-all duration-500 overflow-hidden ${isMenuOpen ? "max-h-80 opacity-100" : "max-h-0 opacity-0"}`}
       >
         <ul className="flex flex-col items-center space-y-5 py-6">
           {[

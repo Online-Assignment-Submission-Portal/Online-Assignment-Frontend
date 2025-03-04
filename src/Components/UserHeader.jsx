@@ -109,8 +109,6 @@ const Header = () => {
                 toast.success("Logout Successful");
                 disconnectSocket();
                 setTimeout(() => navigate(`/signin`), 1500);
-                // setTimeout(() => navigate(`/dashboard/${user._id}`), 1500); // Redirect after 2 seconds
-
             } else {
                 toast.error(response.data.message || "Logout failed.");
             }
@@ -175,7 +173,6 @@ const Header = () => {
                 </div>
             )}
         </header>
-
     );
 };
 

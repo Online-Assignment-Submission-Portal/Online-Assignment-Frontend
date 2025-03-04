@@ -1,4 +1,4 @@
-import React, { useState,useRef } from "react";
+import React, { useState, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
@@ -6,7 +6,6 @@ import "react-toastify/dist/ReactToastify.css";
 import Footer from './Footer';
 import Header from "./Header";
 import ReCAPTCHA from "react-google-recaptcha";
-
 
 const Signup = () => {
   const [firstName, setFirstName] = useState("");
@@ -201,7 +200,6 @@ const Signup = () => {
                 Go to Home
               </button>
             </div>
-
 
             <p className="mt-4 text-center text-sm">
               Already a user?{" "}
