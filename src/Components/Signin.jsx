@@ -22,7 +22,7 @@ const Signin = () => {
       ? "http://localhost:8000"
       : process.env.REACT_APP_BASE_URL;
   const navigate = useNavigate();
-
+  console.log('hello url', apiUrl);
   const handleSignin = async (e) => {
     e.preventDefault();
     setError("");
