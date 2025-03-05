@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { io } from "socket.io-client";
 // const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
 const apiUrl = window.location.hostname === 'localhost'
-? "http://localhost:8000" : process.env.REACT_APP_BASE_URL;
+? "http://localhost:8000" : import.meta.env.VITE_APP_BASE_URL;
 
 // Define the store
 export const useStore = create((set,get) => ({
