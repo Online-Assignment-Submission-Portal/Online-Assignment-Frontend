@@ -18,7 +18,7 @@ function ChatContainer() {
   console.log(onlineUsers);
   // const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
   const apiUrl = window.location.hostname === 'localhost'
-  ? "http://localhost:8000" : process.env.REACT_APP_BASE_URL;
+  ? "http://localhost:8000" : import.meta.env.VITE_APP_BASE_URL;
   const senderId = location.state?.senderId;
   const receiverId = location.state?.receiverId;
   const userRole = location.state?.userRole;
