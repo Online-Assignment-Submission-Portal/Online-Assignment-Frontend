@@ -20,9 +20,8 @@ const Signin = () => {
   const apiUrl =
     window.location.hostname === "localhost"
       ? "http://localhost:8000"
-      : import.meta.env.REACT_APP_BASE_URL;
+      : import.meta.env.VITE_APP_BASE_URL;
   const navigate = useNavigate();
-  console.log('hello url', apiUrl);
   const handleSignin = async (e) => {
     e.preventDefault();
     setError("");
