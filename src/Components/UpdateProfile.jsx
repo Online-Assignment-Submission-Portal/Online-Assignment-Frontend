@@ -10,7 +10,7 @@ const UpdateProfile = () => {
   const apiUrl =
     window.location.hostname === "localhost"
       ? "http://localhost:8000"
-      : process.env.REACT_APP_BASE_URL;
+      : import.meta.env.VITE_APP_BASE_URL;
   const location = useLocation();
   const profile = location.state?.profile.data;
   const userId = location.state?.userId;

@@ -8,7 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 const Grievance = () => {
     const navigate = useNavigate();
     const apiUrl = window.location.hostname === 'localhost'
-        ? "http://localhost:8000" : process.env.REACT_APP_BASE_URL;
+        ? "http://localhost:8000" : import.meta.env.VITE_APP_BASE_URL;
 
     const [feedbacks, setFeedbacks] = useState([]);
     const [loading, setLoading] = useState(true);

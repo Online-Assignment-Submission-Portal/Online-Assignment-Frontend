@@ -13,7 +13,7 @@ function NewAssignment() {
   const foundStudents = location.state?.foundStudents;
   // const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
   const apiUrl = window.location.hostname === 'localhost'
-    ? "http://localhost:8000" : process.env.REACT_APP_BASE_URL;
+    ? "http://localhost:8000" : import.meta.env.VITE_APP_BASE_URL;
   // const subjectID = location.state?.subject.subject_id
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');

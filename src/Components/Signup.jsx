@@ -16,7 +16,7 @@ const Signup = () => {
   const [error, setError] = useState("");
   const [role, setRole] = useState("student");
   const [captchaValue, setCaptchaValue] = useState(null);
-  const apiUrl = window.location.hostname === 'localhost' ? "http://localhost:8000" : process.env.REACT_APP_BASE_URL;
+  const apiUrl = window.location.hostname === 'localhost' ? "http://localhost:8000" : import.meta.env.VITE_APP_BASE_URL;
   const navigate = useNavigate();
   const recaptchaRef = useRef(null);
 

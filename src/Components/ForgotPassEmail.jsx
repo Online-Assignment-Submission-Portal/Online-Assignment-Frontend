@@ -11,7 +11,7 @@ const ForgotPassword = () => {
   const apiUrl =
     window.location.hostname === "localhost"
       ? "http://localhost:8000"
-      : process.env.REACT_APP_BASE_URL;
+      : import.meta.env.VITE_APP_BASE_URL;
   const navigate = useNavigate();
 
   const handleEmailSubmit = async (e) => {
