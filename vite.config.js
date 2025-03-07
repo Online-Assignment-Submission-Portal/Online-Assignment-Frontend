@@ -6,4 +6,8 @@ export default defineConfig({
   plugins: [react()],
   // if you use environment variables, Vite expects them to be prefixed with VITE_
   envPrefix: 'VITE_',
+  server: {
+    historyApiFallback: true,
+  },
+  base: '/'
 });
