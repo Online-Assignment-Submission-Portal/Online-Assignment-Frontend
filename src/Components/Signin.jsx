@@ -14,6 +14,7 @@ const Signin = () => {
   const [error, setError] = useState("");
   const [failedAttempts, setFailedAttempts] = useState(0);
   const [captchaValue, setCaptchaValue] = useState(null);
+  const [loading, setLoading] = useState(false); // Add loading state
   const recaptchaRef = useRef(null);
 
   const { connectSocket, setUserId } = useStore();
@@ -25,6 +26,7 @@ const Signin = () => {
   const handleSignin = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true)
 
     const userDetails = { email, password, recaptchaToken: captchaValue, failedAttempts };
     if (failedAttempts >= 3 && !captchaValue) {
@@ -52,6 +54,7 @@ const Signin = () => {
       }
       toast.error(err.response?.data?.message || "Invalid credentials. Try again.");
     }
+
   };
 
   return (
@@ -133,7 +136,7 @@ const Signin = () => {
                   type="submit"
                   className="w-full bg-green-600 hover:bg-green-500 text-white py-2 px-4 rounded-md font-bold transition"
                 >
-                  Sign In
+                  {loading ? "Signing In..." : "Sign In"}
                 </button>
               </form>
               <button

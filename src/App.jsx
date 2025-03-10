@@ -31,6 +31,7 @@ import Grievance from "./Components/Grievance.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; 
 import Notification from "./Components/Notification.jsx";
+import AdminFeedback from "./Components/AdminFeedback.jsx";
 
 const App = () => {
   const { monitorSocketConnection, userId } = useStore();
@@ -72,6 +73,7 @@ const App = () => {
         <Route path="/chat-container" element={<ChatContainer />} />
         <Route path="/grievances" element={<Grievance />} />
         <Route path="/notification" element={<Notification />} />              
+        <Route path="/userfeedback" element={<AdminFeedback />} />              
         <Route path="/*" element={<PageNotFound />} />
       </Routes>
     </Router>

@@ -60,7 +60,7 @@ const Grievance = () => {
                 <div className="flex flex-wrap justify-between mb-6">
                     <button
                         onClick={() => navigate("/admin-dashboard")}
-                        className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-500 transition duration-300 shadow-md"
+                        className="bg-blue-600 font-semibold text-white py-2 px-4 rounded-lg hover:bg-blue-500 transition duration-300 shadow-md"
                     >
                         Back to Dashboard
                     </button>
@@ -70,14 +70,14 @@ const Grievance = () => {
                             toast.success("Logged out successfully!");
                             navigate("/admin-signin");
                         }}
-                        className="bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-500 transition duration-300 shadow-md"
+                        className="bg-red-600 font-semibold text-white py-2 px-4 rounded-lg hover:bg-red-500 transition duration-300 shadow-md"
                     >
                         Logout
                     </button>
                 </div>
 
                 <h1 className="text-3xl font-bold text-center mb-6 text-gray-200">
-                    User Feedback
+                    Contact Us
                 </h1>
 
                 {feedbacks.length === 0 ? (

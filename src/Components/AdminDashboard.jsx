@@ -35,7 +35,7 @@ const AdminDashboard = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log(response);
+        // console.log(response);
 
         setPendingUsers(response.data);
       } catch (err) {
@@ -176,11 +176,17 @@ const AdminDashboard = () => {
               onClick={() => navigate("/grievances")}
               className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-500 transition"
             >
-              See Feedbacks
+              Contact Us
+            </button>
+            <button
+              onClick={() => navigate("/userfeedback")}
+              className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-500 transition"
+            >
+              See Feedback
             </button>
             <button
               onClick={handleLogout}
-              className="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-rose-500 transition"
+              className="bg-red-600 font-semibold text-white py-2 px-4 rounded-lg hover:bg-red-500 transition duration-300 shadow-md"
             >
               Logout
             </button>

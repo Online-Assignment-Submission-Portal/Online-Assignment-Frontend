@@ -30,13 +30,13 @@ const Notification = () => {
         <h2 className="text-3xl text-center font-bold mb-4 hover:text-gray-400">Notifications</h2>
         <div className="flex justify-between mb-4">
           <button 
-            className="bg-red-500 text-white px-4 py-2 rounded mb-3 hover:bg-red-900 font-semibold" 
+            className="bg-red-500 text-white px-4 py-2 rounded-md mb-3 hover:bg-red-900 font-semibold duration-200" 
             onClick={deleteReadNotifications}
           >
             Clear Notifications
           </button>
           <button 
-            className="bg-red-500 text-white px-4 py-2 rounded mb-3 hover:bg-red-900 font-semibold" 
+            className="bg-red-500 text-white px-4 py-2 rounded-md mb-3 hover:bg-red-900 font-semibold duration-200" 
             onClick={() => navigate(-1)}
           >
             Back
