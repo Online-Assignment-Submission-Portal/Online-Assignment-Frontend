@@ -161,18 +161,25 @@ const Profile = () => {
                 </div>
               </div>
 
-              {/* Logout Button */}
               <div className="flex flex-col sm:flex-row items-center sm:justify-between mb-6 space-y-6 sm:space-y-0">
                 <div className="flex flex-wrap justify-center sm:justify-start gap-4">
                   {userRole !== 'admin' ? (
+                    <>
                     <button
                       className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg sm:w-auto sm:hidden"
                       onClick={() =>
                         navigate(`/dashboard/${userId}`, { state: { profile: data, userId } })
                       }
-                    >
+                      >
                       Back to Dashboard
                     </button>
+                  <button
+                    onClick={handleLogout} 
+                    className="bg-red-600 hover:bg-red-500 text-white font-bold py-2 px-4 rounded-lg sm:w-auto "
+                  >
+                    Logout
+                  </button>
+                      </>
                   ) :
                     <button
                       className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg sm:w-auto sm:hidden"
@@ -181,21 +188,11 @@ const Profile = () => {
                       Go Back
                     </button>
                   }
-                  <button
-                    onClick={() => {
-                      document.cookie = "adminToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-                      toast.success("Logged out successfully!");
-                      navigate("/admin-signin");
-                    }} className="bg-red-600 hover:bg-red-500 text-white font-bold py-2 px-4 rounded-lg sm:w-auto "
-                  >
-                    Logout
-                  </button>
                 </div>
               </div>
 
             </div>
 
-            {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row items-center sm:justify-between mb-6 space-y-6 sm:space-y-0">
               {userRole !== 'admin' ? (
                 <>

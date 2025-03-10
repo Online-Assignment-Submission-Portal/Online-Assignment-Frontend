@@ -19,9 +19,11 @@ const Signup = () => {
   const apiUrl = window.location.hostname === 'localhost' ? "http://localhost:8000" : import.meta.env.VITE_APP_BASE_URL;
   const navigate = useNavigate();
   const recaptchaRef = useRef(null);
+  const [loading, SetLoading] = useState(false)
 
   const handleSignup = async (e) => {
     e.preventDefault();
+    SetLoading(true)
 
     if (password !== confirmPassword) {
       toast.error("Passwords do not match");
@@ -57,6 +59,9 @@ const Signup = () => {
       }
       toast.error(err.response?.data?.message || "Signup failed. Please try again.");
       // console.error(err);
+    }
+    finally {
+      SetLoading(false);
     }
   };
 
@@ -190,7 +195,7 @@ const Signup = () => {
                   type="submit"
                   className="w-full bg-green-600 hover:bg-green-500 text-white py-2 px-4 rounded-md font-bold transition"
                 >
-                  Sign Up
+                  {loading ? "Signing Up..." : "Sign Up"}
                 </button>
               </form>
               <button
