@@ -32,7 +32,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; 
 import Notification from "./Components/Notification.jsx";
 
-import UserFeedback from "./Components/userFeedback.jsx";
+import UserFeedback from "./Components/UserFeedback.jsx";
 
 import AdminFeedback from "./Components/AdminFeedback.jsx";
 
