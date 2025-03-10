@@ -418,6 +418,15 @@ const UserDashboard = () => {
               </div>
             </div>
           </div>
+          <div className="w-full flex justify-start mb-6 pl-6"> 
+  <button
+    onClick={() => navigate("/feedback")}
+    className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-6 rounded-full shadow-lg transition-transform transform hover:scale-105"
+  >
+    Feedback
+  </button>
+</div>
+
         </div>
         <Footer />
       </div>
