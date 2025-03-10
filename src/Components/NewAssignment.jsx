@@ -21,7 +21,7 @@ function NewAssignment() {
   const [maxVal, setMaxVal] = useState('');
   const [deadline, setDeadline] = useState('');
   const [file, setFile] = useState(null);
-  const [loading, setLoading] = useState(false); // Add loading state
+  const [loading, setLoading] = useState(false); 
   
 
   const handleFileUpload = (e) => {

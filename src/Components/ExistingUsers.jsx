@@ -220,7 +220,7 @@ const ExistingUsers = () => {
           </button>
           <button
             onClick={handleLogout}
-            className="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-rose-500 transition mb-2 sm:mb-0"
+            className="bg-red-600 font-semibold text-white py-2 px-4 rounded-lg hover:bg-red-500 transition duration-300 shadow-md"
           >
             Logout
           </button>
