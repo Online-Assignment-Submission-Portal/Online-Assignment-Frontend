@@ -9,7 +9,7 @@ import "slick-carousel/slick/slick-theme.css";
 import AshutoshPhoto from "../photos/AshutoshPic.png";
 import ShashiPhoto from "../photos/ShashiPic.png";
 import NilayPhoto from "../photos/NilayPic.jpg";
-import ShivanshPhoto from "../photos/ShivanshPic.png";
+import ShivanshPhoto from "../photos/ShivanshPic.jpg";
 import SachinPhoto from "../photos/SachinPic.png";
 import AnuragPhoto from "../photos/AnuragPic.jpg";
 

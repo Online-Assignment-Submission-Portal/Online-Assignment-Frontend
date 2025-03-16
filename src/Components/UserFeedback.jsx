@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { AiOutlineCloseCircle } from "react-icons/ai";
@@ -13,7 +13,7 @@ const UserFeedback = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [feedbackList, setFeedbackList] = useState([]);
-  const [showFeedback, setShowFeedback] = useState(false); // Track feedback visibility
+  const [showFeedback, setShowFeedback] = useState(false);
   const { userId } = useStore();
   const navigate = useNavigate();
 
@@ -59,7 +59,6 @@ const UserFeedback = () => {
 
     try {
       setLoading(true);
-
       await axios.post(`${apiUrl}/api/feedback`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -83,15 +82,13 @@ const UserFeedback = () => {
     try {
       const response = await axios.get(`${apiUrl}/api/feedback/user/${userId}`, {
         headers: {
-          Authorization: `Bearer ${
-            document.cookie.split("; ").find((row) => row.startsWith("token="))?.split("=")[1]
-          }`,
+          Authorization: `Bearer ${document.cookie.split("; ").find((row) => row.startsWith("token="))?.split("=")[1]}`,
         },
       });
 
       const feedbacks = response.data?.data || [];
       setFeedbackList(feedbacks);
-      setShowFeedback(true); // Show feedback after fetching
+      setShowFeedback(true);
     } catch (error) {
       console.error("Error fetching feedback:", error.response?.data || error.message);
       setFeedbackList([]);
@@ -118,7 +115,6 @@ const UserFeedback = () => {
 
       <div className="max-w-lg w-full bg-gray-900 p-6 rounded-2xl shadow-lg mt-16">
         <h2 className="text-2xl font-bold mb-6 text-center">Submit Feedback</h2>
-
         {error && <p className="text-red-400 text-center">{error}</p>}
         {success && <p className="text-green-400 text-center">{success}</p>}
 
@@ -134,53 +130,19 @@ const UserFeedback = () => {
 
           <div className="mt-4">
             <label className="block text-sm font-medium mb-2">Upload Images (Max 2)</label>
-            <input
-              type="file"
-              accept="image/*"
-              multiple
-              onChange={handleFileChange}
-              className="block w-full text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-500 transition"
-            />
-            {attachments.length > 0 && (
-              <div className="mt-4 flex gap-4">
-                {attachments.map((file, index) => (
-                  <div key={index} className="relative">
-                    <img
-                      src={URL.createObjectURL(file)}
-                      alt={`preview-${index}`}
-                      className="w-20 h-20 object-cover rounded-lg border border-gray-700"
-                    />
-                    <button
-                      type="button"
-                      className="absolute -top-2 -right-2 bg-red-600 text-white p-1 rounded-full"
-                      onClick={() => removeImage(index)}
-                    >
-                      <AiOutlineCloseCircle size={16} />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
+            <input type="file" accept="image/*" multiple onChange={handleFileChange} className="file-input" />
           </div>
 
-          <button
-            type="submit"
-            className="mt-6 w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-500 transition"
-            disabled={loading}
-          >
+          <button type="submit" className="mt-6 w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-500 transition" disabled={loading}>
             {loading ? "Submitting..." : "Submit Feedback"}
           </button>
         </form>
 
-        <button
-          onClick={toggleFeedback}
-          className="mt-6 w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-500 transition"
-        >
+        <button onClick={toggleFeedback} className="mt-6 w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-500 transition">
           {showFeedback ? "Hide Feedback" : "View My Feedback"}
         </button>
       </div>
 
-      {/* Feedback List Section (Only visible when showFeedback is true) */}
       {showFeedback && feedbackList.length > 0 && (
         <div className="max-w-lg w-full bg-gray-900 p-6 rounded-2xl shadow-lg mt-6">
           <h2 className="text-xl font-bold mb-4 text-center">My Feedbacks</h2>
@@ -188,15 +150,10 @@ const UserFeedback = () => {
             {feedbackList.map((feedback) => (
               <li key={feedback._id} className="p-4 bg-gray-800 rounded-lg border border-gray-700">
                 <p className="text-white">{feedback.message}</p>
-                {feedback.attachments &&
-                  feedback.attachments.map((img, index) => (
-                    <img
-                      key={index}
-                      src={`${apiUrl}/${img}`}
-                      alt="Feedback attachment"
-                      className="w-full h-32 object-cover rounded-lg mt-2"
-                    />
-                  ))}
+                <p className="text-sm text-gray-400">Status: {feedback.status}</p>
+                {feedback.attachments.map((img, index) => (
+                  <img key={index} src={img} alt="Feedback attachment" className="w-full h-32 object-cover rounded-lg mt-2" />
+                ))}
               </li>
             ))}
           </ul>
