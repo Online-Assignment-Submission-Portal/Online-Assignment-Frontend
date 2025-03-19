@@ -14,6 +14,7 @@ const UserFeedback = () => {
   const [success, setSuccess] = useState(null);
   const [feedbackList, setFeedbackList] = useState([]);
   const [showFeedback, setShowFeedback] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
   const { userId } = useStore();
   const navigate = useNavigate();
 
@@ -103,6 +104,10 @@ const UserFeedback = () => {
     }
   };
 
+  const handleImageClick = (imgSrc) => {
+    setSelectedImage(imgSrc);
+  };
+
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center p-6 relative">
       <button
@@ -152,11 +157,38 @@ const UserFeedback = () => {
                 <p className="text-white">{feedback.message}</p>
                 <p className="text-sm text-gray-400">Status: {feedback.status}</p>
                 {feedback.attachments.map((img, index) => (
-                  <img key={index} src={img} alt="Feedback attachment" className="w-full h-32 object-cover rounded-lg mt-2" />
+                  <img
+                    key={index}
+                    src={img}
+                    alt="Feedback attachment"
+                    className="max-h-[300px] w-auto object-contain rounded-lg mt-2 cursor-pointer"
+                    onClick={() => handleImageClick(img)}
+                  />
                 ))}
               </li>
             ))}
           </ul>
+        </div>
+      )}
+
+      {selectedImage && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4"
+          onClick={() => setSelectedImage(null)}
+        >
+          <div className="relative max-w-[90vw] max-h-[90vh]">
+            <img
+              src={selectedImage}
+              alt="Enlarged feedback attachment"
+              className="max-w-full max-h-[90vh] object-contain"
+            />
+            <button
+              className="absolute top-2 right-2 bg-gray-800 rounded-full p-2 hover:bg-gray-700"
+              onClick={() => setSelectedImage(null)}
+            >
+              <AiOutlineCloseCircle size={24} />
+            </button>
+          </div>
         </div>
       )}
     </div>
