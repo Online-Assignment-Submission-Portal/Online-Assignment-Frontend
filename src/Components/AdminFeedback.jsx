@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
-
+import { AiOutlineCloseCircle } from "react-icons/ai";  // Add this import
 
 const AdminFeedback = () => {
     const apiUrl = window.location.hostname === 'localhost'
         ? "http://localhost:8000" : import.meta.env.VITE_APP_BASE_URL;
     const [feedbacks, setFeedbacks] = useState([]);
+    const [selectedImage, setSelectedImage] = useState(null);
     const navigate = useNavigate();
     const pendingFeedbacks = feedbacks.filter(f => f.status === "pending" || f.status === "new");
     const reviewedFeedbacks = feedbacks.filter(f => f.status === "reviewed");
@@ -87,13 +88,13 @@ const AdminFeedback = () => {
                                         {feedback.attachments?.length > 0 ? (
                                             <div className="flex flex-wrap gap-2 justify-center">
                                                 {feedback.attachments.map((url, idx) => (
-                                                    <a key={idx} href={url} target="_blank" rel="noopener noreferrer">
-                                                        <img
-                                                            src={url}
-                                                            alt={`Attachment ${idx + 1}`}
-                                                            className="w-16 h-16 object-cover rounded-lg border border-gray-500 hover:scale-105 transition"
-                                                        />
-                                                    </a>
+                                                    <img
+                                                        key={idx}
+                                                        src={url}
+                                                        alt={`Attachment ${idx + 1}`}
+                                                        className="w-16 h-16 object-cover rounded-lg border border-gray-500 hover:scale-105 transition cursor-pointer"
+                                                        onClick={() => setSelectedImage(url)}
+                                                    />
                                                 ))}
                                             </div>
                                         ) : (
@@ -160,6 +161,30 @@ const AdminFeedback = () => {
                 {renderTable("Reviewed Feedback", reviewedFeedbacks, "bg-blue-700")}
                 {renderTable("Resolved Feedback", resolvedFeedbacks, "bg-green-700")}
             </div>
+
+            {selectedImage && (
+                <div 
+                    className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4"
+                    onClick={() => setSelectedImage(null)}
+                >
+                    <div className="relative max-w-[90vw] max-h-[90vh]">
+                        <img
+                            src={selectedImage}
+                            alt="Enlarged attachment"
+                            className="max-w-full max-h-[90vh] object-contain"
+                        />
+                        <button
+                            className="absolute top-2 right-2 bg-gray-800 rounded-full p-2 hover:bg-gray-700"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setSelectedImage(null);
+                            }}
+                        >
+                            <AiOutlineCloseCircle size={24} />
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

@@ -5,6 +5,7 @@ import { AiOutlineCloseCircle } from "react-icons/ai";
 import { BiArrowBack } from "react-icons/bi";
 import useStore from "../lib/useStore";
 import { toast } from "react-toastify";
+import Header from './UserHeader'
 
 const UserFeedback = () => {
   const [message, setMessage] = useState("");
@@ -109,7 +110,9 @@ const UserFeedback = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col items-center p-6 relative">
+    <div>
+      <Header />
+      <div className="min-h-screen bg-black text-white flex flex-col items-center p-6 relative">
       <button
         onClick={() => navigate(-1)}
         className="absolute top-6 left-6 bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-500 transition"
@@ -192,6 +195,8 @@ const UserFeedback = () => {
         </div>
       )}
     </div>
+    </div>
+    
   );
 };
 
