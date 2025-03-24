@@ -83,7 +83,7 @@ function AssignmentDetails() {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(response);
+      // console.log(response);
       if (response.data.success) {
         setSubmission(response.data.fileURL);
         setFeedbackDetails(response.data)
@@ -113,7 +113,7 @@ function AssignmentDetails() {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log(response);
+        // console.log(response);
 
         if (response.data.success) {
           setAssignmentDetails(response.data.assignment);
@@ -155,7 +155,7 @@ function AssignmentDetails() {
           },
         }
       );
-      console.log(response);
+      // console.log(response);
   
       if (response.data.success) {
         setAssignmentDetails((data) => ({ ...data, status: !data.status }));
@@ -164,7 +164,7 @@ function AssignmentDetails() {
         toast.error('Failed to change assignment status.');
       }
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       toast.error('An error occurred while changing assignment status.');
     }
   };
@@ -203,7 +203,7 @@ function AssignmentDetails() {
     setIsUploading(true);
     const formData = new FormData();
     formData.append('fileupload', selectedFile);
-    console.log('hello file:', selectedFile);
+    // console.log('hello file:', selectedFile);
     try {
 
       const response = await axios.post(`${apiUrl}/assignment/submitassignment/${assignmentId}`,
@@ -214,10 +214,10 @@ function AssignmentDetails() {
             'Content-Type': 'multipart/form-data',
           },
         });
-      console.log(response);
+      // console.log(response);
       if (response.data.success) {
         toast.success('Assignment submitted successfully!');
-        console.log(response.data);
+        // console.log(response.data);
         setSubmission(response.data.submission.fileURL)
         // setData({ ...data, : response.data.data.image });
         closeModal();
@@ -227,7 +227,7 @@ function AssignmentDetails() {
       }
     } catch (err) {
       // setError('An error occurred while submitting assignment');
-      console.log(err);
+      // console.log(err);
       toast.error('An error occurred while submitting the assignment.');
     } finally {
       setIsUploading(false)
@@ -249,7 +249,7 @@ function AssignmentDetails() {
           },
         });
       if (response.data.success) {
-        console.log(response.data);
+        // console.log(response.data);
       }
     } catch (err) {
       toast.error('An error occurred while checking Plagiarism.');

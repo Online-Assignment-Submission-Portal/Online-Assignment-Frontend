@@ -54,6 +54,9 @@ const Signin = () => {
       }
       toast.error(err.response?.data?.message || "Invalid credentials. Try again.");
     }
+    finally{
+      setLoading(false);
+    }
 
   };
 

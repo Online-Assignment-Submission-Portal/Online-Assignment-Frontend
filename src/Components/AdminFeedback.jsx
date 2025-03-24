@@ -24,7 +24,7 @@ const AdminFeedback = () => {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setFeedbacks(response.data.data);
-            console.log(response);
+            // console.log(response);
         } catch (error) {
             toast.error("Failed to load feedbacks");
         }
@@ -32,6 +32,42 @@ const AdminFeedback = () => {
     useEffect(() => {
         fetchFeedbacks();
     }, [navigate, token]);
+
+    const handleLogout = async () => {
+        try {
+    
+          if (!token) {
+            toast.error('Please sign in.');
+            return navigate('/admin-signin');
+          }
+    
+          const response = await axios.post(
+            `${apiUrl}/admin/logout`,
+            {},
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          console.log(response);
+    
+          if (response.status === 200) {
+            document.cookie = "adminToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+            localStorage.clear();
+            resetStore();
+            toast.success("Logout Successful");
+            // disconnectSocket();
+            setTimeout(() => navigate(`/admin-signin`), 1500);
+            // setTimeout(() => navigate(`/dashboard/${user._id}`), 1500); // Redirect after 2 seconds
+    
+          } else {
+            toast.error(response.data.message || "Logout failed.");
+          }
+        } catch (err) {
+          toast.error(err.response?.data?.message || "An error occurred during logout.");
+        }
+      };
 
     const updateStatus = async (id, newStatus) => {
         try {
@@ -143,16 +179,7 @@ const AdminFeedback = () => {
                     >
                         Back to Dashboard
                     </button>
-                    <button
-                        onClick={() => {
-                            document.cookie = "adminToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-                            toast.success("Logged out successfully!");
-                            navigate("/admin-signin");
-                        }}
-                        className="bg-red-600 font-semibold text-white py-2 px-4 rounded-lg hover:bg-red-500 transition duration-300 shadow-md"
-                    >
-                        Logout
-                    </button>
+
                 </div>
 
                 <h1 className="text-3xl font-bold text-center mb-6 text-gray-200">User Feedback</h1>

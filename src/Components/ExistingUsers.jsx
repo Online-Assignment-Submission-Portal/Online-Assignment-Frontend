@@ -218,12 +218,12 @@ const ExistingUsers = () => {
           >
             Back to Dashboard
           </button>
-          <button
+          {/* <button
             onClick={handleLogout}
             className="bg-red-600 font-semibold text-white py-2 px-4 rounded-lg hover:bg-red-500 transition duration-300 shadow-md"
           >
             Logout
-          </button>
+          </button> */}
         </div>
 
         {/* Search bar */}
