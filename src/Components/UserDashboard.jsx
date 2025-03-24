@@ -8,6 +8,7 @@ import Header from './UserHeader'
 import useStore from "../lib/useStore";
 import notificationStore from "../lib/notificationStore";
 import 'remixicon/fonts/remixicon.css';
+import { IoBugSharp } from "react-icons/io5";
 
 const UserDashboard = () => {
   const { id } = useParams();
@@ -423,7 +424,8 @@ const UserDashboard = () => {
     onClick={() => navigate("/feedback")}
     className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-6 rounded-full shadow-lg transition-transform transform hover:scale-105"
   >
-    Feedback
+    <i class="ri-bug-2-line"></i> Report bugs
+    {/* <div className="flex"><IoBugSharp /> Report bugs</div> */}
   </button>
 </div>
 

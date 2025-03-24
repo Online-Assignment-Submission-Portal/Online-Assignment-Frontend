@@ -168,21 +168,9 @@ const NoticeBoard = ({ userRole, subject, notice }) => {
           [...messages].map((msg) => (
             <div
               key={msg._id}
-              className="p-3 border-b border-gray-600 text-gray-200 flex justify-between items-center hover:bg-gray-800 max-w-screen"
+              className="p-3 border-b border-gray-600 text-gray-200 hover:bg-gray-800"
             >
-              {editingMessage === msg._id ? (
-                <input
-                  type="text"
-                  value={editedText}
-                  onChange={(e) => setEditedText(e.target.value)}
-                  className="w-full p-2 bg-gray-600 text-white rounded"
-                />
-              ) : (
-                <span className="max-w-screen break-words scrollbar-none overflow-x-scroll mr-3">
-                  {msg.message}
-                </span>
-              )}
-              <div className="flex items-center gap-5 mt-2">
+              <div className="flex justify-between items-center mb-2">
                 <span className="text-sm text-gray-400">
                   {new Date(msg.lastUpdatedAt).toLocaleString("en-GB", {
                     day: "2-digit",
@@ -195,7 +183,6 @@ const NoticeBoard = ({ userRole, subject, notice }) => {
                 </span>
                 {userRole === "teacher" && (
                   <div className="relative flex items-center">
-                    {/* Edit & Delete Options (Visible when menu is clicked) */}
                     {showOptions === msg._id && (
                       <div className="flex items-center gap-2">
                         {editingMessage === msg._id ? (
@@ -209,7 +196,7 @@ const NoticeBoard = ({ userRole, subject, notice }) => {
                             <button
                               onClick={() => {
                                 setEditingMessage(null);
-                                setShowOptions(null); // ✅ Hide buttons after cancel
+                                setShowOptions(null);
                               }}
                               className="text-gray-400 hover:text-gray-300 flex items-center"
                             >
@@ -237,8 +224,6 @@ const NoticeBoard = ({ userRole, subject, notice }) => {
                         )}
                       </div>
                     )}
-
-                    {/* Three-line menu button */}
                     <button
                       onClick={() =>
                         setShowOptions(showOptions === msg._id ? null : msg._id)
@@ -250,6 +235,18 @@ const NoticeBoard = ({ userRole, subject, notice }) => {
                       <FaBars size={18} />
                     </button>
                   </div>
+                )}
+              </div>
+              <div className="mt-2">
+                {editingMessage === msg._id ? (
+                  <input
+                    type="text"
+                    value={editedText}
+                    onChange={(e) => setEditedText(e.target.value)}
+                    className="w-full p-2 bg-gray-600 text-white rounded"
+                  />
+                ) : (
+                  <p className="text-gray-200 break-words">{msg.message}</p>
                 )}
               </div>
             </div>
