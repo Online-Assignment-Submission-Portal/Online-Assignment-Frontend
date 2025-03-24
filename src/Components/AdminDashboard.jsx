@@ -60,7 +60,7 @@ const AdminDashboard = () => {
       }
 
       const response = await axios.post(
-        `${apiUrl}/user/logout`,
+        `${apiUrl}/admin/logout`,
         {},
         {
           headers: {
@@ -68,7 +68,7 @@ const AdminDashboard = () => {
           },
         }
       );
-      console.log(response);
+      // console.log(response);
 
       if (response.status === 200) {
         document.cookie = "adminToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
@@ -165,7 +165,7 @@ const AdminDashboard = () => {
         {/* <ToastContainer position="top-center" autoClose={1500} /> */}
         <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-4xl">
           <h2 className="text-3xl text-center italic font-bold mb-6">Admin Dashboard</h2>
-          <div className="flex flex-row justify-between mt-6 gap-2 font-semibold">
+          <div className="flex flex-col text-center items-center sm:flex-row sm:justify-between mt-6 gap-2 font-semibold">
             <button
               onClick={() => navigate("/existing-users")}
               className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-500 transition"

@@ -10,6 +10,7 @@ const AdminSignin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   // const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
   const apiUrl = window.location.hostname === 'localhost'
     ? "http://localhost:8000" : import.meta.env.VITE_APP_BASE_URL;
@@ -17,7 +18,7 @@ const AdminSignin = () => {
 
   const handleSignin = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
     try {
       const response = await axios.post(`${apiUrl}/admin/signin`, {
         email,
@@ -35,6 +36,9 @@ const AdminSignin = () => {
       }
     } catch (err) {
       toast.error(err.response?.data?.message || "Login failed. Please try again.");
+    }
+    finally{
+      setLoading(false);
     }
   };
 
@@ -93,8 +97,8 @@ const AdminSignin = () => {
                   type="submit"
                   className="w-full bg-green-600 hover:bg-green-500 text-white py-2 px-4 rounded-md font-bold transition"
                 >
-                  Login
-                </button>
+                  {loading ? "Signing In..." : "Sign In"}
+                  </button>
               </form>
               <button
                 onClick={() => navigate("/")}

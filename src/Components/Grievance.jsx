@@ -64,7 +64,7 @@ const Grievance = () => {
                     >
                         Back to Dashboard
                     </button>
-                    <button
+                    {/* <button
                         onClick={() => {
                             document.cookie = "adminToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
                             toast.success("Logged out successfully!");
@@ -73,7 +73,7 @@ const Grievance = () => {
                         className="bg-red-600 font-semibold text-white py-2 px-4 rounded-lg hover:bg-red-500 transition duration-300 shadow-md"
                     >
                         Logout
-                    </button>
+                    </button> */}
                 </div>
 
                 <h1 className="text-3xl font-bold text-center mb-6 text-gray-200">
