@@ -69,14 +69,14 @@ const Header = () => {
                     },
                 }
             );
-            console.log(response);
+            // console.log(response);
             if (response.data.success) {
                 navigate(`/profile/${userId}`, { state: { profile: response.data, userID: userId, userRole: response.data.role } });
             } else {
                 toast.error("Failed to fetch profile data.");
             }
         } catch (err) {
-            console.log(err);
+            // console.log(err);
             toast.error(err.response?.data?.message || "An error occurred during Profile view.");
         }
     };

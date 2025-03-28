@@ -19,7 +19,7 @@ const Notification = () => {
     if (!socket)
       return;
     socket.onclose = () => {
-      console.log("WebSocket disconnected, attempting to reconnect...");
+      // console.log("WebSocket disconnected, attempting to reconnect...");
       setTimeout(connectSocket, 1000); // Retry connection after 1 second
     };
   }, [socket]);

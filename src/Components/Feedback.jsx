@@ -19,7 +19,7 @@ const Feedback = ({ assignmentId, submissions, onUpdateSubmissions }) => {
             [column]: !prevColumns[column],
         }));
     };
-    console.log(submissions);
+    // console.log(submissions);
     const navigate = useNavigate();
     const apiUrl =
         window.location.hostname === "localhost"

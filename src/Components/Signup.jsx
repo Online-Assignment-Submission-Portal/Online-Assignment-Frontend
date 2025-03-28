@@ -31,7 +31,7 @@ const Signup = () => {
     }
 
     if (role !== "student" && role !== "teacher") {
-      console.log(role);
+      // console.log(role);
       toast.error("Role must be student or teacher");
       return;
     }
