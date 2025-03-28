@@ -15,7 +15,7 @@ function ChatContainer() {
   const [selectedMessageId, setSelectedMessageId] = useState(null);
   const [newMessage, setNewMessage] = useState('');
   const {onlineUsers,socket,connectSocket} = useStore()
-  console.log(onlineUsers);
+  // console.log(onlineUsers);
   // const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
   const apiUrl = window.location.hostname === 'localhost'
   ? "http://localhost:8000" : import.meta.env.VITE_APP_BASE_URL;
@@ -23,7 +23,7 @@ function ChatContainer() {
   const receiverId = location.state?.receiverId;
   const userRole = location.state?.userRole;
   
-  console.log("Location State:", location.state);
+  // console.log("Location State:", location.state);
   const [receiverProfile, setReceiverProfile] = useState({
     name: 'Loading...', // Default placeholder name
     avatar: null, // Default avatar
@@ -38,7 +38,7 @@ function ChatContainer() {
   useEffect(() => {
     if (receiverId) {
       const isOnline = onlineUsers.includes(receiverId);
-      console.log(isOnline)
+      // console.log(isOnline)
       setReceiverProfile((prevProfile) => ({
         ...prevProfile,
         status: isOnline ? 'Online' : 'Offline',
@@ -68,7 +68,7 @@ function ChatContainer() {
         
       }
     };
-    console.log("Receiver ID:", receiverId);
+    // console.log("Receiver ID:", receiverId);
   
     if (receiverId) {
       fetchMessages();
@@ -79,7 +79,7 @@ function ChatContainer() {
     if(!socket)
       return;
     socket.onclose = () => {
-      console.log("WebSocket disconnected, attempting to reconnect...");
+      // console.log("WebSocket disconnected, attempting to reconnect...");
       setTimeout(connectSocket, 1000); // Retry connection after 1 second
     };
   },[socket])
@@ -101,7 +101,7 @@ function ChatContainer() {
         );
         
         // console.clear();
-        console.log(response.data);
+        // console.log(response.data);
         // Update the receiver's profile state with the fetched data
         setReceiverProfile((prevProfile) => ({
           ...prevProfile,

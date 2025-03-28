@@ -10,7 +10,7 @@ const Rubrics = ({ rubricResults }) => {
         FinalRubricScore: true,
     });
 
-    console.log(rubricResults);
+    // console.log(rubricResults);
 
     // Toggle column visibility
     const handleFieldToggle = (column) => {

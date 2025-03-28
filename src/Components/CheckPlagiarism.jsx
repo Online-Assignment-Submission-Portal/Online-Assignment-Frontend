@@ -94,7 +94,7 @@ function CheckPlagiarism() {
             },
           }
         );
-        console.log(response);
+        // console.log(response);
 
         if (response.data.success && response.data.mlResponse.results) {
           setPlagiarismData(response.data.mlResponse.results);
@@ -102,7 +102,7 @@ function CheckPlagiarism() {
           setNotSubmitted(response.data.notSubmitted);
           setLate(response.data.late);
           const mergedData = mergeData(response.data.mlResponse, response.data.submissions);
-          console.log(mergedData);
+          // console.log(mergedData);
           setSubmissions(mergedData);
           const toastId = "plagiarism-success";
           if (!toast.isActive(toastId)) {

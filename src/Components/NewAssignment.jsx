@@ -113,7 +113,7 @@ function NewAssignment() {
             },
           }
         );
-        console.log(response2, " resp2 ");
+        // console.log(response2, " resp2 ");
         if (response2.status === 200 && response2.data) {
           navigate(`/subject/${subject.subject_id}`, { state: { subject: response2.data, userID, userRole } });
         }

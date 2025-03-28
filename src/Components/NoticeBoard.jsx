@@ -40,7 +40,7 @@ const NoticeBoard = ({ userRole, subject, notice }) => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      console.log(response.data.notices);
+      // console.log(response.data.notices);
       setMessages(response.data.notices);
       setLoaded(true); // Mark as loaded
     } catch (error) {
@@ -84,7 +84,7 @@ const NoticeBoard = ({ userRole, subject, notice }) => {
           (a, b) => new Date(b.lastUpdatedAt) - new Date(a.lastUpdatedAt)
         )
       );
-      console.log(messages);
+      // console.log(messages);
       setNewMessage("");
       toast.success("Notice posted successfully.");
     } catch (error) {
@@ -101,7 +101,7 @@ const NoticeBoard = ({ userRole, subject, notice }) => {
 
     // Confirmation alert before deleting
     if (!window.confirm("Are you sure you want to delete this notice?")) return;
-    console.log(noticeId, " there ");
+    // console.log(noticeId, " there ");
     try {
       await axios.delete(`${apiUrl}/subject/notice/${noticeId}`, {
         headers: { Authorization: `Bearer ${token}` },

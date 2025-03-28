@@ -50,7 +50,7 @@ const AdminFeedback = () => {
               },
             }
           );
-          console.log(response);
+        //   console.log(response);
     
           if (response.status === 200) {
             document.cookie = "adminToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
