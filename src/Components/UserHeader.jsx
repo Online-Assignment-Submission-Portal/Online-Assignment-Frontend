@@ -118,7 +118,7 @@ const Header = () => {
     };
 
     return (
-        <header className="bg-gray-800 text-gray-200 py-4 shadow-lg">
+        <header className="bg-gray-800 text-gray-200 py-4 shadow-lg relative z-50">
             <div className="container mx-auto flex justify-between items-center px-6">
                 <h1 className="text-2xl font-bold">CollegeHub</h1>
                 <nav className="hidden md:flex gap-6">
@@ -143,13 +143,13 @@ const Header = () => {
                 </nav>
                 <button
                     onClick={() => setIsOpen(!isOpen)}
-                    className="md:hidden text-white text-2xl focus:outline-none"
+                    className="md:hidden text-white text-2xl focus:outline-none transition ease-in duration-200"
                 >
                     {isOpen ? <FiX size={28} /> : <FiMenu size={28} />}
                 </button>
             </div>
             {isOpen && (
-                <div className="md:hidden absolute top-16 left-0 w-full bg-gray-800 shadow-lg text-center">
+                <div className="md:hidden absolute top-16 left-0 w-full bg-gray-800 shadow-lg text-center z-50">
                     <nav className="flex flex-col gap-4 p-4">
                         <span
                             onClick={handleDashboard}

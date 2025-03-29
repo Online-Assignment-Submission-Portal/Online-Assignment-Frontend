@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Loding from "../partials/Loding";
 import { Line } from 'react-chartjs-2';
 import Header from './UserHeader';
+import { FaBars } from "react-icons/fa";
 
 function AssignmentDetails() {
   const location = useLocation();
@@ -31,6 +32,7 @@ function AssignmentDetails() {
   const [isSubmissionModalOpen, setIsSubmissionModalOpen] = useState(false);
   const [submit, setSubmit] = useState(false);
   const [status, setStatus] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleBack = async () => {
     try {
@@ -303,49 +305,94 @@ function AssignmentDetails() {
     <Header />
     <div className="min-h-screen bg-gray-900 text-gray-200 py-8">
       <div className="container mx-auto bg-gray-800 p-8 rounded-lg shadow-lg max-w-4xl">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-          <h1 className="text-2xl sm:text-3xl font-bold text-center sm:text-left">
-            Assignment Details
-          </h1>
-
-          <div className="flex flex-wrap justify-center sm:justify-end gap-4">
-            {userRole === 'teacher' && (
-              <div className='flex justify-center md:justify-end gap-4'>
-                <div className="flex justify-center md:justify-end">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 relative">
+      {/* Assignment Details Heading and Mobile Dropdown */}
+      <div className="flex items-center justify-between w-full sm:w-auto">
+        <h1 className="text-3xl font-bold text-center sm:text-left">
+          Assignment Details
+        </h1>
+        <div className="sm:hidden ml-4 relative z-20">
+          <button
+            className="p-2 bg-gray-700 rounded-lg text-white transition-transform duration-200"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            <FaBars className={`h-6 w-6 transform duration-200 ${isOpen ? "rotate-90" : "rotate-0"}`} />
+          </button>
+          {isOpen && (
+            <div className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg p-2 flex flex-col gap-2 z-10">
+              {userRole === "teacher" && (
+                <>
                   <button
-                    onClick={ handleStatusChange                    
-                    }
-                    className={`px-6 py-2 ${assignmentDetails.status ? "bg-red-600 hover:bg-red-500" : "bg-green-600 hover:bg-green-500"} text-white font-bold rounded-lg transition`}
-                  >
+                    onClick={handleStatusChange}
+                    className={`px-6 py-2 font-bold rounded-lg transition text-white ${assignmentDetails.status ? "bg-red-600 hover:bg-red-500" : "bg-green-600 hover:bg-green-500"}`}
+                    >
                     {assignmentDetails.status ? "Close Assignment" : "Open Assignment"}
                   </button>
-                </div>
+                  <button
+                    onClick={() =>
+                      navigate(`/updateassignment/${assignmentId}`, {
+                        state: {
+                          assignment_id: assignmentId,
+                          assignment_details: assignmentDetails,
+                          userRole,
+                          userID,
+                          subjectID,
+                        },
+                      })
+                    }
+                    className="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition"
+                    >
+                    Update Details
+                  </button>
+                </>
+              )}
               <button
+                onClick={handleBack}
                 className="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition"
-                onClick={() =>
-                  navigate(`/updateassignment/${assignmentId}`, {
-                    state: {
-                      assignment_id: assignmentId,
-                      assignment_details: assignmentDetails,
-                      userRole,
-                      userID,
-                      subjectID,
-                    },
-                  })
-                }
-              >
-                Update Details
+                >
+                Back
               </button>
-              </div>
-            )}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Desktop Buttons */}
+      <div className="hidden sm:flex flex-wrap justify-end gap-4">
+        {userRole === "teacher" && (
+          <>
             <button
-              onClick={handleBack}
+              onClick={handleStatusChange}
+              className={`px-6 py-2 font-bold rounded-lg transition text-white ${assignmentDetails.status ? "bg-red-600 hover:bg-red-500" : "bg-green-600 hover:bg-green-500"}`}
+            >
+              {assignmentDetails.status ? "Close Assignment" : "Open Assignment"}
+            </button>
+            <button
+              onClick={() =>
+                navigate(`/updateassignment/${assignmentId}`, {
+                  state: {
+                    assignment_id: assignmentId,
+                    assignment_details: assignmentDetails,
+                    userRole,
+                    userID,
+                    subjectID,
+                  },
+                })
+              }
               className="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition"
             >
-              Back
+              Update Details
             </button>
-          </div>
-        </div>
+          </>
+        )}
+        <button
+          onClick={handleBack}
+          className="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition"
+        >
+          Back
+        </button>
+      </div>
+    </div>
 
         <div className="space-y-6">
           <div>
