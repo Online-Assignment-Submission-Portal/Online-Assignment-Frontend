@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Footer from './Footer';
 import Header from "./Header";
 import ReCAPTCHA from "react-google-recaptcha";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Signup = () => {
   const [firstName, setFirstName] = useState("");
@@ -20,6 +21,9 @@ const Signup = () => {
   const navigate = useNavigate();
   const recaptchaRef = useRef(null);
   const [loading, SetLoading] = useState(false)
+  const [rollNumber, setRollNumber] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleSignup = async (e) => {
     e.preventDefault();
@@ -41,7 +45,7 @@ const Signup = () => {
       return;
     }
 
-    const userDetails = { firstName, lastName, email, password, confirmPassword, role, recaptchaToken: captchaValue };
+    const userDetails = { firstName, lastName, email, password, confirmPassword, role, rollNo : rollNumber, recaptchaToken: captchaValue };
     const userEmail = { email };
 
     try {
@@ -69,12 +73,15 @@ const Signup = () => {
     <>
       <Header />
       <div className="min-h-screen flex flex-col">
-        <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white"
+        <div
+          className="min-h-screen flex items-center justify-center bg-gray-900 text-white"
           style={{
-            backgroundImage: "url('https://jharkhand.studyinfo.org.in/wp-content/uploads/2023/08/Screenshot-66-1024x469.png')",
+            backgroundImage:
+              "url('https://jharkhand.studyinfo.org.in/wp-content/uploads/2023/08/Screenshot-66-1024x469.png')",
             backgroundSize: "cover",
-            backgroundPosition: "top"
-          }}>
+            backgroundPosition: "top",
+          }}
+        >
           <div className="bg-gray-800 mt-6 mb-6 p-6 rounded-lg shadow-lg w-full max-w-md">
             <h2 className="text-2xl font-bold text-center mb-6">Sign Up</h2>
             {error && (
@@ -84,10 +91,12 @@ const Signup = () => {
             )}
 
             <div className="space-y-4">
-
               <form onSubmit={handleSignup} className="space-y-4">
                 <div>
-                  <label htmlFor="firstName" className="block text-sm font-medium mb-1">
+                  <label
+                    htmlFor="firstName"
+                    className="block text-sm font-medium mb-1"
+                  >
                     First Name
                   </label>
                   <input
@@ -102,7 +111,10 @@ const Signup = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="lastName" className="block text-sm font-medium mb-1">
+                  <label
+                    htmlFor="lastName"
+                    className="block text-sm font-medium mb-1"
+                  >
                     Last Name
                   </label>
                   <input
@@ -117,7 +129,10 @@ const Signup = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium mb-1">
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-medium mb-1"
+                  >
                     Email
                   </label>
                   <input
@@ -132,37 +147,74 @@ const Signup = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="password" className="block text-sm font-medium mb-1">
-                    Password
-                  </label>
-                  <input
-                    type="password"
-                    id="password"
-                    placeholder="Enter your password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    className="w-full p-2 bg-gray-700 rounded-md text-white outline-none focus:ring-2 focus:ring-green-500"
-                  />
+                  {/* Password Field */}
+                  <div className="relative">
+                    <label
+                      htmlFor="password"
+                      className="block text-sm font-medium mb-1"
+                    >
+                      Password
+                    </label>
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      id="password"
+                      placeholder="Enter your password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      className="w-full p-2 bg-gray-700 rounded-md text-white outline-none focus:ring-2 focus:ring-green-500 pr-10"
+                    />
+                    <button
+                      type="button"
+                      className="absolute inset-y-0 right-3 flex items-center mt-5 scale-[130%]"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? (
+                        <FaEyeSlash className="text-white" />
+                      ) : (
+                        <FaEye className="text-white" />
+                      )}
+                    </button>
+                  </div>
+
+                  {/* Confirm Password Field */}
+                  <div className="relative mt-4">
+                    <label
+                      htmlFor="confirmPassword"
+                      className="block text-sm font-medium mb-1"
+                    >
+                      Confirm Password
+                    </label>
+                    <input
+                      type={showConfirmPassword ? "text" : "password"}
+                      id="confirmPassword"
+                      placeholder="Re-enter your password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      required
+                      className="w-full p-2 bg-gray-700 rounded-md text-white outline-none focus:ring-2 focus:ring-green-500 pr-10"
+                    />
+                    <button
+                      type="button"
+                      className="absolute inset-y-0 right-3 flex items-center mt-5 scale-[130%]"
+                      onClick={() =>
+                        setShowConfirmPassword(!showConfirmPassword)
+                      }
+                    >
+                      {showConfirmPassword ? (
+                        <FaEyeSlash className="text-white" />
+                      ) : (
+                        <FaEye className="text-white" />
+                      )}
+                    </button>
+                  </div>
                 </div>
 
                 <div>
-                  <label htmlFor="confirmPassword" className="block text-sm font-medium mb-1">
-                    Confirm Password
-                  </label>
-                  <input
-                    type="password"
-                    id="confirmPassword"
-                    placeholder="Re-enter your password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    required
-                    className="w-full p-2 bg-gray-700 rounded-md text-white outline-none focus:ring-2 focus:ring-green-500"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="role" className="block text-sm font-medium mb-1">
+                  <label
+                    htmlFor="role"
+                    className="block text-sm font-medium mb-1"
+                  >
                     Role
                   </label>
                   <select
@@ -175,6 +227,25 @@ const Signup = () => {
                     <option value="student">Student</option>
                     <option value="teacher">Teacher</option>
                   </select>
+                  {role === "student" && (
+                    <div className="mt-4">
+                      <label
+                        htmlFor="rollNumber"
+                        className="block text-sm font-medium mb-1"
+                      >
+                        Roll Number
+                      </label>
+                      <input
+                        placeholder="Enter your complete roll number"
+                        type="text"
+                        id="rollNumber"
+                        value={rollNumber}
+                        onChange={(e) => setRollNumber(e.target.value)}
+                        required
+                        className="w-full p-2 bg-gray-700 rounded-md text-white outline-none focus:ring-2 focus:ring-green-500"
+                      />
+                    </div>
+                  )}
                 </div>
                 <div className="flex justify-center">
                   <ReCAPTCHA
