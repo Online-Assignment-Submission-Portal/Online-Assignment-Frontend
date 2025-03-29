@@ -163,15 +163,15 @@ const NoticeBoard = ({ userRole, subject, notice }) => {
       <h1 className="text-2xl font-semibold text-gray-200">
         📢 Notice Board - {subject?.subject_name}
       </h1>
-      <div className="bg-gray-700 rounded-lg max-h-64 overflow-y-auto scrollbar-none m-8">
+      <div className="bg-gray-700 rounded-lg max-h-64 overflow-y-auto scrollbar-none mt-6 ">
         {messages.length > 0 ? (
           [...messages].map((msg) => (
             <div
               key={msg._id}
-              className="p-3 border-b border-gray-600 text-gray-200 hover:bg-gray-800"
+              className="p-3 border-b border-gray-600 text-gray-200 hover:bg-gray-800 transition"
             >
               <div className="flex justify-between items-center mb-2">
-                <span className="text-sm text-gray-400">
+                <span className="text-sm text-gray-400 pr-2">
                   {new Date(msg.lastUpdatedAt).toLocaleString("en-GB", {
                     day: "2-digit",
                     month: "2-digit",

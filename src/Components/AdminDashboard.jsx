@@ -219,7 +219,7 @@ const AdminDashboard = () => {
                     <tr key={user._id} className="odd:bg-gray-600 even:bg-gray-700 text-center">
                       <td className="px-4 py-2">{`${user.firstName} ${user.lastName}`}</td>
                       <td className="px-4 py-2">{user.email}</td>
-                      <td className="px-4 py-2">{user.role}</td>
+                      <td className="px-4 py-2">{user.role} - {user?.rollNo}</td>
                       <td className="px-4 py-2">
                         <div className="flex justify-between">
                           <label className="flex items-center">
