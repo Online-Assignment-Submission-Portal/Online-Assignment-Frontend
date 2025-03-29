@@ -306,8 +306,9 @@ function AssignmentDetails() {
     <div className="min-h-screen bg-gray-900 text-gray-200 py-8">
       <div className="container mx-auto bg-gray-800 p-8 rounded-lg shadow-lg max-w-4xl">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 relative">
+      {/* Assignment Details Heading and Mobile Dropdown */}
       <div className="flex items-center justify-between w-full sm:w-auto">
-        <h1 className="text-3xl font-bold text-left">
+        <h1 className="text-3xl font-bold text-center sm:text-left">
           Assignment Details
         </h1>
         <div className="sm:hidden ml-4 relative z-20">
@@ -318,7 +319,7 @@ function AssignmentDetails() {
             <FaBars className={`h-6 w-6 transform duration-200 ${isOpen ? "rotate-90" : "rotate-0"}`} />
           </button>
           {isOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-gray-700 rounded-lg shadow-lg p-2 flex flex-col gap-2 z-10">
+            <div className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg p-2 flex flex-col gap-2 z-10">
               {userRole === "teacher" && (
                 <>
                   <button
@@ -356,6 +357,7 @@ function AssignmentDetails() {
         </div>
       </div>
 
+      {/* Desktop Buttons */}
       <div className="hidden sm:flex flex-wrap justify-end gap-4">
         {userRole === "teacher" && (
           <>

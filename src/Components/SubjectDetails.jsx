@@ -393,8 +393,9 @@ function SubjectDetails() {
         {/* <ToastContainer position="top-center" autoClose={1500} /> */}
         <div className="container mx-auto bg-gray-800 p-8 rounded-lg shadow-lg">
           <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4 relative">
+            {/* Subject Name and Mobile Dropdown in the same line */}
             <div className="flex items-center justify-between w-full sm:w-auto">
-              <h1 className="text-3xl font-bold text-gray-200 text-left">
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-200 text-center">
                 Subject Name: {subject.subject_name}
               </h1>
               <div className="sm:hidden ml-4 relative z-20">
@@ -402,10 +403,10 @@ function SubjectDetails() {
                   className="p-2 bg-gray-700 rounded-lg text-white transition-transform duration-200"
                   onClick={() => setIsOpen(!isOpen)}
                 >
-                  <FaBars className={`h-6 w-6 transform duration-200 ${isOpen ? 'rotate-90' : 'rotate-0'}`} />
+                  <FaBars className={`h-6 w-6 transform ${isOpen ? 'rotate-90' : 'rotate-0'}`} />
                 </button>
                 {isOpen && (
-                  <div className="font-bold absolute right-0 mt-2 w-48 bg-gray-700 rounded-lg shadow-lg p-2 flex flex-col gap-2 z-10 transition duration-200">
+                  <div className="font-bold absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg p-2 flex flex-col gap-2 z-10">
                     {userRole === 'teacher' && (
                       <button
                         onClick={confirmDeleteSubject}
