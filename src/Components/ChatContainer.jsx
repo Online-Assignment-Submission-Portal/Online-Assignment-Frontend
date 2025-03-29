@@ -75,14 +75,14 @@ function ChatContainer() {
     }
   }, [receiverId]);
 
-  useEffect(() => {
-    if(!socket)
-      return;
-    socket.onclose = () => {
-      // console.log("WebSocket disconnected, attempting to reconnect...");
-      setTimeout(connectSocket, 1000); // Retry connection after 1 second
-    };
-  },[socket])
+  // useEffect(() => {
+  //   if(!socket)
+  //     return;
+  //   socket.onclose = () => {
+  //     // console.log("WebSocket disconnected, attempting to reconnect...");
+  //     setTimeout(connectSocket, 1000); // Retry connection after 1 second
+  //   };
+  // },[socket])
   // Fetch receiver's profile on component mount
   useEffect(() => {
     const fetchReceiverProfile = async () => {
