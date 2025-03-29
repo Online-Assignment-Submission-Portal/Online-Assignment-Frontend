@@ -25,10 +25,11 @@ const UserDashboard = () => {
   const [joinMessage, setJoinMessage] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [notification, setNotification] = useState([]);
-  const { disconnectSocket, resetStore } = useStore();
-  const { notifications } = notificationStore();
+  const { disconnectSocket, resetStore, socket } = useStore();
+  const { notifications, fetchNotifications, addNotification } = notificationStore();
   const userId = id.toString();
   let userData;
+
 
 
   useEffect(() => {
@@ -50,7 +51,7 @@ const UserDashboard = () => {
         );
 
         if (response.data.success) {
-          setNotification(response.data.notifications);
+          fetchNotifications();  // Fetch all notifications into zustand store
         }
       } catch (error) {
         console.error("Error fetching notifications: ", error);
@@ -58,10 +59,22 @@ const UserDashboard = () => {
     };
 
     fetchUnreadNotifications();
-    const interval = setInterval(fetchUnreadNotifications, 10000);
-    return () => clearInterval(interval);
-  }, [userId, apiUrl]);
+  }, [userId, apiUrl, fetchNotifications]);
 
+   // 🔹 Real-time WebSocket Notification Listener
+   useEffect(() => {
+    if (!socket) return;
+
+    const handleNewNotification = (notification) => {
+      addNotification(notification);
+    };
+
+    socket.on("updateNotifications", handleNewNotification);
+
+    return () => {
+      socket.off("updateNotifications", handleNewNotification);
+    };
+  }, [socket, addNotification]);
 
   const fetchUserData = async (id) => {
     try {
@@ -83,25 +96,22 @@ const UserDashboard = () => {
           },
         }
       );
+
       if (response.data.success) {
         setUser(response.data.user);
-        userData = response.data.user;
       } else {
         toast.error("Failed to fetch user data.");
         setError("Failed to fetch user data.");
       }
     } catch (err) {
-      if (err.response && err.response.status === 500) {
-        toast.error(err.response?.data?.message || "An error occurred.");
-        navigate("/signin");
-      } else {
-        toast.error(err.response?.data?.message || "An error occurred.");
-      }
+      toast.error(err.response?.data?.message || "An error occurred.");
+      navigate("/signin");
     }
   };
+
   useEffect(() => {
     fetchUserData(id);
-  }, [id, navigate]);
+  }, [id]);
 
 
 

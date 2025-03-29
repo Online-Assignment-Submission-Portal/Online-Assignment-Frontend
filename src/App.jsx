@@ -38,14 +38,23 @@ import AdminFeedback from "./Components/AdminFeedback.jsx";
 
 
 const App = () => {
-  const { monitorSocketConnection, userId } = useStore();
+  // const { monitorSocketConnection, userId } = useStore();
+
+  // useEffect(() => {
+  //   if(userId){
+  //   console.log("Montioring socket connection");
+  //   monitorSocketConnection();
+  //   }
+  // }, [monitorSocketConnection, userId]);
+
+  const { connectSocket, userId } = useStore();
 
   useEffect(() => {
-    if(userId){
-    console.log("Montioring socket connection");
-    monitorSocketConnection();
+    // On app mount, if there is a userId, establish the socket connection.
+    if (userId) {
+      connectSocket();
     }
-  }, [monitorSocketConnection, userId]);
+  }, [userId, connectSocket]);
 
   return (
     <Router>
