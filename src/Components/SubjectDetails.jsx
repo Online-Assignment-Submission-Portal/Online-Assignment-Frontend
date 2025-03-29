@@ -6,6 +6,10 @@ import 'react-toastify/dist/ReactToastify.css';  // Import styles for Toastify
 import * as XLSX from 'xlsx'; // Import XLSX for Excel export
 import Header from './UserHeader'
 import NoticeBoard from './NoticeBoard';
+import { Menu, Transition } from "@headlessui/react";
+import { Fragment } from "react";
+import { FaBars } from "react-icons/fa";
+
 
 function SubjectDetails() {
   const location = useLocation();
@@ -23,6 +27,8 @@ function SubjectDetails() {
   const [notFoundEmails, setNotFoundEmails] = useState([]);
   const [assignments, setAssignments] = useState([]);
   const [unreadMessages, setUnreadMessages] = useState({});
+  const [isOpen, setIsOpen] = useState(false);
+
   // console.log(subject);
   // console.log(location.state, " there ");
 
@@ -386,11 +392,40 @@ function SubjectDetails() {
       <div className="min-h-screen bg-gray-900 py-8 flex flex-col">
         {/* <ToastContainer position="top-center" autoClose={1500} /> */}
         <div className="container mx-auto bg-gray-800 p-8 rounded-lg shadow-lg">
-          <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-200 text-center w-full sm:w-auto">
-              Subject Name: {subject.subject_name}
-            </h1>
-            <div className="flex gap-4">
+          <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4 relative">
+            <div className="flex items-center justify-between w-full sm:w-auto">
+              <h1 className="text-3xl font-bold text-gray-200 text-left">
+                Subject Name: {subject.subject_name}
+              </h1>
+              <div className="sm:hidden ml-4 relative z-20">
+                <button
+                  className="p-2 bg-gray-700 rounded-lg text-white transition-transform duration-200"
+                  onClick={() => setIsOpen(!isOpen)}
+                >
+                  <FaBars className={`h-6 w-6 transform duration-200 ${isOpen ? 'rotate-90' : 'rotate-0'}`} />
+                </button>
+                {isOpen && (
+                  <div className="font-bold absolute right-0 mt-2 w-48 bg-gray-700 rounded-lg shadow-lg p-2 flex flex-col gap-2 z-10 transition duration-200">
+                    {userRole === 'teacher' && (
+                      <button
+                        onClick={confirmDeleteSubject}
+                        className="px-4 py-2 sm:px-6 sm:py-2 bg-red-600 hover:bg-red-500 text-white font-bold rounded-lg transition"
+                      >
+                        Delete Subject
+                      </button>
+                    )}
+                    <button
+                      onClick={() => navigate(`/dashboard/${userID}`)}
+                      className="px-4 py-2 sm:px-6 sm:py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition"
+                    >
+                      Back to Dashboard
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="sm:flex gap-4 hidden">
               {userRole === 'teacher' && (
                 <button
                   onClick={confirmDeleteSubject}
@@ -611,7 +646,7 @@ function SubjectDetails() {
               </div>
             </div>
           )}
-          <NoticeBoard userRole={userRole} subject={subject} notice={subject.notices}/>
+          <NoticeBoard userRole={userRole} subject={subject} notice={subject.notices} />
         </div>
       </div>
     </>
