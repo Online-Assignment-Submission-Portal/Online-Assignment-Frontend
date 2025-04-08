@@ -14,12 +14,12 @@ import SachinPhoto from "../photos/SachinPic.png";
 import AnuragPhoto from "../photos/AnuragPic.jpg";
 
 const developers = [
-  { name: "Ashutosh Kumar", role: "Full Stack Developer", desc: "Expert in React and UI/UX design.", photo: AshutoshPhoto },
-  { name: "Shashi Shankar", role: "Full Stack Developer", desc: "Specializes in Node.js and database management.", photo: ShashiPhoto },
-  { name: "Shivansh Mishra", role: "Full Stack Developer", desc: "Handles both frontend and backend tasks.", photo: ShivanshPhoto },
-  { name: "Nilay Chaudhary", role: "Full Stack Developer", desc: "Ensures the project is on track and meets deadlines.", photo: NilayPhoto },
-  { name: "Sachin Kumar", role: "ML Engineer", desc: "Responsible for testing and quality assurance.", photo: SachinPhoto },
-  { name: "Anurag Saran", role: "ML Engineer", desc: "Manages deployment and cloud infrastructure.", photo: AnuragPhoto }
+  { name: "Ashutosh Kumar", role: "Full Stack Developer", desc: "Backend and Flask ML backend.", photo: AshutoshPhoto },
+  { name: "Shashi Shankar", role: "Full Stack Developer", desc: "Team Leader, backend, UI/UX.", photo: ShashiPhoto },
+  { name: "Shivansh Mishra", role: "Full Stack Developer", desc: "Socket.io, Frontend.", photo: ShivanshPhoto },
+  { name: "Nilay Chaudhary", role: "Full Stack Developer", desc: "Frontend, UI/UX, mailing services.", photo: NilayPhoto },
+  { name: "Sachin Kumar", role: "ML Engineer", desc: "Machine Learning Model for plagarism, Flask ML backend.", photo: SachinPhoto },
+  { name: "Anurag Saran", role: "ML Engineer", desc: "Machine Learning Model for plagarism, Frontend.", photo: AnuragPhoto }
 ];
 
 const Home = () => {
