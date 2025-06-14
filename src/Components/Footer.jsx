@@ -1,6 +1,7 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import 'remixicon/fonts/remixicon.css';
+import React from "react";
+import { Link } from "react-router-dom";
+import "remixicon/fonts/remixicon.css";
+const companyPracticeLink = import.meta.env.VITE_COMPANYWISE_QUESTIONS_URL;
 
 const Footer = () => {
   return (
@@ -14,6 +15,17 @@ const Footer = () => {
             </span>{" "}
             2025 All rights reserved.
           </p>
+          <a
+            href={companyPracticeLink}
+            className="hover:text-gray-400 flex items-center"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span className="text-violet-600 mr-2">
+            <i class="ri-book-open-line"></i>
+            </span>
+            <span>Company-Wise-Problems</span>
+          </a>
         </div>
 
         <div>
@@ -28,7 +40,10 @@ const Footer = () => {
               </Link>
             </li>
             <li>
-              <Link to="/services" className="hover:underline flex items-center">
+              <Link
+                to="/services"
+                className="hover:underline flex items-center"
+              >
                 <span className="text-violet-600 mr-2">
                   <i className="ri-customer-service-fill"></i>
                 </span>
