@@ -76,9 +76,8 @@ const Signup = () => {
         <div
           className="min-h-screen flex items-center justify-center bg-gray-900 text-white"
           style={{
-            backgroundImage:
-              "url('https://jharkhand.studyinfo.org.in/wp-content/uploads/2023/08/Screenshot-66-1024x469.png')",
-            backgroundSize: "cover",
+            backgroundImage: "url('/sign_up_bg.png')", // Replace with your actual image name
+            backgroundSize: "150%", // Adjust this value to zoom out (e.g., 150% for zooming out)
             backgroundPosition: "top",
           }}
         >
