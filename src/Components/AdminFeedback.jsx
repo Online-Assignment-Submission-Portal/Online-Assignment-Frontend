@@ -81,6 +81,22 @@ const AdminFeedback = () => {
         }
     };
 
+    const updateStatusAndResponse = async (id, newStatus, responseText) => {
+        try {
+            await axios.patch(
+                `${apiUrl}/api/feedback/${id}/status`,
+                { status: newStatus, response: responseText },
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                }
+            );
+            setFeedbacks(feedbacks.map(f => f._id === id ? { ...f, status: newStatus, response: responseText } : f));
+            toast.success("Status and response updated successfully");
+        } catch (error) {
+            toast.error("Failed to update status and response");
+        }
+    };
+
     // Delete Feedback
     const deleteFeedback = async (id) => {
         if (!window.confirm("Are you sure you want to delete this feedback?")) return;
@@ -109,9 +125,10 @@ const AdminFeedback = () => {
                         <thead className="bg-gray-800">
                             <tr>
                                 <th className="px-4 py-2 text-center">Email</th>
-                                <th className="px-4 py-2 text-center w-[40%]">Feedback</th>
+                                <th className="px-4 py-2 text-center w-[30%]">Feedback</th>
                                 <th className="px-4 py-2 text-center">Attachments</th>
                                 <th className="px-4 py-2 text-center">Status</th>
+                                <th className="px-4 py-2 text-center">Response</th>
                                 <th className="px-4 py-2 text-center">Actions</th>
                             </tr>
                         </thead>
@@ -140,7 +157,7 @@ const AdminFeedback = () => {
                                     <td className="px-4 py-2">
                                         <select
                                             value={feedback?.status === "new" ? "pending" : feedback?.status}
-                                            onChange={(e) => updateStatus(feedback._id, e.target.value)}
+                                            onChange={(e) => updateStatusAndResponse(feedback._id, e.target.value, feedback.response || "")}
                                             className={`border border-gray-600 rounded-lg px-2 py-1 text-white
                                             ${feedback.status === "pending" || feedback.status === "new" ? "bg-yellow-600" : ""}
                                             ${feedback.status === "reviewed" ? "bg-blue-600" : ""}
@@ -151,6 +168,15 @@ const AdminFeedback = () => {
                                             <option value="reviewed" className="bg-gray-800">Reviewed</option>
                                             <option value="resolved" className="bg-gray-800">Resolved</option>
                                         </select>
+                                    </td>
+                                    <td className="px-4 py-2">
+                                        <input
+                                            type="text"
+                                            value={feedback.response || ""}
+                                            onChange={(e) => setFeedbacks(feedbacks.map(f => f._id === feedback._id ? { ...f, response: e.target.value } : f))}
+                                            placeholder="Enter response"
+                                            className="border border-gray-600 rounded-lg px-2 py-1 text-black w-full"
+                                        />
                                     </td>
                                     <td className="px-4 py-2">
                                         <button
