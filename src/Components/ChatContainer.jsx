@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLocation , useNavigate} from 'react-router-dom';
 import { FaUser } from 'react-icons/fa';
 import { IoArrowBack } from 'react-icons/io5';
@@ -14,7 +14,8 @@ function ChatContainer() {
   const [messages, setMessages] = useState([]);
   const [selectedMessageId, setSelectedMessageId] = useState(null);
   const [newMessage, setNewMessage] = useState('');
-  const {onlineUsers,socket,connectSocket} = useStore()
+  const {onlineUsers,socket,connectSocket} = useStore();
+  const messagesEndRef = useRef(null);
   // console.log(onlineUsers);
   // const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
   const apiUrl = window.location.hostname === 'localhost'
@@ -34,6 +35,15 @@ function ChatContainer() {
   const handleSelectMessage = (messageId) => {
     setSelectedMessageId(messageId); // Store the selected message ID in state
   };
+
+
+  const scrollToBottom = () => {
+  messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+};
+
+useEffect(() => {
+  scrollToBottom();
+}, [messages]);
   
   useEffect(() => {
     if (receiverId) {
@@ -302,6 +312,7 @@ function ChatContainer() {
             </div>
           </div>
         ))}
+        <div ref={messagesEndRef} />
       </div>
 
       {/* Message Input */}
