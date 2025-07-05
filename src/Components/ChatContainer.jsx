@@ -43,7 +43,7 @@ function ChatContainer() {
 
 useEffect(() => {
   scrollToBottom();
-}, []);
+}, [messages]);
   
   useEffect(() => {
     if (receiverId) {
