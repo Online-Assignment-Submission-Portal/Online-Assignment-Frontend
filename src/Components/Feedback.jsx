@@ -231,27 +231,27 @@ const Feedback = ({ assignmentId, submissions, onUpdateSubmissions }) => {
                                     </td>
                                     {columns.CompletenessScore && (
                                         <td className="px-2 sm:px-4 py-2 border border-gray-600">
-                                            {submission.CompletenessScore}
+                                            {submission?.CompletenessScore ? submission.CompletenessScore : 'Not available'}
                                         </td>
                                     )}
                                     {columns.GrammarScore && (
                                         <td className="px-2 sm:px-4 py-2 border border-gray-600">
-                                            {submission.GrammarScore}
+                                            {submission.GrammarScore ? submission.GrammarScore : 'Not available'}
                                         </td>
                                     )}
                                     {columns.OriginalityScore && (
                                         <td className="px-2 sm:px-4 py-2 border border-gray-600">
-                                            {submission.OriginalityScore}
+                                            {submission.OriginalityScore ? submission.OriginalityScore : 'Not available'}
                                         </td>
                                     )}
                                     {columns.StructureScore && (
                                         <td className="px-2 sm:px-4 py-2 border border-gray-600">
-                                            {submission.StructureScore}
+                                            {submission.StructureScore ? submission.StructureScore : 'Not available'}
                                         </td>
                                     )}
                                     {columns.FinalRubricScore && (
                                         <td className="px-2 sm:px-4 py-2 border border-gray-600">
-                                            {submission.FinalRubricScore}%
+                                            {submission.FinalRubricScore ? `${submission.FinalRubricScore}%` : 'Not available'}
                                         </td>
                                     )}
                                     <td className="border-b border-gray-600 px-4 py-2">

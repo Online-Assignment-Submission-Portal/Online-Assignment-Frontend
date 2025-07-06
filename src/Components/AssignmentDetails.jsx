@@ -582,7 +582,7 @@ function AssignmentDetails() {
           ) : userRole === 'teacher' ? (
             <div className="space-y-6">
               {/* Marks Information */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                 <div>
                   <p className="text-gray-400 font-medium">Min Marks:</p>
                   <p>
@@ -596,6 +596,14 @@ function AssignmentDetails() {
                   <p>
                     {assignmentDetails?.maxVal !== undefined
                       ? assignmentDetails?.maxVal
+                      : 'Not available'}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-gray-400 font-medium">Plag Threshold (%):</p>
+                  <p>
+                    {assignmentDetails?.plagVal !== undefined
+                      ? assignmentDetails?.plagVal
                       : 'Not available'}
                   </p>
                 </div>

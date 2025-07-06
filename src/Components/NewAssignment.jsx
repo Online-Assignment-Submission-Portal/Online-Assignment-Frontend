@@ -18,11 +18,12 @@ function NewAssignment() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [minVal, setMinVal] = useState('0');
-  const [maxVal, setMaxVal] = useState('');
+  const [maxVal, setMaxVal] = useState('100');
+  const [plagVal, setPlagVal] = useState('20');
   const [deadline, setDeadline] = useState('');
   const [file, setFile] = useState(null);
-  const [loading, setLoading] = useState(false); 
-  
+  const [loading, setLoading] = useState(false);
+
 
   const handleFileUpload = (e) => {
     const uploadedFile = e.target.files[0];
@@ -67,6 +68,7 @@ function NewAssignment() {
       formData.append('description', description);
       formData.append('minVal', minVal);
       formData.append('maxVal', maxVal);
+      formData.append('plagVal', plagVal);
       formData.append('deadline', deadline);
       formData.append('file', file);
       // const subjectId = subject._id.toString();
@@ -92,7 +94,7 @@ function NewAssignment() {
                 senderId,
                 receiverId: studentId,
                 content: `A new Assignment has been added to the subject: ${subject.subject_name}`,
-                status:'unread',
+                status: 'unread',
               },
               {
                 headers: {
@@ -160,7 +162,7 @@ function NewAssignment() {
             />
           </div>
 
-          <div className="flex space-x-4">
+          <div className="flex flex-col md:flex-row md:space-x-4 space-y-6 md:space-y-0">
             <div className="flex-1">
               <label className="block text-gray-400 mb-2 font-medium">Min Marks</label>
               <input
@@ -171,6 +173,7 @@ function NewAssignment() {
                 required
               />
             </div>
+
             <div className="flex-1">
               <label className="block text-gray-400 mb-2 font-medium">Max Marks</label>
               <input
@@ -181,7 +184,23 @@ function NewAssignment() {
                 required
               />
             </div>
+            <div className="flex-1">
+              <label
+                title="Only document pairs with detected similarity above this threshold will be displayed"
+                className="block text-gray-400 mb-2 font-medium truncate whitespace-nowrap"
+              >
+                Min Plagiarism Threshold (%) 🛈
+              </label>
+              <input
+                type="number"
+                value={plagVal}
+                onChange={(e) => setPlagVal(e.target.value)}
+                className="w-full p-3 border border-gray-600 rounded bg-gray-700 text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+              />
+            </div>
           </div>
+
 
           <div>
             <label className="block text-gray-400 mb-2 font-medium">Deadline</label>

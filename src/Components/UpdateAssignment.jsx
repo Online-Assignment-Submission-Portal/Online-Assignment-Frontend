@@ -10,7 +10,7 @@ function UpdateAssignment() {
   const navigate = useNavigate();
   // const apiUrl = process.env.REACT_APP_BASE_URL || "http://localhost:8000"
   const apiUrl = window.location.hostname === 'localhost'
-  ? "http://localhost:8000" : import.meta.env.VITE_APP_BASE_URL;
+    ? "http://localhost:8000" : import.meta.env.VITE_APP_BASE_URL;
   const location = useLocation();
   const assignmentId = location.state?.assignment_id;
   const assignmentDetails = location.state?.assignment_details;
@@ -23,7 +23,7 @@ function UpdateAssignment() {
 
   // const [loading, setLoading] = useState(false); // Loading state
 
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -75,15 +75,15 @@ function UpdateAssignment() {
   };
 
   function extractFileName(fileLink) {
-    const fileNameWithExtension = fileLink.split('/').pop();
-    const lastDotIndex = fileNameWithExtension.lastIndexOf('.');
-    return decodeURIComponent(fileNameWithExtension.substring(0, lastDotIndex));
+    const fileNameWithExtension = fileLink?.split('/').pop();
+    const lastDotIndex = fileNameWithExtension?.lastIndexOf('.');
+    return decodeURIComponent(fileNameWithExtension?.substring(0, lastDotIndex));
   }
 
   function extractFileExtension(fileLink) {
-    const fileNameWithExtension = fileLink.split('/').pop();
-    const lastDotIndex = fileNameWithExtension.lastIndexOf('.');
-    return fileNameWithExtension.substring(lastDotIndex + 1);
+    const fileNameWithExtension = fileLink?.split('/').pop();
+    const lastDotIndex = fileNameWithExtension?.lastIndexOf('.');
+    return fileNameWithExtension?.substring(lastDotIndex + 1);
   }
 
   if (error) {
@@ -137,34 +137,58 @@ function UpdateAssignment() {
             <label className="block text-gray-400 mb-2 font-medium">File Name</label>
             <input
               type="text"
-              value={`${extractFileName(assignmentDetails.fileLink)}.${extractFileExtension(assignmentDetails.fileLink)}`}
+              value={assignmentDetails?.fileLink !== null ? `${extractFileName(assignmentDetails?.fileLink)}.${extractFileExtension(assignmentDetails?.fileLink)}` : 'No file found'}
               disabled
               className="w-full p-3 border border-gray-600 rounded bg-gray-700 text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
-          <div className="flex space-x-4">
+          <div className="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0">
             <div className="flex-1">
               <label className="block text-gray-400 mb-2 font-medium">Min Marks</label>
               <input
                 type="number"
                 value={assignment.minVal !== undefined ? assignment.minVal : ''}
-                onChange={(e) => setAssignment({ ...assignment, minVal: e.target.value })}
+                onChange={(e) =>
+                  setAssignment({ ...assignment, minVal: e.target.value })
+                }
                 className="w-full p-3 border border-gray-600 rounded bg-gray-700 text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
               />
             </div>
+
             <div className="flex-1">
               <label className="block text-gray-400 mb-2 font-medium">Max Marks</label>
               <input
                 type="number"
                 value={assignment.maxVal !== undefined ? assignment.maxVal : ''}
-                onChange={(e) => setAssignment({ ...assignment, maxVal: e.target.value })}
+                onChange={(e) =>
+                  setAssignment({ ...assignment, maxVal: e.target.value })
+                }
+                className="w-full p-3 border border-gray-600 rounded bg-gray-700 text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+              />
+            </div>
+
+            <div className="flex-1">
+              <label
+                title="Only document pairs with detected similarity above this threshold will be displayed"
+                className="block text-gray-400 mb-2 font-medium truncate whitespace-nowrap"
+              >
+                Min Plagiarism Threshold (%)
+              </label>
+              <input
+                type="number"
+                value={assignment.plagVal !== undefined ? assignment.plagVal : ''}
+                onChange={(e) =>
+                  setAssignment({ ...assignment, plagVal: e.target.value })
+                }
                 className="w-full p-3 border border-gray-600 rounded bg-gray-700 text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
               />
             </div>
           </div>
+
 
           <div className="flex justify-between items-center gap-2 font-semibold">
             <button
@@ -180,7 +204,7 @@ function UpdateAssignment() {
               className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition"
               disabled={loading}
             >
-             {loading ? "Updating..." : "Update"}
+              {loading ? "Updating..." : "Update"}
             </button>
           </div>
         </form>

@@ -264,17 +264,17 @@ function CheckPlagiarism() {
                       </td>
                       {columns.CosineSimilarity && (
                         <td className="px-2 sm:px-4 py-2 border border-gray-600">
-                          {entry.CosineSimilarity.toFixed(2)}%
+                          {entry?.CosineSimilarity ? `${entry.CosineSimilarity.toFixed(2)}%` : 'Not available'}
                         </td>
                       )}
                       {columns.JaccardSimilarity && (
                         <td className="px-2 sm:px-4 py-2 border border-gray-600">
-                          {entry.JaccardSimilarity.toFixed(2)}%
+                          {entry?.JaccardSimilarity ? `${entry.JaccardSimilarity.toFixed(2)}%` : 'Not available'}
                         </td>
                       )}
                       {columns.CombinedSimilarity && (
                         <td className="px-2 sm:px-4 py-2 border border-gray-600">
-                          {entry.CombinedSimilarity.toFixed(2)}%
+                          {entry?.CombinedSimilarity ? `${entry.CombinedSimilarity.toFixed(2)}%` : 'Not available'}
                         </td>
                       )}
                     </tr>
