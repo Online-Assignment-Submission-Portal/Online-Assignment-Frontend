@@ -19,29 +19,39 @@ export const useStore = create((set,get) => ({
     get().disconnectSocket();
     set({ userId: null,onlineUsers: [],socket: null });
   },
-  connectSocket: () => {
+ connectSocket: () => {
     const userId = get().userId;
-    if (!userId) {
-      // console.log("userId is null, cannot connect socket");
-      return;
+
+    // Don't connect if no userId
+    if (!userId) return;
+
+    // If socket exists, clean it up first
+    if (get().socket) {
+      get().socket.removeAllListeners();
+      get().socket.disconnect();
     }
-    // console.log("Connecting socket with userId:", userId);
-    if(get().socket?.connected) return;
+
+    // Create a fresh socket instance
     const socket = io(apiUrl, {
       query: { userId },
-      // Optionally configure reconnection options here:
-      reconnectionAttempts: 5, // for example, limit the number of reconnection attempts
+      reconnectionAttempts: 5,
       reconnectionDelay: 1000,
+      autoConnect: true,
     });
-    socket.connect()
-    set({ socket:socket });
+
+    socket.on("connect", () => {
+      console.log("Socket connected:", socket.id);
+    });
+
+    socket.on("disconnect", (reason) => {
+      console.log("Socket disconnected:", reason);
+    });
+
     socket.on("getOnlineUsers", (userIds) => {
-      set({ onlineUsers: userIds })
-    })
-    // socket.on("disconnect", () => {
-    //   // console.log("WebSocket disconnected, attempting to reconnect...");
-    //   get().handleSocketDisconnect();
-    // });
+      set({ onlineUsers: userIds });
+    });
+
+    set({ socket });
   },
   disconnectSocket: () => {
     if(get().socket?.connected) get().socket.disconnect();
