@@ -41,10 +41,8 @@ const Signin = () => {
         document.cookie = `token=${token}; path=/`;
         toast.success("Signin successful!");
         setUserId(user._id);
-        setTimeout(() => {
           connectSocket();
           navigate(`/dashboard/${user._id}`);
-        }, 1500);
       }
     } catch (err) {
       setFailedAttempts((prev) => prev + 1);
