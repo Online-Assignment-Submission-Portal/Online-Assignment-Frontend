@@ -19,7 +19,7 @@ const developers = [
   { name: "Shivansh Mishra", role: "Full Stack Developer", desc: "Socket.io, Frontend.", photo: ShivanshPhoto },
   { name: "Nilay Chaudhary", role: "Full Stack Developer", desc: "Frontend, UI/UX, mailing services.", photo: NilayPhoto },
   { name: "Sachin Kumar", role: "ML Engineer", desc: "Machine Learning Model for plagarism, Flask ML backend.", photo: SachinPhoto },
-  { name: "Anurag Saran", role: "ML Engineer", desc: "Full Stack.", photo: AnuragPhoto }
+  { name: "Anurag Saran", role: "Full Stack Developer", desc: "Frontend, UI/UX, Backend Models.", photo: AnuragPhoto }
 ];
 
 const Home = () => {
