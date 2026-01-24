@@ -40,10 +40,10 @@ const Signup = () => {
       return;
     }
 
-    if (!captchaValue) {
-      toast.error("Please complete the CAPTCHA verification.");
-      return;
-    }
+    // if (!captchaValue) {
+    //   toast.error("Please complete the CAPTCHA verification.");
+    //   return;
+    // }
 
     const userDetails = { firstName, lastName, email, password, confirmPassword, role, rollNo : rollNumber, recaptchaToken: captchaValue };
     const userEmail = { email };
@@ -246,7 +246,7 @@ const Signup = () => {
                     </div>
                   )}
                 </div>
-                <div className="flex justify-center">
+                {/* <div className="flex justify-center">
                   <ReCAPTCHA
                     sitekey="6Le74EwsAAAAABoHqRL1DdnMil6rZwwnAZLNnlF5"
                     ref={recaptchaRef}
@@ -260,7 +260,7 @@ const Signup = () => {
                       setCaptchaValue(null);
                     }}
                   />
-                </div>
+                </div> */}
                 <button
                   type="submit"
                   className="w-full bg-green-600 hover:bg-green-500 text-white py-2 px-4 rounded-md font-bold transition"
