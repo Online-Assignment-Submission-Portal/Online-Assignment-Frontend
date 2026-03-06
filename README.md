@@ -1,70 +1,285 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# 📚 CollegeHub – Online Assignment Submission Portal
 
-## Available Scripts
+A modern AI-powered assignment management platform that streamlines the workflow between students and educators.
+CollegeHub enables students to submit assignments online while allowing teachers to evaluate, detect plagiarism, and provide feedback, all in one centralized system.
 
-In the project directory, you can run:
 
-### `npm start`
+# 🚀 Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+👨‍🎓 Student Features
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+* Submit assignments online
 
-### `npm test`
+* Track submission status (Submitted / Late / Graded)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+* View grades and teacher feedback
 
-### `npm run build`
+* Join subjects using subject codes
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+* Download assignment resources
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+* Real-time chat with teachers
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+* Notifications for deadlines and announcements
 
-### `npm run eject`
+👩‍🏫 Teacher Features
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+* Create and manage assignments
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+* Set deadlines and grading ranges
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+* View and evaluate student submissions
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+* Detect plagiarism automatically
 
-## Learn More
+* Provide grades and feedback
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+* Communicate with students via chat
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+* Post notices and announcements
 
-### Code Splitting
+🛠 Admin Features
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+* Manage users (students & teachers)
 
-### Analyzing the Bundle Size
+* Monitor system activity
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+* View and resolve feedback reports
 
-### Making a Progressive Web App
+* Maintain platform integrity
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
 
-### Advanced Configuration
+# 🤖 AI-Powered Evaluation System
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+The platform integrates an AI backend service that performs advanced assignment analysis.
 
-### Deployment
+**Key AI Capabilities**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+* Plagiarism Detection
 
-### `npm run build` fails to minify
+* Cosine Similarity
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+* Jaccard Similarity
+
+**Rubric-based Evaluation**
+
+* Originality
+
+* Structure
+
+* Grammar
+
+* Completeness
+
+**AI Text Detection**
+
+* Perplexity analysis
+
+* Burstiness metrics
+
+This helps identify AI-generated content and ensures academic integrity.
+
+# 🏗 System Architecture
+
+The system follows a full-stack MERN architecture with an additional AI evaluation microservice.
+```
+Frontend (React + Tailwind)
+        ↓
+Backend API (Node.js + Express)
+        ↓
+Database (MongoDB)
+        ↓
+File Storage (Cloudinary)
+        ↓
+AI Evaluation Service (Flask + Python NLP)
+```
+# Tech Stack
+
+**Frontend**
+
+* React.js
+
+* Tailwind CSS
+
+**Backend**
+
+* Node.js
+
+* Express.js
+
+**Database**
+
+* MongoDB
+
+**AI / NLP Service**
+
+* Python
+
+* Flask
+
+* NLTK
+
+* Scikit-learn
+
+* NumPy
+
+**File Processing**
+
+* PyMuPDF
+
+* python-docx
+
+* python-pptx
+
+**Other Tools**
+
+* Cloudinary (file storage)
+
+* Git (version control)
+
+
+# 🗂 Database Schema
+
+**User**
+```
+firstName
+lastName
+email
+password (hashed)
+role (student / teacher)
+subjects[]
+profileImage
+rollNo / employeeId
+```
+**Subject**
+```
+subjectName
+subjectCode
+teacherId
+studentsId[]
+assignmentsId[]
+```
+
+**Assignment**
+```
+title
+description
+deadline
+minMarks
+maxMarks
+createdBy
+subjectId
+```
+
+**Submission**
+```
+assignmentId
+studentId
+fileURL
+submissionDate
+grade
+feedback
+status
+```
+
+**Message**
+```
+senderId
+receiverId
+text
+image
+isRead
+```
+
+**Notification**
+```
+senderId
+receiverId
+content
+status
+```
+
+
+# 📊 Plagiarism Detection
+
+Two NLP similarity algorithms are used:
+
+**Cosine Similarity**
+
+Measures similarity between two documents using vector space representation.
+```
+similarity = (A · B) / (||A|| ||B||)
+```
+**Jaccard Similarity**
+
+Measures lexical overlap between two documents.
+```
+J(A,B) = |A ∩ B| / |A ∪ B|
+```
+Combining both improves plagiarism detection accuracy.
+# Installation
+
+1️⃣ Clone the Repository
+
+```bash
+  git clone https://github.com/yourusername/collegehub.git
+  cd collegehub
+```
+
+2️⃣ Install Backend Dependencies
+
+```bash
+cd backend
+npm install
+```
+
+3️⃣ Install Frontend Dependencies
+
+```bash
+cd frontend
+npm install
+```
+
+4️⃣ Run the Application
+
+Start backend
+```bash
+npm run dev
+```
+Start frontend
+```bash
+npm start
+```
+
+
+
+    
+# 🎯 Project Objectives
+
+* Digitize assignment submission workflow
+
+* Improve communication between students and teachers
+
+* Ensure academic integrity through plagiarism detection
+
+* Provide automated evaluation assistance
+
+* Create a scalable platform for educational institutions
+
+
+# 🔮 Future Improvements
+
+* AI-based automated grading
+
+* Integration with LMS platforms
+
+* Advanced plagiarism detection using deep learning
+
+* Mobile application support
+
+* Real-time collaborative editing
+# 📜 License
+
+This project is intended for educational and research purposes.
+
