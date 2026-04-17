@@ -13,6 +13,7 @@ function CheckPlagiarism() {
   const location = useLocation();
   const navigate = useNavigate();
   const assignmentId = location.state?.assignment_id;
+  console.log(assignmentId);
   const apiUrl =
     window.location.hostname === "localhost"
       ? "http://localhost:8000"
@@ -59,9 +60,10 @@ function CheckPlagiarism() {
       }
       return acc;
     }, {});
+    // console.log(rubricMap);
     const mergedData = submissions.map(submission => {
-      const submissionId = String(submission.studentId);
-      const matchingRubric = rubricMap[submissionId]; 
+      const submissionId = String(submission.studentId._id);
+      const matchingRubric = rubricMap[submissionId];
       return {
         ...submission, 
         ...(matchingRubric || {}), 
@@ -85,23 +87,22 @@ function CheckPlagiarism() {
           return navigate("/signin");
         }
 
-        const response = await axios.post(
-          `${apiUrl}/assignment/checkplagiarism/${assignmentId}`,
-          {},
+        const response = await axios.get(
+          `${apiUrl}/assignment/get-plagiarism-report/${assignmentId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }
         );
-        // console.log(response);
+        // console.log('res', response);
 
-        if (response.data.success && response.data.mlResponse.results) {
-          setPlagiarismData(response.data.mlResponse.results);
-          setSubmitted(response.data.submitted);
-          setNotSubmitted(response.data.notSubmitted);
-          setLate(response.data.late);
-          const mergedData = mergeData(response.data.mlResponse, response.data.submissions);
+        if (response.data.success && response.data.plagiarismReport.results) {
+          setPlagiarismData(response.data.plagiarismReport.results);
+          setSubmitted(response.data.plagiarismReport.submitted);
+          setNotSubmitted(response.data.plagiarismReport.notSubmitted);
+          setLate(response.data.plagiarismReport.late);
+          const mergedData = mergeData(response.data.plagiarismReport, response.data.plagiarismReport.submissions);
           // console.log(mergedData);
           setSubmissions(mergedData);
           const toastId = "plagiarism-success";

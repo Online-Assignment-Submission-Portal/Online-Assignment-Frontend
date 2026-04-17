@@ -13,6 +13,7 @@ const Feedback = ({ assignmentId, submissions, onUpdateSubmissions }) => {
         StructureScore: false,
         FinalRubricScore: true,
     });
+    console.log('hi',submissions);
     const handleFieldToggle = (column) => {
         setColumns((prevColumns) => ({
             ...prevColumns,
@@ -220,11 +221,11 @@ const Feedback = ({ assignmentId, submissions, onUpdateSubmissions }) => {
                                             rel="noopener noreferrer"
                                             className="text-blue-400 hover:underline"
                                         >
-                                            {submission.firstName} {submission.lastName}
+                                            {submission.studentId.name}
                                         </a>
                                     </td>
                                     <td className="border-b border-gray-600 px-4 py-2">
-                                        {submission.rollNo}
+                                        {submission.studentId.rollNo}
                                     </td>
                                     <td className="border-b border-gray-600 px-4 py-2">
                                         {submission.status === 'late' ? 'Late' : 'On Time'}

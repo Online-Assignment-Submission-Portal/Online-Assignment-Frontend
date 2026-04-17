@@ -20,6 +20,11 @@ function AssignmentDetails() {
   const [assignmentDetails, setAssignmentDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [plagiarismData, setPlagiarismData] = useState([]);
+  const [submitted, setSubmitted] = useState(0);
+  const [notSubmitted, setNotSubmitted] = useState(0);
+  const [late, setLate] = useState(0);
+  const [submissions, setSubmissions] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -251,10 +256,14 @@ function AssignmentDetails() {
           },
         });
       if (response.data.success) {
-        // console.log(response.data);
+        toast.success("Plagiarism check is in processing stage, please wait for a while.");
+      } else {
+        toast.error("Failed to check plagiarism.");
       }
     } catch (err) {
-      toast.error('An error occurred while checking Plagiarism.');
+      toast.error(err?.response?.data?.message || "An error occurred.");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -617,14 +626,25 @@ function AssignmentDetails() {
                 </div>
                 <div className="flex justify-center md:justify-end">
                   <button
-                    onClick={() =>
-                      navigate('/check-plagiarism', {
-                        state: { assignment_id: assignmentId },
-                      })
-                    }
+                    onClick={handleConnection}
                     className="px-6 py-2 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-lg transition"
                   >
                     Check Plagiarism
+                  </button>
+                </div>
+
+                <div className="flex justify-center md:justify-end">
+                  <button
+                    onClick={() =>
+                      {
+                        navigate(`/check-plagiarism`, {
+                          state: { assignment_id: assignmentId },
+                        })
+                      }
+                    }
+                    className="px-6 py-2 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-lg transition"
+                  >
+                    View Plagiarism Results
                   </button>
                 </div>
                 
