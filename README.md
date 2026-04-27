@@ -1,8 +1,7 @@
 
 # 📚 CollegeHub – Online Assignment Submission Portal
 
-A modern AI-powered assignment management platform that streamlines the workflow between students and educators.
-CollegeHub enables students to submit assignments online while allowing teachers to evaluate, detect plagiarism, and provide feedback, all in one centralized system.
+A modern assignment management platform that streamlines the workflow between students and educators. CollegeHub enables students to submit assignments online while allowing teachers to evaluate submissions, provide feedback, and use an AI-powered plagiarism checker, all in one centralized system.
 
 
 # 🚀 Features
